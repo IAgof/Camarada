@@ -1,11 +1,83 @@
 <resources>
 
-    <!-- Base application theme. -->
-    <style name="AppTheme" parent="Theme.AppCompat.Light.DarkActionBar">
-        <!-- Customize your theme here. -->
+
+    <!-- AppTheme Camarada -->
+    <style name="CamaradaTheme" parent="Theme.AppCompat.Light.NoActionBar">
         <item name="colorPrimary">@color/colorPrimary</item>
         <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
         <item name="colorAccent">@color/colorAccent</item>
+        <item name="android:textColorPrimary">@color/textColorPrimary</item>
+        <item name="android:textColorSecondary">@color/textColorSecondary</item>
+        <item name="colorControlNormal">@color/colorControlNormal</item>
+        <item name="colorControlActivated">@color/colorControlActivated</item>
+
+        <item name="android:scrollbarThumbHorizontal">@color/colorTransparent</item>
+        <item name="android:scrollbarThumbVertical">@color/colorTransparent</item>
+
+
+        <item name="windowNoTitle">true</item>
+        <item name="windowActionBar">true</item>
+        <item name="android:windowFullscreen">false</item>
+
+        <item name="android:alertDialogTheme">@style/CamaradaAlertDialog</item>
+        <item name="toolbarStyle">@style/CamaradaToolbar</item>
+
+        <item name="android:preferenceCategoryStyle">@style/CamaradaCategoryPreference</item>
+
+
+
+    </style>
+
+
+    <style name="CamaradaToolbar" parent="Theme.AppCompat">
+        <!--<item name="android:maxHeight">@dimen/abc_action_bar_default_height_material</item> -->
+        <item name="android:maxHeight">@dimen/abc_text_size_title_material_toolbar</item>
+        <item name="android:background">@color/colorPrimary</item>
+        <item name="android:textColorPrimary">@color/textColorTitleToolbar</item>
+        <item name ="android:textAllCaps">false</item>
+        <item name="android:paddingEnd">8dp</item>
+        <item name="windowActionBar">false</item>
+
+    </style>
+
+
+    <style name="CamaradaAlertDialog" parent="Theme.AppCompat.Light.Dialog.Alert">
+        <item name="colorPrimary">@color/colorPrimary</item>
+        <item name="textColorAlertDialogListItem">@color/textColorPrimary</item>
+        <item name="colorAccent">@color/colorPrimary</item>
+        <item name ="textAllCaps">false</item>
+        <item name="android:windowBackground">@android:color/transparent</item>
+    </style>
+
+    <style name="CamaradaDialog" parent="Theme.AppCompat.Light.Dialog">
+        <item name="colorPrimary">@color/colorPrimary</item>
+        <item name="textColorAlertDialogListItem">@color/textColorPrimary</item>
+        <item name="colorAccent">@color/colorPrimary</item>
+        <item name ="textAllCaps">false</item>
+        <item name="android:windowBackground">@android:color/transparent</item>
+    </style>
+
+    <style name="CamaradaAlertDialogDark" parent="Theme.AppCompat.Dialog.Alert">
+
+        <item name="colorAccent">@color/colorPrimary</item>
+        <item name="android:windowBackground">@android:color/transparent</item>
+
+    </style>
+
+    <style name="CamaradaCategoryPreference" parent="Theme.AppCompat.Light">
+        <item name ="android:textAllCaps">true</item>
+        <item name="android:layout">@layout/settings_category_preference</item>
+        <item name="android:shouldDisableView">false</item>
+        <item name="android:selectable">false</item>
+    </style>
+
+    <style name="CamaradaIntroTutorial" parent="Theme.AppCompat.Light">
+
+        <item name="windowNoTitle">true</item>
+        <item name="windowActionBar">false</item>
+        <item name="android:windowFullscreen">true</item>
+        <item name="android:windowContentOverlay">@null</item>
+
     </style>
 
 </resources>
