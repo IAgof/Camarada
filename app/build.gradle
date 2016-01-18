@@ -19,8 +19,15 @@ android {
     }
 }
 
+repositories {
+    flatDir{
+        dirs 'libs'
+    }
+}
+
 dependencies {
     compile fileTree(dir: 'libs', include: ['*.jar'])
     testCompile 'junit:junit:4.12'
     compile 'com.android.support:appcompat-v7:23.1.1'
+    compile (name:'avrecorder-1.0.0', ext:'aar')
 }
