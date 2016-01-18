@@ -27,7 +27,8 @@ repositories {
 
 dependencies {
     compile fileTree(dir: 'libs', include: ['*.jar'])
-    compile(name: 'muxer', ext: 'aar')
     testCompile 'junit:junit:4.12'
+    compile project(':muxer')
+    compile 'com.googlecode.mp4parser:isoparser:1.0.5.4'
     compile 'com.android.support:appcompat-v7:23.1.1'
 }
