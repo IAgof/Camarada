@@ -6,71 +6,17 @@
         grabar vídeos. Sin ellos Videona no puede funcionar y se cerrará</string>
     <string name="CloseBecauseOfPermissionsTitle">Permisos no aceptados</string>
 
-    <!-- Record Activity -->
-    <string name="chronometerDefault">00:00</string>
-    <string name="toast_exit">Pulsa otra vez para salir</string>
-    <string name="please_wait">Espera por favor</string>
-    <string name="dialog_processing">Haciendo magia en tu vídeo</string>
-    <string name="recordError">Algo ha fallado. Imposible grabar el vídeo, pruebe otra vez</string>
-
     <!-- Share Activity -->
     <string name="shareError">Uy, no hemos podido compartir el vídeo.</string>
     <string name="share_using">Compartir vídeo con</string>
 
-    <!-- Editor Activity -->
-    <string name="editDeleteProjectTitle">Papelera</string>
-    <string name="editDeleteProjectMessage">¿Deseas eliminar los clips de vídeo de esta edición?</string>
-    <string name="editDeleteProjectAccept">Quiero eliminarlos</string>
-    <string name="editDeleteProjectCancel">Me los quedo</string>
-
-    <string name="edit_title_name">Sala de edición</string>
-    <string name="edit_text_fx">Trabajando en los efectos</string>
-    <string name="edit_text_look">Trabajando en la magia</string>
-    <string name="edit_text_special">Características especiales</string>
-    <string name="edit_text_insufficient_memory">No hay memoria suficiente</string>
-    <string name="toast_exit_edit">Pulsa para salir del editor</string>
-    <string name="toast_add_videos">Por favor, añada vídeos al proyecto</string>
-    <string name="addMediaItemToTrackError">Ups! Algo no ha ido bien. Inténtalo de nuevo</string>
-    <string name="confirmDeleteVideosFromProjectTitle">Papelera</string>
-    <string name="confirmDeleteVideosFromProjectMessage">¿Deseas eliminar los clips de vídeo de esta edición?</string>
-    <string name="acceptDeleteVideosFromProject">Quiero eliminarlos</string>
-    <string name="cancelDeleteVideosFromProject">Me los quedo</string>
-    <string name="deletedVideosFromProject">Vídeos borrados del proyecto. Graba o añade nuevos vídeos</string>
-    <string name="addVideosToProject">Por favor, graba o añade nuevos vídeos</string>
-    <string name="invalidRazorTime">Por favor, selecciona un instante de tiempo para cortar el vídeo</string>
-    <string name="add_videos_to_project">Por favor, añade vídeos al proyecto</string>
-    <string name="videos_removed">Videos borrados del proyecto, grabe o añada nuevos videos</string>
-    <string name="error">error</string>
-    <string name="editTextActionLabel">Hecho</string>
-
-    <!-- Gallery activity -->
-
-    <string name="galleryDeleteTitle">Elimina definitivamente estos archivos de tu terminal </string>
-    <string name="galleryDeleteMessage">Elimina definitivamente estos archivos de tu terminal </string>
-    <string name="galleryDeleteAccept">Quiero eliminarlos</string>
-    <string name="galleryDeleteCancel">Me los quedo</string>
-
-    <string name="confirmDeleteTitle">Eliminar</string>
-    <string name="confirmDeleteTitle1">vídeo</string>
-    <string name="confirmDeleteTitle2">vídeos</string>
-    <string name="cancelDeleteMessage">Me los quedo</string>
-    <string name="galleryActivityTitle">Galería</string>
-    <string name="mastersFolderTitle">Originales</string>
-    <string name="editedFolderTitle">Editados</string>
-
-    <!-- Trim fragment -->
-    <string name="confirmTrim">Hecho</string>
-
-    <!-- Video Preview Activity -->
-    <string name="invalid_video">Este vídeo no se puede reproducir. Por favor, seleccione otro</string>
-
-    <!-- VideoFullScreen Activity -->
-    <string name="title_activity_video_player">Video Player</string>
-
-
     <!-- Settings Activity -->
 
     <string name="action_settings">Ajustes</string>
+    <string name="settingsTitle">Ajustes</string>
+
+        <!-- Contact Videona -->
+        <string name="title_contact_section">Contacto</string>
 
         <!-- Rate Videona -->
         <string name="rateUsDialogTitle">¿Te ha gustado Videona?</string>
@@ -89,51 +35,13 @@
         <string name="exitAppCancel">Me quedo</string>
 
 
-        <!-- Join/Leave beta Videona -->
+        <!-- Download Videona -->
         <string name="title_advanced_section">Avanzado</string>
-        <string name="content_advanced_section">Prueba Videona Beta</string>
-        <string name="thanks">Gracias!!!</string>
-        <string name="joinBetaLinkInfo">Sigue las instrucciones de Google para ser Betatester. Cuando el
-            proceso se complete recibirás la actualización.</string>
-        <string name="joinBetaLink"><u>Pinche aquí!!!</u></string>
-        <string name="email">email</string>
-        <string name="enterEmail">Introduce un email válido</string>
-        <string name="removeEmail">Borrar email</string>
-        <string name="send_email">Enviar</string>
-        <string name="invalid_email">Por favor, añade un email válido</string>
-        <string name="valid_email">Gracias!!</string>
-        <string name="positive_button_join_beta_dialog">Quiero probarlo!</string>
-        <string name="negative_button_join_beta_dialog">Ahora no, gracias</string>
-
-
-        <!-- User info -->
-        <string name="titleUserSection">Mi cuenta</string>
-        <string name="name">Nombre</string>
-        <string name="enterName">Introduce tu nombre</string>
-        <string name="removeName">Borrar nombre</string>
-        <string name="username">Nombre de usuario</string>
-        <string name="enterUsername">Introduce un nombre de usuario</string>
-        <string name="removeUsername">Borrar nombre de usuario</string>
-        <string name="emailPreference">Email</string>
-        <string name="save">Guardar</string>
-
-        <!-- Camera Settings -->
-        <string name="title_camera_section">Cámara</string>
-        <string name="resolution">Resolución</string>
-        <string name="low_resolution_name">Buena (720p)</string>
-        <string name="low_resolution_value">Buena</string>
-        <string name="good_resolution_name">Muy buena (1080p)</string>
-        <string name="good_resolution_value">Muy buena</string>
-        <string name="high_resolution_name">Excelente (4K)</string>
-        <string name="high_resolution_value">Excelente</string>
-        <string name="quality">Calidad</string>
-        <string name="low_quality_name">Buena (2 Mbps)</string>
-        <string name="low_quality_value">Buena</string>
-        <string name="good_quality_name">Muy buena (5 Mbps)</string>
-        <string name="good_quality_value">Muy buena</string>
-        <string name="high_quality_name">Excelente (10 Mbps)</string>
-        <string name="high_quality_value">Excelente</string>
-        <string name="cancelSettingsCamera">Cancelar</string>
+        <string name="downloadVideonaPreferenceText">Descarga Videona</string>
+        <string name="downloadVideonaDialogTitle">Descarga Videona</string>
+        <string name="downloadVideonaDialogMessage">Consigue gratis Videona App</string>
+        <string name="downloadVideonaDialogAccept">Me apunto</string>
+        <string name="downloadVideonaDialogCancel">No gracias</string>
 
         <!-- More info Settings -->
         <string name="aboutUsTitle">Sobre nosotros</string>
@@ -142,14 +50,6 @@
         <string name="termsOfService">Condiciones de servicio</string>
         <string name="licenses">Licencias</string>
         <string name="legacyAdviceTitle">Aviso legal</string>
-
-        <!-- Contact Settings, not in use -->
-        <string name="title_contact_section">Contacta con Videona</string>
-        <string name="content_contact_section">Dinos que opinas de la aplicación</string>
-
-        <!-- Tutorial Settings, not in use -->
-        <string name="title_tutorial_section">Tutorial</string>
-        <string name="content_tutorial_section">Mira nuestro tutorial</string>
 
         <!-- Accounts actions -->
         <string name="accountActions">Acciones de cuenta</string>
@@ -520,10 +420,5 @@ Cuando resulten de aplicación al Item, el Comprador podrá hacer uso de las gar
 Videona otorga a los Usuarios una licencia personal, revocable, no exclusiva y no transferible para cargar y utilizar el software de la Aplicación exclusivamente para el uso de los Servicios previstos en las presentes Condiciones Particulares. El software no podrá ser utilizado, copiado, reproducido, transmitido, mostrado, distribuido, vendido, licenciado, descargado o explotado en cualquier forma diferente al funcionamiento del Servicio. Queda prohibido al Usuario realizar ingeniería inversa, descompilar, desensamblar o de cualquier otra forma crear códigos fuentes a partir del software.
 Con respecto a las funcionalidades y herramientas de la Aplicación que permiten al Usuario crear Features, Videona otorga a los Usuarios una licencia para utilizarlas, reproducirlas y preparar trabajos u obras derivadas, exclusivamente para la creación y venta de Features, conforme a las presentes Condiciones Particulares.\n
     </string>
-
-    <!-- Others -->
-    <string name="ok">Ok</string>
-    <string name="yes">Sí</string>
-    <string name="no">No</string>
 
 </resources>

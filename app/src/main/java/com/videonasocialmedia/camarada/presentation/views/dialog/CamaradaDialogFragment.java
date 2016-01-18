@@ -1,11 +1,4 @@
-/*
- * Copyright (c) 2016. Videona Socialmedia SL
- * http://www.videona.com
- * info@videona.com
- * All rights reserved
- */
-
-package com.videonasocialmedia.videona.presentation.views.dialog;
+package com.videonasocialmedia.camarada.presentation.views.dialog;
 
 import android.app.Activity;
 import android.app.AlertDialog;
@@ -17,8 +10,8 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
 
-import com.videonasocialmedia.videona.R;
-import com.videonasocialmedia.videona.presentation.views.listener.OnVideonaDialogButtonsListener;
+import com.videonasocialmedia.camarada.presentation.views.listener.OnCamaradaDialogClickListener;
+import com.videonasocialmedia.camarada.R;
 
 import butterknife.ButterKnife;
 import butterknife.InjectView;
@@ -26,7 +19,7 @@ import butterknife.OnClick;
 
 public class CamaradaDialogFragment extends DialogFragment {
 
-    OnVideonaDialogButtonsListener clickListener;
+    OnCamaradaDialogClickListener clickListener;
     private int idDialog;
 
     @InjectView(R.id.acceptDialog)
@@ -45,7 +38,7 @@ public class CamaradaDialogFragment extends DialogFragment {
 
     public static CamaradaDialogFragment newInstance(String title, String message, String accept,
                                                     String cancel, int idDialog) {
-        VideonaDialogFragment frag = new VideonaDialogFragment();
+        CamaradaDialogFragment frag = new CamaradaDialogFragment();
         Bundle args = new Bundle();
         args.putString("title", title);
         args.putString("message", message);
@@ -60,7 +53,7 @@ public class CamaradaDialogFragment extends DialogFragment {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        clickListener = (OnVideonaDialogButtonsListener) getTargetFragment();
+        clickListener = (OnCamaradaDialogClickListener) getTargetFragment();
     }
 
 
@@ -68,7 +61,7 @@ public class CamaradaDialogFragment extends DialogFragment {
     public Dialog onCreateDialog(Bundle savedInstanceState) {
 
 
-        AlertDialog.Builder builder = new AlertDialog.Builder(getActivity(), R.style.VideonaDialog);
+        AlertDialog.Builder builder = new AlertDialog.Builder(getActivity(), R.style.CamaradaDialog);
         LayoutInflater inflater = getActivity().getLayoutInflater();
         View v = inflater.inflate(R.layout.dialog_videona, null);
         builder.setView(v);
@@ -90,7 +83,7 @@ public class CamaradaDialogFragment extends DialogFragment {
         super.onAttach(activity);
 
         try {
-            clickListener = (OnVideonaDialogButtonsListener) activity;
+            clickListener = (OnCamaradaDialogClickListener) activity;
         } catch (ClassCastException e) {
             throw new ClassCastException(activity.toString() + " must implement " +
                     "OnVideonaDialogButtonsListener");

@@ -15,7 +15,7 @@
         android:layout_marginRight="5dp"
         android:layout_marginBottom="5dp"
         android:layout_marginTop="10dp"
-        tools:text="@string/CloseBecauseOfPermissionsTitle"
+        tools:text="@string/rateUsDialogTitle"
         android:textSize="18sp"
         android:textColor="@color/textColorTitle"
         android:layout_gravity="center"
@@ -34,7 +34,7 @@
         android:layout_height="wrap_content"
         android:layout_margin="5dp"
         android:textSize="16sp"
-        tools:text="@string/permissionsDeniedMessage"
+        tools:text="@string/rateUsDialogMessage"
         android:padding="8dp" />
 
     <LinearLayout
@@ -50,7 +50,7 @@
             android:paddingRight="10dp"
             android:id="@+id/cancelDialog"
             android:textSize="17sp"
-            android:text="@string/ok"
+            tools:text="@string/acceptDialogRateUs"
             android:background="@color/colorTransparent"
             android:textColor="@color/textColorTitle"
             android:textAllCaps="false"/>
@@ -62,7 +62,7 @@
             android:paddingRight="10dp"
             android:id="@+id/acceptDialog"
             android:textSize="17sp"
-            android:text="@string/ok"
+            android:text="@string/cancelDialogRateUs"
             android:background="@color/colorTransparent"
             android:textColor="@color/textColorTitle"
             android:textAllCaps="false"/>

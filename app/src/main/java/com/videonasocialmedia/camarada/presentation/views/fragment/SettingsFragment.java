@@ -1,5 +1,31 @@
+package com.videonasocialmedia.camarada.presentation.views.fragment;
+
+import android.content.Context;
+import android.content.Intent;
+import android.content.SharedPreferences;
+import android.net.Uri;
+import android.os.Bundle;
+import android.preference.ListPreference;
+import android.preference.Preference;
+import android.preference.PreferenceFragment;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
+import android.widget.ListView;
+import android.widget.TextView;
+
+import com.videonasocialmedia.camarada.BuildConfig;
+import com.videonasocialmedia.camarada.R;
+import com.videonasocialmedia.camarada.presentation.mvp.presenters.PreferencesPresenter;
+import com.videonasocialmedia.camarada.presentation.mvp.presenters.PreferencesView;
+import com.videonasocialmedia.camarada.presentation.views.dialog.CamaradaDialogFragment;
+import com.videonasocialmedia.camarada.presentation.views.listener.OnCamaradaDialogClickListener;
+import com.videonasocialmedia.camarada.utils.ConfigPreferences;
+
+import java.util.ArrayList;
+
 public class SettingsFragment extends PreferenceFragment implements SharedPreferences.OnSharedPreferenceChangeListener,
-        PreferencesView, OnVideonaDialogButtonsListener {
+        PreferencesView, OnCamaradaDialogClickListener {
 
 
     protected PreferencesPresenter preferencesPresenter;
@@ -8,8 +34,11 @@ public class SettingsFragment extends PreferenceFragment implements SharedPrefer
     protected SharedPreferences.Editor editor;
 
     /* Dialogs*/
-    private VideonaDialogFragment dialogExitApp;
+    private CamaradaDialogFragment dialogExitApp;
     private final int REQUEST_CODE_DIALOG_EXIT = 1;
+
+    private CamaradaDialogFragment dialogDownloadVideona;
+    private final int REQUEST_CODE_DOWNLOAD_BETA = 2;
 
 
     @Override
@@ -32,7 +61,7 @@ public class SettingsFragment extends PreferenceFragment implements SharedPrefer
         editor = sharedPreferences.edit();
 
         setupExitPreference();
-        setupBetaPreference();
+        downloadVideonaPreference();
 
     }
 
@@ -49,36 +78,36 @@ public class SettingsFragment extends PreferenceFragment implements SharedPrefer
 
     }
 
-    private void setupBetaPreference() {
+    private void downloadVideonaPreference() {
         Preference joinBetaPref = findPreference("beta");
         joinBetaPref.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
             @Override
             public boolean onPreferenceClick(Preference preference) {
 
-                    createBetaDialog();
+                    createJoinVideonaDialog();
 
                 return true;
             }
         });
     }
 
-    private void createBetaDialog() {
+    private void createJoinVideonaDialog() {
 
-        dialogBeta = new VideonaDialogFragment().newInstance(
-                getString(R.string.betaDialogTitle),
-                getString(R.string.betaDialogMessage),
-                getString(R.string.betaDialogAccept),
-                getString(R.string.betaDialogCancel),
-                REQUEST_CODE_DIALOG_BETA
+        dialogDownloadVideona = new CamaradaDialogFragment().newInstance(
+                getString(R.string.downloadVideonaDialogTitle),
+                getString(R.string.downloadVideonaDialogMessage),
+                getString(R.string.downloadVideonaDialogAccept),
+                getString(R.string.downloadVideonaDialogCancel),
+                REQUEST_CODE_DOWNLOAD_BETA
         );
 
-        dialogBeta.setTargetFragment(this, REQUEST_CODE_DIALOG_BETA);
-        dialogBeta.show(getFragmentManager(), "Settings beta fragment");
+        dialogDownloadVideona.setTargetFragment(this, REQUEST_CODE_DOWNLOAD_BETA);
+        dialogDownloadVideona.show(getFragmentManager(), "Settings beta fragment");
     }
 
     private void createExitAppDialog() {
 
-        dialogExitApp = new VideonaDialogFragment().newInstance(
+        dialogExitApp = new CamaradaDialogFragment().newInstance(
                 getString(R.string.exitAppTitle),
                 getString(R.string.exitAppMessage),
                 getString(R.string.exitAppAccept),
@@ -95,10 +124,10 @@ public class SettingsFragment extends PreferenceFragment implements SharedPrefer
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        View v = inflater.inflate(R.layout.list, null);
+        View v = inflater.inflate(R.layout.settings_list, null);
         ListView listView = (ListView)v.findViewById(android.R.id.list);
 
-        ViewGroup footer = (ViewGroup) inflater.inflate(R.layout.footer, listView, false);
+        ViewGroup footer = (ViewGroup) inflater.inflate(R.layout.settings_footer, listView, false);
         listView.addFooterView(footer, null, false);
 
         TextView footerText = (TextView)v.findViewById(R.id.footerText);
@@ -112,10 +141,10 @@ public class SettingsFragment extends PreferenceFragment implements SharedPrefer
     @Override
     public void onResume() {
         super.onResume();
-        preferencesPresenter.checkAvailablePreferences();
+
         sharedPreferences.registerOnSharedPreferenceChangeListener(this);
         sharedPreferences.registerOnSharedPreferenceChangeListener(preferencesPresenter);
-        Qordoba.updateScreen(getActivity());
+
     }
 
     @Override
@@ -173,8 +202,8 @@ public class SettingsFragment extends PreferenceFragment implements SharedPrefer
             dialogExitApp.dismiss();
         }
 
-        if(id == REQUEST_CODE_DIALOG_BETA) {
-            dialogBeta.dismissDialog();
+        if(id == REQUEST_CODE_DOWNLOAD_BETA) {
+            dialogDownloadVideona.dismissDialog();
         }
     }
 
@@ -185,7 +214,7 @@ public class SettingsFragment extends PreferenceFragment implements SharedPrefer
             exitApp();
         }
 
-        if(id == REQUEST_CODE_DIALOG_BETA){
+        if(id == REQUEST_CODE_DOWNLOAD_BETA){
 
             String url = "https://play.google.com/apps/testing/com.videonasocialmedia.videona";
             Intent i = new Intent(Intent.ACTION_VIEW);

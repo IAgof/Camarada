@@ -1,4 +1,20 @@
-public class SettingsBaseActivity extends VideonaActivity implements OnVideonaDialogButtonsListener {
+package com.videonasocialmedia.camarada.presentation.views.activity;
+
+import android.content.Intent;
+import android.net.Uri;
+import android.os.Bundle;
+import android.support.v7.widget.Toolbar;
+import android.view.Menu;
+import android.view.MenuItem;
+
+import com.videonasocialmedia.camarada.R;
+import com.videonasocialmedia.camarada.presentation.views.dialog.CamaradaDialogActivity;
+import com.videonasocialmedia.camarada.presentation.views.fragment.SettingsFragment;
+import com.videonasocialmedia.camarada.presentation.views.listener.OnCamaradaDialogClickListener;
+
+import butterknife.ButterKnife;
+
+public class SettingsActivity extends CamaradaActivity implements OnCamaradaDialogClickListener {
 
     private CamaradaDialogActivity dialogVote;
     private final int REQUEST_CODE_DIALOG_VOTE = 1;
@@ -12,14 +28,13 @@ public class SettingsBaseActivity extends VideonaActivity implements OnVideonaDi
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayShowTitleEnabled(false);
-        ActionBar ab = getSupportActionBar();
+        android.support.v7.app.ActionBar ab = getSupportActionBar();
         ab.setDisplayHomeAsUpEnabled(true);
 
-        // Display the fragment as the main content.
-        Qordoba.setCurrentNavigationRoute(android.R.id.content, this.getClass().getName());
         getFragmentManager().beginTransaction()
                 .replace(R.id.fragment_preferences, new SettingsFragment())
                 .commit();
+
     }
 
     @Override
@@ -31,14 +46,14 @@ public class SettingsBaseActivity extends VideonaActivity implements OnVideonaDi
     @Override
     protected void onResume() {
         super.onResume();
-        EventBus.getDefault().register(this);
+
     }
 
     @Override
     protected void onPause() {
         super.onPause();
         mixpanel.track("Time in Settings Activity");
-        EventBus.getDefault().unregister(this);
+
     }
 
     @Override
@@ -63,9 +78,6 @@ public class SettingsBaseActivity extends VideonaActivity implements OnVideonaDi
         }
     }
 
-    public void onEvent(JoinBetaEvent event){
-
-    }
 
     private void goToContact() {
         navigateTo("mailto:info@videona.com");
@@ -73,7 +85,7 @@ public class SettingsBaseActivity extends VideonaActivity implements OnVideonaDi
 
     private void goToVote() {
 
-        dialogVote = new VideonaDialogActivity().newInstance(
+        dialogVote = new com.videonasocialmedia.camarada.presentation.views.dialog.CamaradaDialogActivity().newInstance(
                 getString(R.string.rateUsDialogTitle),
                 getString(R.string.rateUsDialogMessage),
                 getString(R.string.acceptDialogRateUs),

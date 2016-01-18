@@ -1,3 +1,10 @@
+package com.videonasocialmedia.camarada.presentation.mvp.presenters;
+
+import android.content.Context;
+import android.content.SharedPreferences;
+
+import java.util.ArrayList;
+
 /**
  * This class is used to show the setting menu.
  */
@@ -5,7 +12,7 @@ public class PreferencesPresenter implements SharedPreferences.OnSharedPreferenc
 
     private Context context;
     private SharedPreferences sharedPreferences;
-    private PreferencesView preferencesView;
+    private com.videonasocialmedia.camarada.presentation.mvp.presenters.PreferencesView preferencesView;
 
     /**
      * Constructor
@@ -14,27 +21,11 @@ public class PreferencesPresenter implements SharedPreferences.OnSharedPreferenc
      * @param context
      * @param sharedPreferences
      */
-    public PreferencesPresenter(PreferencesView preferencesView, Context context,
+    public PreferencesPresenter(com.videonasocialmedia.camarada.presentation.mvp.presenters.PreferencesView preferencesView, Context context,
                                 SharedPreferences sharedPreferences) {
         this.preferencesView = preferencesView;
         this.context = context;
         this.sharedPreferences = sharedPreferences;
-    }
-
-
-    /**
-     * Checks user preferences data
-     */
-    private void checkUserAccountData() {
-        checkUserAccountPreference(ConfigPreferences.NAME);
-        checkUserAccountPreference(ConfigPreferences.USERNAME);
-        checkUserAccountPreference(ConfigPreferences.EMAIL);
-    }
-
-    private void checkUserAccountPreference(String key) {
-        String data = sharedPreferences.getString(key, null);
-        if (data != null && !data.isEmpty())
-            preferencesView.setSummary(key, data);
     }
 
 
@@ -56,13 +47,7 @@ public class PreferencesPresenter implements SharedPreferences.OnSharedPreferenc
 
     @Override
     public void onSharedPreferenceChanged(SharedPreferences sharedPreferences, String key) {
-        if (key.compareTo(ConfigPreferences.KEY_LIST_PREFERENCES_QUALITY) == 0 ||
-                key.compareTo(ConfigPreferences.KEY_LIST_PREFERENCES_RESOLUTION) == 0) {
-            if (BuildConfig.FLAVOR.compareTo("stable") == 0) {
-                RemoveVideosUseCase videoRemover = new RemoveVideosUseCase();
-                videoRemover.removeMediaItemsFromProject();
-            }
-        }
+
     }
 
 }

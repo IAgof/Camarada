@@ -1,11 +1,4 @@
-/*
- * Copyright (c) 2015. Videona Socialmedia SL
- * http://www.videona.com
- * info@videona.com
- * All rights reserved
- */
-
-package com.videonasocialmedia.videona.presentation.views.activity;
+package com.videonasocialmedia.camarada.presentation.views.activity;
 
 import android.os.Bundle;
 import android.support.v7.app.ActionBar;
@@ -15,9 +8,8 @@ import android.widget.TextView;
 
 import com.google.android.gms.analytics.GoogleAnalytics;
 import com.google.android.gms.analytics.HitBuilders;
-import com.qordoba.sdk.Qordoba;
-import com.videonasocialmedia.videona.BuildConfig;
-import com.videonasocialmedia.videona.R;
+import com.videonasocialmedia.camarada.BuildConfig;
+import com.videonasocialmedia.camarada.R;
 
 import butterknife.ButterKnife;
 import butterknife.InjectView;
@@ -43,7 +35,7 @@ public class AboutActivity extends CamaradaActivity {
         String version= BuildConfig.VERSION_NAME + "\n";
         versionName.setText(version);
         // Display the fragment as the main content.
-        Qordoba.setCurrentNavigationRoute(android.R.id.content, this.getClass().getName());
+
     }
 
     @Override

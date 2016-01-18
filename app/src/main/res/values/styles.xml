@@ -57,27 +57,12 @@
         <item name="android:windowBackground">@android:color/transparent</item>
     </style>
 
-    <style name="CamaradaAlertDialogDark" parent="Theme.AppCompat.Dialog.Alert">
-
-        <item name="colorAccent">@color/colorPrimary</item>
-        <item name="android:windowBackground">@android:color/transparent</item>
-
-    </style>
 
     <style name="CamaradaCategoryPreference" parent="Theme.AppCompat.Light">
         <item name ="android:textAllCaps">true</item>
         <item name="android:layout">@layout/settings_category_preference</item>
         <item name="android:shouldDisableView">false</item>
         <item name="android:selectable">false</item>
-    </style>
-
-    <style name="CamaradaIntroTutorial" parent="Theme.AppCompat.Light">
-
-        <item name="windowNoTitle">true</item>
-        <item name="windowActionBar">false</item>
-        <item name="android:windowFullscreen">true</item>
-        <item name="android:windowContentOverlay">@null</item>
-
     </style>
 
 </resources>

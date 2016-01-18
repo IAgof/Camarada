@@ -10,7 +10,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:minHeight="?attr/actionBarSize"
-        android:theme="@style/VideonaToolbar">
+        android:theme="@style/CamaradaToolbar">
 
         <TextView
             android:layout_width="wrap_content"
@@ -69,9 +69,7 @@
                 android:text="@string/versionTitle" />
 
             <TextView
-                android:id="@+id/videactivity_licenses.xml
-activity_policy_privacy.xml
-activity_legal_notice.xmlona_version"
+                android:id="@+id/videona_version"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content" />
 

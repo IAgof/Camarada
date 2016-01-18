@@ -5,14 +5,13 @@
  * All rights reserved
  */
 
-package com.videonasocialmedia.videona.presentation.views.activity;
+package com.videonasocialmedia.camarada.presentation.views.activity;
 
 import android.os.Bundle;
 import android.support.v7.app.ActionBar;
 import android.support.v7.widget.Toolbar;
 
-import com.qordoba.sdk.Qordoba;
-import com.videonasocialmedia.videona.R;
+import com.videonasocialmedia.camarada.R;
 
 
 public class LicensesActivity extends CamaradaActivity {
@@ -27,8 +26,7 @@ public class LicensesActivity extends CamaradaActivity {
         getSupportActionBar().setDisplayShowTitleEnabled(false);
         ActionBar ab = getSupportActionBar();
         ab.setDisplayHomeAsUpEnabled(true);
-        // Display the fragment as the main content.
-        Qordoba.setCurrentNavigationRoute(android.R.id.content, this.getClass().getName());
+
     }
 
     @Override

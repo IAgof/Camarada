@@ -1,3 +1,9 @@
+package com.videonasocialmedia.camarada.presentation.mvp.presenters;
+
+import android.preference.ListPreference;
+
+import java.util.ArrayList;
+
 /**
  * This interface is used to show the setting menu.
  */

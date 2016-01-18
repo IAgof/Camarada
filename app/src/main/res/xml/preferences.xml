@@ -5,7 +5,7 @@
         android:title="@string/title_advanced_section">
         <Preference
             android:key="beta"
-            android:title="@string/betaPreferenceText">
+            android:title="@string/downloadVideonaPreferenceText">
         </Preference>
     </PreferenceCategory>
 
