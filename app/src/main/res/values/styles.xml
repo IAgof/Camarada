@@ -30,8 +30,7 @@
 
 
     <style name="CamaradaToolbar" parent="Theme.AppCompat">
-        <!--<item name="android:maxHeight">@dimen/abc_action_bar_default_height_material</item> -->
-        <item name="android:maxHeight">@dimen/abc_text_size_title_material_toolbar</item>
+        <item name="android:maxHeight">@dimen/abc_action_bar_default_height_material</item>
         <item name="android:background">@color/colorPrimary</item>
         <item name="android:textColorPrimary">@color/textColorTitleToolbar</item>
         <item name ="android:textAllCaps">false</item>
@@ -63,6 +62,15 @@
         <item name="android:layout">@layout/settings_category_preference</item>
         <item name="android:shouldDisableView">false</item>
         <item name="android:selectable">false</item>
+    </style>
+
+    <style name="CamaradaIntroTutorial" parent="Theme.AppCompat.Light">
+
+        <item name="windowNoTitle">true</item>
+        <item name="windowActionBar">false</item>
+        <item name="android:windowFullscreen">true</item>
+        <item name="android:windowContentOverlay">@null</item>
+
     </style>
 
 </resources>

@@ -14,7 +14,7 @@
         android:layout_alignParentEnd="true"
         android:layout_alignParentTop="true"
         android:layout_centerInParent="true"
-        android:src="@mipmap/splash_screen" />
+        android:src="@drawable/intro_app_splash_screen" />
 
     <TextView
         android:id="@+id/videona_version"
