@@ -3,7 +3,6 @@ package com.videonasocialmedia.camarada.presentation.views.activity;
 import android.Manifest;
 import android.app.AlertDialog;
 import android.content.Context;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.content.res.Configuration;
@@ -25,7 +24,8 @@ import com.karumi.dexter.listener.multi.MultiplePermissionsListener;
 import com.mixpanel.android.mpmetrics.MixpanelAPI;
 import com.videonasocialmedia.camarada.BuildConfig;
 import com.videonasocialmedia.camarada.CamaradaApplication;
-import com.videonasocialmedia.camarada.R;
+import com.videonasocialmedia.camarada.presentation.views.dialog.CamaradaDialogActivity;
+import com.videonasocialmedia.camarada.presentation.views.listener.OnCamaradaDialogClickListener;
 import com.videonasocialmedia.camarada.utils.PermissionConstants;
 
 import java.util.List;
@@ -114,7 +114,8 @@ public class CamaradaActivity extends AppCompatActivity {
         return getResources().getConfiguration().orientation;
     }
 
-    class CustomPermissionListener extends EmptyMultiplePermissionsListener {
+    class CustomPermissionListener extends EmptyMultiplePermissionsListener
+            implements OnCamaradaDialogClickListener {
 
         private final Context context;
         private final String title;
@@ -123,6 +124,9 @@ public class CamaradaActivity extends AppCompatActivity {
         private final Drawable icon;
 
         private AlertDialog dialog;
+
+        private CamaradaDialogActivity dialogPermission;
+        private final int REQUEST_CODE_DIALOG_PERMISSION = 1;
 
         private CustomPermissionListener(Context context, String title,
                                          String message, String positiveButtonText, Drawable icon) {
@@ -138,10 +142,10 @@ public class CamaradaActivity extends AppCompatActivity {
             super.onPermissionsChecked(report);
 
             if (!report.areAllPermissionsGranted()) {
-                showDialog();
+                createPermissionDialog();
             } else {
-                if (dialog != null) {
-                    dialog.dismiss();
+                if (dialogPermission != null) {
+                    dialogPermission.dismiss();
                 }
             }
         }
@@ -153,23 +157,40 @@ public class CamaradaActivity extends AppCompatActivity {
             token.continuePermissionRequest();
         }
 
-        private void showDialog() {
-            dialog = new AlertDialog.Builder(context, R.style.CamaradaAlertDialog)
-                    .setTitle(title)
-                    .setMessage(message)
-                    .setPositiveButton(positiveButtonText, new DialogInterface.OnClickListener() {
-                        @Override
-                        public void onClick(DialogInterface dialog, int which) {
-                            dialog.dismiss();
-                            Intent myAppSettings = new Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS,
-                                    Uri.parse("package:" + context.getPackageName()));
-                            myAppSettings.addCategory(Intent.CATEGORY_DEFAULT);
-                            myAppSettings.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-                            context.startActivity(myAppSettings);
-                        }
-                    })
-                    .setIcon(icon)
-                    .show();
+        private void createPermissionDialog() {
+
+
+            dialogPermission = new CamaradaDialogActivity().newInstance(
+                    title,
+                    message,
+                    positiveButtonText,
+                    "",
+                    REQUEST_CODE_DIALOG_PERMISSION
+            );
+
+            dialogPermission.hideCancelDialog();
+
+            dialogPermission.show(getFragmentManager(), "dialogPermission");
+
+        }
+
+        @Override
+        public void onClickAcceptDialogListener(int id) {
+
+            if( id == REQUEST_CODE_DIALOG_PERMISSION){
+                dialogPermission.dismiss();
+                Intent myAppSettings = new Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS,
+                        Uri.parse("package:" + context.getPackageName()));
+                myAppSettings.addCategory(Intent.CATEGORY_DEFAULT);
+                myAppSettings.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                context.startActivity(myAppSettings);
+            }
+
+        }
+
+        @Override
+        public void onClickCancelDialogListener(int id) {
+
         }
     }
 }

@@ -85,7 +85,7 @@ public class SettingsActivity extends CamaradaActivity implements OnCamaradaDial
 
     private void goToVote() {
 
-        dialogVote = new com.videonasocialmedia.camarada.presentation.views.dialog.CamaradaDialogActivity().newInstance(
+        dialogVote = new CamaradaDialogActivity().newInstance(
                 getString(R.string.rateUsDialogTitle),
                 getString(R.string.rateUsDialogMessage),
                 getString(R.string.acceptDialogRateUs),
