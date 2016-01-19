@@ -1,8 +1,10 @@
 package com.videonasocialmedia.camarada.domain;
 
+import android.os.Environment;
+
 import com.googlecode.mp4parser.authoring.Movie;
-import com.videonasocialmedia.muxer.Appender;
-import com.videonasocialmedia.muxer.utils.Utils;
+import com.videonasocialmedia.camarada.domain.muxer.Muxer;
+import com.videonasocialmedia.camarada.utils.Utils;
 
 import java.io.File;
 import java.io.IOException;
@@ -15,23 +17,27 @@ import java.util.List;
  */
 public class ExportUseCase {
     private OnExportFinishedListener onExportFinishedListener;
-    private Appender appender;
-    private String pathVideoEdited;
+    private Muxer muxer;
+    private String pathVideoExported;
 
     public ExportUseCase(OnExportFinishedListener onExportFinishedListener) {
         this.onExportFinishedListener = onExportFinishedListener;
-        appender = new Appender();
+        muxer = new Muxer();
     }
 
     public void export(List<String> videoPaths) {
-        pathVideoEdited = File.separator + "V_EDIT_" + new SimpleDateFormat("yyyyMMdd_HHmmss").format(new Date()) + ".mp4";
+        // TODO definir dónde se va a guardar el vídeo y con qué nombre
+        pathVideoExported = Environment.getExternalStoragePublicDirectory(
+                Environment.DIRECTORY_MOVIES) + File.separator + "V_EDIT_" +
+                new SimpleDateFormat("yyyyMMdd_HHmmss").format(new Date()) + ".mp4";
         Movie mergedVideoWithoutAudio = appendVideos(videoPaths);
         if(mergedVideoWithoutAudio != null) {
-            Movie result = addAudio(mergedVideoWithoutAudio, getAudioPath(), getMovieDuration());
+            Movie result = addAudio(mergedVideoWithoutAudio, getAudioPath(),
+                    getMovieDuration(videoPaths));
             if(result != null) {
                 try {
-                    Utils.createFile(result, pathVideoEdited);
-                    onExportFinishedListener.onExportSuccess(pathVideoEdited);
+                    Utils.createFile(result, pathVideoExported);
+                    onExportFinishedListener.onExportSuccess(pathVideoExported);
                 } catch (IOException e) {
                     onExportFinishedListener.onExportError(String.valueOf(e));
                 }
@@ -42,7 +48,7 @@ public class ExportUseCase {
     private Movie appendVideos(List<String> videoPaths) {
         Movie result = null;
         try {
-            result = appender.appendVideos(videoPaths, false);
+            result = muxer.appendVideos(videoPaths, false);
         } catch (IOException e) {
             onExportFinishedListener.onExportError(String.valueOf(e));
         }
@@ -50,19 +56,19 @@ public class ExportUseCase {
     }
 
     private String getAudioPath() {
-        // TODO ver cómo coger la música
-        return "lhjafsh";
+        // TODO ver de dónde coger la música
+        return Environment.getExternalStoragePublicDirectory(
+                Environment.DIRECTORY_MOVIES) + File.separator + "audio.m4a";
     }
 
-    private double getMovieDuration() {
-        // TODO ver cómo coger la duración del vídeo
-        return 1500;
+    private double getMovieDuration(List<String> videoPaths) {
+        return muxer.getFileDuration(videoPaths);
     }
 
     private Movie addAudio(Movie movie, String audioPath, double durationMovie) {
         Movie result = null;
         try {
-            result = appender.addAudio(movie, audioPath, durationMovie);
+            result = muxer.addAudio(movie, audioPath, durationMovie);
         } catch (IOException e) {
             onExportFinishedListener.onExportError(String.valueOf(e));
         }

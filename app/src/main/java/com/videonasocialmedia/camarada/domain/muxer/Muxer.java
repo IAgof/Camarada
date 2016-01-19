@@ -1,4 +1,6 @@
-package com.videonasocialmedia.muxer;
+package com.videonasocialmedia.camarada.domain.muxer;
+
+import android.util.Log;
 
 import com.coremedia.iso.IsoFile;
 import com.googlecode.mp4parser.authoring.Movie;
@@ -14,7 +16,7 @@ import java.util.List;
 /**
  * Created by Veronica Lago Fominaya on 18/01/2016.
  */
-public class Appender {
+public class Muxer {
 
     private Trimmer trimmer;
 
@@ -62,27 +64,6 @@ public class Appender {
         return result;
     }
 
-    public Movie addAudio(Movie movie, ArrayList<String> audioPaths, double movieDuration) throws IOException {
-        ArrayList<Movie> audioList = new ArrayList<>();
-        trimmer = new AudioTrimmer();
-        List<Track> audioTracks = new LinkedList<>();
-
-        for (String audio : audioPaths) {
-            audioList.add(trimmer.trim(audio, 0, movieDuration));
-        }
-        for (Movie m : audioList) {
-            for (Track t : m.getTracks()) {
-                if (t.getHandler().equals("soun")) {
-                    audioTracks.add(t);
-                }
-            }
-        }
-        if (audioTracks.size() > 0) {
-            movie.addTrack(new AppendTrack(audioTracks.toArray(new Track[audioTracks.size()])));
-        }
-        return movie;
-    }
-
     public Movie addAudio(Movie movie, String audioPath, double movieDuration) throws IOException {
 
         double audioDuration = getFileDuration(audioPath);
@@ -112,10 +93,10 @@ public class Appender {
 
     private double getFileDuration(String filePath) throws IOException {
         IsoFile isoFile = new IsoFile(filePath);
-        double lengthInSeconds = (double)
-                isoFile.getMovieBox().getMovieHeaderBox().getDuration() /
-                isoFile.getMovieBox().getMovieHeaderBox().getTimescale();
-        return lengthInSeconds;
+        double lengthInMSeconds = (double)
+                (isoFile.getMovieBox().getMovieHeaderBox().getDuration()/
+                isoFile.getMovieBox().getMovieHeaderBox().getTimescale())*1000;
+        return lengthInMSeconds;
     }
 
     private void repeatAudio(List<Movie> audioList, String audioPath, double audioDuration,
@@ -125,7 +106,7 @@ public class Appender {
         double durationOfLastAudioFile = movieDuration -
                 (numCompleteAudioFilesInMovieDuration * audioDuration);
 
-        for (int i=0; i<numCompleteAudioFilesInMovieDuration-1; i++)
+        for (int i=0; i<numCompleteAudioFilesInMovieDuration; i++)
             audioList.add(MovieCreator.build(audioPath));
 
         audioList.add(trimmer.trim(audioPath, 0, durationOfLastAudioFile));
@@ -134,5 +115,17 @@ public class Appender {
     private void trimAudio(List<Movie> audioList, String audioPath, double movieDuration)
             throws IOException {
         audioList.add(trimmer.trim(audioPath, 0, movieDuration));
+    }
+
+    public double getFileDuration(List<String> videoPaths) {
+        double duration = 0;
+        for (String path : videoPaths) {
+            try {
+                duration = duration + getFileDuration(path);
+            } catch (IOException e) {
+                Log.e("IOException", "error", e);
+            }
+        }
+        return duration;
     }
 }
