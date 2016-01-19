@@ -10,11 +10,11 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
 
-import com.videonasocialmedia.camarada.presentation.views.listener.OnCamaradaDialogClickListener;
 import com.videonasocialmedia.camarada.R;
+import com.videonasocialmedia.camarada.presentation.views.listener.OnCamaradaDialogClickListener;
 
+import butterknife.Bind;
 import butterknife.ButterKnife;
-import butterknife.InjectView;
 import butterknife.OnClick;
 
 public class CamaradaDialogFragment extends DialogFragment {
@@ -22,13 +22,13 @@ public class CamaradaDialogFragment extends DialogFragment {
     OnCamaradaDialogClickListener clickListener;
     private int idDialog;
 
-    @InjectView(R.id.acceptDialog)
+    @Bind(R.id.acceptDialog)
     Button acceptDialog;
-    @InjectView(R.id.cancelDialog)
+    @Bind(R.id.cancelDialog)
     Button cancelDialog;
-    @InjectView(R.id.titleDialog)
+    @Bind(R.id.titleDialog)
     TextView titleDialog;
-    @InjectView(R.id.messageDialog )
+    @Bind(R.id.messageDialog )
     TextView messageDialog;
 
 
@@ -66,7 +66,7 @@ public class CamaradaDialogFragment extends DialogFragment {
         View v = inflater.inflate(R.layout.dialog_videona, null);
         builder.setView(v);
 
-        ButterKnife.inject(this, v);
+        ButterKnife.bind(this, v);
 
         setTitleDialog(getArguments().getString("title"));
         setMessageDialog(getArguments().getString("message"));

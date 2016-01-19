@@ -30,7 +30,7 @@ import java.io.File;
 import java.io.IOException;
 
 import butterknife.ButterKnife;
-import butterknife.InjectView;
+import butterknife.Bind;
 
 /**
  * InitAppActivity.
@@ -52,7 +52,7 @@ public class InitAppActivity extends CamaradaActivity implements InitAppView, On
      */
     private final String LOG_TAG = this.getClass().getSimpleName();
     protected Handler handler = new Handler();
-    @InjectView(R.id.videona_version)
+    @Bind(R.id.videona_version)
     TextView versionName;
     private long MINIMUN_WAIT_TIME;
     private SharedPreferences sharedPreferences;
@@ -74,14 +74,13 @@ public class InitAppActivity extends CamaradaActivity implements InitAppView, On
                 WindowManager.LayoutParams.FLAG_FULLSCREEN);
 
         setContentView(R.layout.activity_init_app);
-        ButterKnife.inject(this);
+        ButterKnife.bind(this);
 
         setVersionCode();
         if (BuildConfig.DEBUG) {
-            //Wait longer while debug so we can start qordoba sandbox mode on splash screen
-            MINIMUN_WAIT_TIME = 1000;
+            MINIMUN_WAIT_TIME = 2000;
         } else {
-            MINIMUN_WAIT_TIME = 900;
+            MINIMUN_WAIT_TIME = 2000;
         }
     }
 
@@ -281,7 +280,6 @@ public class InitAppActivity extends CamaradaActivity implements InitAppView, On
         checkRootPathMovies();
         checkAndInitPath(Constants.PATH_APP);
         checkAndInitPath(Constants.PATH_APP_TEMP);
-        checkAndInitPath(Constants.PATH_APP_MASTERS);
         checkAndInitPath(Constants.VIDEO_MUSIC_TEMP_FILE);
 
         File privateDataFolderModel = getDir(Constants.FOLDER_VIDEONA_PRIVATE_MODEL, Context.MODE_PRIVATE);
@@ -357,9 +355,9 @@ public class InitAppActivity extends CamaradaActivity implements InitAppView, On
         private void exitSplashScreen() {
             if(sharedPreferences.getBoolean(ConfigPreferences.FIRST_TIME, true)) {
                ///TODO Intro navigate(IntroAppActivity.class);
-                navigate(SettingsActivity.class);
+                navigate(IntroAppActivity.class);
             } else {
-                navigate(SettingsActivity.class);
+                navigate(IntroAppActivity.class);
             }
         }
 
