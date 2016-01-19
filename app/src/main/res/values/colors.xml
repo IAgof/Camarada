@@ -1,6 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
+    <color name="colorPrimary">#9a352d</color>
+    <color name="colorPrimaryDark">#821f19</color>
+    <color name="colorAccent">#9a352d</color>
+    <color name="colorSecondary">#808080</color>
+    <color name="colorSecondaryLight">#CCCCCC</color>
+    <color name="textColorPrimary">#212121</color>
+    <color name="textColorSecondary">#727272</color>
+    
     <color name="colorTransparent">#00000000</color>
     <color name="colorGreyTransparent">#7F000000</color>
     <color name="colorBlack">#000000</color>
@@ -23,16 +31,9 @@
 
     <color name="colorControlNormal">#FFFFFF</color>
     <color name="colorControlActivated">#808080</color>
-
-    <color name="colorPrimary">#9a352d</color>
-    <color name="colorPrimaryDark">#821f19</color>
-    <color name="colorSecondary">#808080</color>
-    <color name="colorSecondaryLight">#CCCCCC</color>
-    <color name="colorAccent">#fe304b</color>
-
-    <color name="textColorPrimary">#212121</color>
-    <color name="textColorSecondary">#727272</color>
+    
 
     <color name="editTextBottomLine">#808080</color>
 
+    
 </resources>
