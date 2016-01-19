@@ -10,6 +10,7 @@ import android.widget.VideoView;
 import com.videonasocialmedia.camarada.R;
 import com.videonasocialmedia.camarada.model.SocialNetwork;
 import com.videonasocialmedia.camarada.presentation.adapters.SocialNetworkAdapter;
+import com.videonasocialmedia.camarada.presentation.listener.OnSocialNetworkClickedListener;
 import com.videonasocialmedia.camarada.presentation.mvp.presenters.SharePresenter;
 import com.videonasocialmedia.camarada.presentation.mvp.views.PreviewVideoView;
 import com.videonasocialmedia.camarada.presentation.mvp.views.ShareView;
@@ -22,15 +23,15 @@ import butterknife.ButterKnife;
 /**
  * Created by jca on 18/1/16.
  */
-public class ShareActivity extends AppCompatActivity implements ShareView, PreviewVideoView {
-
-    private SharePresenter presenter;
-    private VideoPreviewEventListener videoPreviewEventListener;
+public class ShareActivity extends AppCompatActivity implements ShareView, PreviewVideoView,
+        OnSocialNetworkClickedListener {
 
     @Bind(R.id.videoPreview)
     VideoView videoPreview;
     @Bind(R.id.socialNetworkRecycler)
     RecyclerView socialNetworkRecycler;
+    private SharePresenter presenter;
+    private String videoPath;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -44,7 +45,7 @@ public class ShareActivity extends AppCompatActivity implements ShareView, Previ
     }
 
     private void initVideoPreview() {
-        videoPreviewEventListener= new VideoPreviewEventListener();
+        VideoPreviewEventListener videoPreviewEventListener = new VideoPreviewEventListener();
         videoPreview.setOnCompletionListener(videoPreviewEventListener);
         videoPreview.setOnPreparedListener(videoPreviewEventListener);
     }
@@ -53,8 +54,8 @@ public class ShareActivity extends AppCompatActivity implements ShareView, Previ
         RecyclerView.LayoutManager layoutManager=
                 new LinearLayoutManager(this,LinearLayoutManager.VERTICAL,false);
         socialNetworkRecycler.setLayoutManager(layoutManager);
-        SocialNetworkAdapter socialNetworkAdapter= new SocialNetworkAdapter();
-        socialNetworkRecycler.setAdapter();
+        SocialNetworkAdapter socialNetworkAdapter = new SocialNetworkAdapter(this);
+        socialNetworkRecycler.setAdapter(socialNetworkAdapter);
     }
 
     @Override
@@ -86,6 +87,11 @@ public class ShareActivity extends AppCompatActivity implements ShareView, Previ
     @Override
     public void seekTo(int milliseconds) {
         videoPreview.seekTo(milliseconds);
+    }
+
+    @Override
+    public void onSocialNetworkClicked(SocialNetwork socialNetwork) {
+        presenter.shareVideo(videoPath, socialNetwork, this);
     }
 
     class VideoPreviewEventListener implements MediaPlayer.OnCompletionListener, MediaPlayer.OnPreparedListener{
