@@ -1,4 +1,4 @@
-package com.videonasocialmedia.camarada.presentation.views.listener;
+package com.videonasocialmedia.camarada.presentation.listener;
 
 public interface OnCamaradaDialogClickListener {
 

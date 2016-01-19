@@ -1,5 +1,9 @@
 package com.videonasocialmedia.camarada.utils;
 
+import android.content.ContentResolver;
+import android.content.Context;
+import android.net.Uri;
+
 import com.coremedia.iso.boxes.Container;
 import com.googlecode.mp4parser.authoring.Movie;
 import com.googlecode.mp4parser.authoring.Track;
@@ -73,5 +77,47 @@ public class Utils {
             currentSample++;
         }
         return new long[]{startSample, endSample};
+    }
+
+    public static Uri obtainUriToShare(Context context, String videoPath) {
+        Uri uri;
+        if (videoPath != null) {
+            ContentResolver resolver = context.getContentResolver();
+            uri = getUriFromContentProvider(resolver, videoPath);
+            if (uri == null) {
+                uri = createUriToShare(resolver, videoPath);
+            }
+        } else {
+            uri = null;
+        }
+        return uri;
+    }
+
+    private static Uri getUriFromContentProvider(ContentResolver resolver, String videoPath) {
+        Uri uri = null;
+        String[] retCol = {MediaStore.Audio.Media._ID};
+        Cursor cursor = resolver.query(MediaStore.Video.Media.EXTERNAL_CONTENT_URI,
+                retCol,
+                MediaStore.MediaColumns.DATA + "='" + videoPath + "'", null, null);
+
+        if (cursor.getCount() != 0) {
+            cursor.moveToFirst();
+            int id = cursor.getInt(cursor.getColumnIndex(MediaStore.MediaColumns._ID));
+            uri = ContentUris.withAppendedId(MediaStore.Video.Media.EXTERNAL_CONTENT_URI,
+                    id);
+            cursor.close();
+        }
+        return uri;
+    }
+
+    private static Uri createUriToShare(ContentResolver resolver, String videoPath) {
+        ContentValues content = new ContentValues(4);
+        content.put(MediaStore.Video.VideoColumns.TITLE, videoPath);
+        content.put(MediaStore.Video.VideoColumns.DATE_ADDED,
+                System.currentTimeMillis());
+        content.put(MediaStore.Video.Media.MIME_TYPE, "video/mp4");
+        content.put(MediaStore.Video.Media.DATA, videoPath);
+        return resolver.insert(MediaStore.Video.Media.EXTERNAL_CONTENT_URI,
+                content);
     }
 }
