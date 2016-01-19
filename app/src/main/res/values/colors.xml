@@ -1,6 +1,38 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <color name="colorPrimary">#3F51B5</color>
-    <color name="colorPrimaryDark">#303F9F</color>
-    <color name="colorAccent">#FF4081</color>
+
+    <color name="colorTransparent">#00000000</color>
+    <color name="colorGreyTransparent">#7F000000</color>
+    <color name="colorBlack">#000000</color>
+
+    <color name="colorSpinnerCenter">#00b8f3</color>
+    <color name="colorSpinnerEnd">#0091ea</color>
+
+
+    <color name="textColorVersionSplashScreen">#FFFFFF</color>
+    <color name="textColorFiltersRecord">#FFFFFF</color>
+    <color name="textColorNumVideos">#FFFFFF</color>
+    <color name="textColorChronometer">#FFFFFF</color>
+
+    <color name="colorButton">#0091ea</color>
+    <color name="colorButtonAccent">#fe304b</color>
+    <color name="textColorButton">#FFFFFF</color>
+    <color name="textColorTitle">#9a352d</color>
+    <color name="textColorTitleToolbar">#FFFFFF</color>
+
+
+    <color name="colorControlNormal">#FFFFFF</color>
+    <color name="colorControlActivated">#808080</color>
+
+    <color name="colorPrimary">#9a352d</color>
+    <color name="colorPrimaryDark">#821f19</color>
+    <color name="colorSecondary">#808080</color>
+    <color name="colorSecondaryLight">#CCCCCC</color>
+    <color name="colorAccent">#fe304b</color>
+
+    <color name="textColorPrimary">#212121</color>
+    <color name="textColorSecondary">#727272</color>
+
+    <color name="editTextBottomLine">#808080</color>
+
 </resources>
