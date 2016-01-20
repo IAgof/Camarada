@@ -8,7 +8,7 @@
     <color name="colorSecondaryLight">#CCCCCC</color>
     <color name="textColorPrimary">#212121</color>
     <color name="textColorSecondary">#727272</color>
-    
+
     <color name="colorTransparent">#00000000</color>
     <color name="colorGreyTransparent">#7F000000</color>
     <color name="colorBlack">#000000</color>
@@ -31,9 +31,9 @@
 
     <color name="colorControlNormal">#FFFFFF</color>
     <color name="colorControlActivated">#808080</color>
-    
+
 
     <color name="editTextBottomLine">#808080</color>
 
-    
+
 </resources>

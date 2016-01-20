@@ -11,9 +11,6 @@ import com.google.android.gms.analytics.Tracker;
 import com.karumi.dexter.Dexter;
 
 
-/**
- * Created by jca on 18/1/16.
- */
 public class CamaradaApplication extends Application{
 
     private static Context context;

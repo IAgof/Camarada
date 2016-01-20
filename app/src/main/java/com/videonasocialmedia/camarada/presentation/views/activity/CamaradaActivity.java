@@ -122,11 +122,9 @@ public class CamaradaActivity extends AppCompatActivity {
         private final String message;
         private final String positiveButtonText;
         private final Drawable icon;
-
-        private AlertDialog dialog;
-
-        private CamaradaDialogActivity dialogPermission;
         private final int REQUEST_CODE_DIALOG_PERMISSION = 1;
+        private AlertDialog dialog;
+        private CamaradaDialogActivity dialogPermission;
 
         private CustomPermissionListener(Context context, String title,
                                          String message, String positiveButtonText, Drawable icon) {

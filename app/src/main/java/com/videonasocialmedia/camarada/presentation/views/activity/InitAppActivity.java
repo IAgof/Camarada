@@ -78,10 +78,9 @@ public class InitAppActivity extends CamaradaActivity implements InitAppView, On
 
         setVersionCode();
         if (BuildConfig.DEBUG) {
-            //Wait longer while debug so we can start qordoba sandbox mode on splash screen
-            MINIMUN_WAIT_TIME = 1000;
+            MINIMUN_WAIT_TIME = 2000;
         } else {
-            MINIMUN_WAIT_TIME = 900;
+            MINIMUN_WAIT_TIME = 2000;
         }
     }
 
@@ -281,7 +280,6 @@ public class InitAppActivity extends CamaradaActivity implements InitAppView, On
         checkRootPathMovies();
         checkAndInitPath(Constants.PATH_APP);
         checkAndInitPath(Constants.PATH_APP_TEMP);
-        checkAndInitPath(Constants.PATH_APP_MASTERS);
         checkAndInitPath(Constants.VIDEO_MUSIC_TEMP_FILE);
 
         File privateDataFolderModel = getDir(Constants.FOLDER_VIDEONA_PRIVATE_MODEL, Context.MODE_PRIVATE);
@@ -357,7 +355,7 @@ public class InitAppActivity extends CamaradaActivity implements InitAppView, On
         private void exitSplashScreen() {
             if(sharedPreferences.getBoolean(ConfigPreferences.FIRST_TIME, true)) {
                ///TODO Intro navigate(IntroAppActivity.class);
-                navigate(RecordActivity.class);
+                navigate(IntroAppActivity.class);
             } else {
                 navigate(RecordActivity.class);
             }

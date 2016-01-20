@@ -25,7 +25,6 @@ public class LegalNoticeActivity extends CamaradaActivity {
         getSupportActionBar().setDisplayShowTitleEnabled(false);
         ActionBar ab = getSupportActionBar();
         ab.setDisplayHomeAsUpEnabled(true);
-
     }
 
     @Override

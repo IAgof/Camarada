@@ -20,8 +20,6 @@ import butterknife.OnClick;
 public class CamaradaDialogFragment extends DialogFragment {
 
     OnCamaradaDialogClickListener clickListener;
-    private int idDialog;
-
     @Bind(R.id.acceptDialog)
     Button acceptDialog;
     @Bind(R.id.cancelDialog)
@@ -30,6 +28,7 @@ public class CamaradaDialogFragment extends DialogFragment {
     TextView titleDialog;
     @Bind(R.id.messageDialog )
     TextView messageDialog;
+    private int idDialog;
 
 
     public CamaradaDialogFragment(){
