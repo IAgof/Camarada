@@ -8,9 +8,9 @@ import android.view.Menu;
 import android.view.MenuItem;
 
 import com.videonasocialmedia.camarada.R;
+import com.videonasocialmedia.camarada.presentation.listener.OnCamaradaDialogClickListener;
 import com.videonasocialmedia.camarada.presentation.views.dialog.CamaradaDialogActivity;
 import com.videonasocialmedia.camarada.presentation.views.fragment.SettingsFragment;
-import com.videonasocialmedia.camarada.presentation.views.listener.OnCamaradaDialogClickListener;
 
 import butterknife.ButterKnife;
 
@@ -23,7 +23,7 @@ public class SettingsActivity extends CamaradaActivity implements OnCamaradaDial
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_settings);
-        ButterKnife.inject(this);
+        ButterKnife.bind(this);
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);

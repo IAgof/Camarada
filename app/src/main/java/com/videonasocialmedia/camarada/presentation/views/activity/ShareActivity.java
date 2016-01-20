@@ -9,7 +9,7 @@ import android.widget.VideoView;
 
 import com.videonasocialmedia.camarada.R;
 import com.videonasocialmedia.camarada.model.SocialNetwork;
-import com.videonasocialmedia.camarada.presentation.adapters.SocialNetworkAdapter;
+import com.videonasocialmedia.camarada.presentation.adapter.SocialNetworkAdapter;
 import com.videonasocialmedia.camarada.presentation.listener.OnSocialNetworkClickedListener;
 import com.videonasocialmedia.camarada.presentation.mvp.presenters.SharePresenter;
 import com.videonasocialmedia.camarada.presentation.mvp.views.PreviewVideoView;

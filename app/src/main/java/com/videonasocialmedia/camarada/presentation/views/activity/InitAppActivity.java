@@ -20,7 +20,7 @@ import android.widget.TextView;
 
 import com.videonasocialmedia.camarada.BuildConfig;
 import com.videonasocialmedia.camarada.R;
-import com.videonasocialmedia.camarada.presentation.views.listener.OnInitAppEventListener;
+import com.videonasocialmedia.camarada.presentation.listener.OnInitAppEventListener;
 import com.videonasocialmedia.camarada.presentation.mvp.views.InitAppView;
 import com.videonasocialmedia.camarada.utils.AppStart;
 import com.videonasocialmedia.camarada.utils.ConfigPreferences;
@@ -29,8 +29,8 @@ import com.videonasocialmedia.camarada.utils.Constants;
 import java.io.File;
 import java.io.IOException;
 
+import butterknife.Bind;
 import butterknife.ButterKnife;
-import butterknife.InjectView;
 
 /**
  * InitAppActivity.
@@ -52,7 +52,7 @@ public class InitAppActivity extends CamaradaActivity implements InitAppView, On
      */
     private final String LOG_TAG = this.getClass().getSimpleName();
     protected Handler handler = new Handler();
-    @InjectView(R.id.videona_version)
+    @Bind(R.id.videona_version)
     TextView versionName;
     private long MINIMUN_WAIT_TIME;
     private SharedPreferences sharedPreferences;
@@ -74,7 +74,7 @@ public class InitAppActivity extends CamaradaActivity implements InitAppView, On
                 WindowManager.LayoutParams.FLAG_FULLSCREEN);
 
         setContentView(R.layout.activity_init_app);
-        ButterKnife.inject(this);
+        ButterKnife.bind(this);
 
         setVersionCode();
         if (BuildConfig.DEBUG) {
@@ -357,9 +357,9 @@ public class InitAppActivity extends CamaradaActivity implements InitAppView, On
         private void exitSplashScreen() {
             if(sharedPreferences.getBoolean(ConfigPreferences.FIRST_TIME, true)) {
                ///TODO Intro navigate(IntroAppActivity.class);
-                navigate(SettingsActivity.class);
+                navigate(RecordActivity.class);
             } else {
-                navigate(SettingsActivity.class);
+                navigate(RecordActivity.class);
             }
         }
 
