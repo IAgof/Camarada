@@ -13,12 +13,6 @@ public interface RecordView {
 
     void hideSettings();
 
-    void lockScreenRotation();
-
-    void unlockScreenRotation();
-
-    void reStartScreenRotation();
-
     void showFlashOn(boolean on);
 
     void showFlashSupported(boolean state);

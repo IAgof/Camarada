@@ -6,6 +6,9 @@ import android.util.Log;
 
 import com.videonasocialmedia.avrecorder.AVRecorder;
 import com.videonasocialmedia.avrecorder.SessionConfig;
+import com.videonasocialmedia.avrecorder.event.CameraEncoderResetEvent;
+import com.videonasocialmedia.avrecorder.event.CameraOpenedEvent;
+import com.videonasocialmedia.avrecorder.event.MuxerFinishedEvent;
 import com.videonasocialmedia.avrecorder.view.GLCameraEncoderView;
 import com.videonasocialmedia.camarada.domain.ExportUseCase;
 import com.videonasocialmedia.camarada.domain.OnExportFinishedListener;
@@ -13,6 +16,8 @@ import com.videonasocialmedia.camarada.presentation.mvp.views.RecordView;
 import com.videonasocialmedia.camarada.utils.Constants;
 
 import java.io.IOException;
+
+import de.greenrobot.event.EventBus;
 
 /**
  * Created by Veronica Lago Fominaya on 19/01/2016.
@@ -87,10 +92,12 @@ public class RecordPresenter implements OnExportFinishedListener {
     }
 
     public void onResume() {
+        EventBus.getDefault().register(this);
         recorder.onHostActivityResumed();
     }
 
     public void onPause() {
+        EventBus.getDefault().unregister(this);
         stopRecord();
         recorder.onHostActivityPaused();
     }
@@ -130,7 +137,6 @@ public class RecordPresenter implements OnExportFinishedListener {
 
     private void startRecord() {
         recorder.startRecording();
-        recordView.lockScreenRotation();
         recordView.showStopButton();
         recordView.hideSettings();
         recordView.disableShareButton();
@@ -148,31 +154,28 @@ public class RecordPresenter implements OnExportFinishedListener {
 //        }
     }
 
-//    public void removeMasterVideos() {
+    public void removeMasterVideos() {
 //        removeVideosUseCase.removeMediaItemsFromProject();
-//    }
-//
-//    public void onEventMainThread(CameraEncoderResetEvent e) {
-//        startRecord();
-//    }
-//
-//    public void onEventMainThread(CameraOpenedEvent e) {
-//
-//        Log.d(LOG_TAG, "camera opened, camera != null");
-//        //Calculate orientation, rotate if needed
-//        //recordView.unlockScreenRotation();
-//        if (firstTimeRecording) {
+    }
+
+    public void onEventMainThread(CameraEncoderResetEvent e) {
+        startRecord();
+    }
+
+    public void onEventMainThread(CameraOpenedEvent e) {
+        //Calculate orientation, rotate if needed
+        //recordView.unlockScreenRotation();
+        if (firstTimeRecording) {
 //            recordView.unlockScreenRotation();
-//        }
-//
-//    }
-//
-//    public void onEventMainThread(MuxerFinishedEvent e) {
-//        recordView.stopChronometer();
+        }
+
+    }
+
+    public void onEventMainThread(MuxerFinishedEvent e) {
 //        String finalPath = moveVideoToMastersFolder();
 //        addVideoToProjectUseCase.addVideoToTrack(finalPath);
-//    }
-//
+    }
+
 //    private String moveVideoToMastersFolder() {
 //        File originalFile = new File(config.getOutputPath());
 //        String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss").format(new Date());
@@ -181,7 +184,7 @@ public class RecordPresenter implements OnExportFinishedListener {
 //        originalFile.renameTo(destinationFile);
 //        return destinationFile.getAbsolutePath();
 //    }
-//
+
 //    public void onEvent(AddMediaItemToTrackSuccessEvent e) {
 //        recordView.showRecordButton();
 //        recordView.enableShareButton();

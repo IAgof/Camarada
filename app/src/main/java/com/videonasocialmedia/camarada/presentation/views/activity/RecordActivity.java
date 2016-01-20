@@ -1,11 +1,19 @@
 package com.videonasocialmedia.camarada.presentation.views.activity;
 
+import android.annotation.TargetApi;
 import android.app.AlertDialog;
 import android.content.Context;
+import android.content.Intent;
 import android.content.SharedPreferences;
+import android.os.Build;
 import android.os.Bundle;
+import android.view.MotionEvent;
+import android.view.View;
 import android.widget.ImageButton;
+import android.widget.Toast;
 
+import com.google.android.gms.analytics.GoogleAnalytics;
+import com.google.android.gms.analytics.HitBuilders;
 import com.videonasocialmedia.avrecorder.view.GLCameraEncoderView;
 import com.videonasocialmedia.camarada.R;
 import com.videonasocialmedia.camarada.presentation.mvp.presenters.RecordPresenter;
@@ -14,6 +22,8 @@ import com.videonasocialmedia.camarada.utils.ConfigPreferences;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
+import butterknife.OnClick;
+import butterknife.OnTouch;
 
 /**
  * Created by Veronica Lago Fominaya on 19/01/2016.
@@ -79,98 +89,285 @@ public class RecordActivity extends CamaradaActivity implements RecordView {
         hideSystemUi();
     }
 
+    private void hideSystemUi() {
+//        if (!Utils.isKitKat() || !mUseImmersiveMode) {
+//            getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,
+//                    WindowManager.LayoutParams.FLAG_FULLSCREEN);
+//        } else if (mUseImmersiveMode) {
+//            setKitKatWindowFlags();
+//        }
+    }
+
+    @Override
+    public void onPause() {
+        super.onPause();
+        recordPresenter.onPause();
+        mixpanel.track("Time in Record Activity");
+    }
+
+    @Override
+    protected void onStop() {
+        super.onStop();
+        recordPresenter.onStop();
+        finish();
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        recordPresenter.onDestroy();
+    }
+
+    @TargetApi(Build.VERSION_CODES.KITKAT)
+    @Override
+    public void onWindowFocusChanged(boolean hasFocus) {
+        super.onWindowFocusChanged(hasFocus);
+//        if (Utils.isKitKat() && hasFocus && mUseImmersiveMode) {
+//            setKitKatWindowFlags();
+//        }
+    }
+
+    @TargetApi(Build.VERSION_CODES.KITKAT)
+    private void setKitKatWindowFlags() {
+        getWindow().getDecorView().setSystemUiVisibility(
+                View.SYSTEM_UI_FLAG_LAYOUT_STABLE
+                        | View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION
+                        | View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN
+                        | View.SYSTEM_UI_FLAG_HIDE_NAVIGATION
+                        | View.SYSTEM_UI_FLAG_FULLSCREEN
+                        | View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY
+        );
+    }
+
+    @OnTouch(R.id.recordButton) boolean onTouch(MotionEvent event) {
+        if (event.getAction() == MotionEvent.ACTION_DOWN) {
+            if (!recording) {
+                recordPresenter.requestRecord();
+//                sendButtonTracked("Start recording");
+                mixpanel.timeEvent("Time recording one video");
+                mixpanel.track("Start recording");
+            } else {
+                recordPresenter.stopRecord();
+//                sendButtonTracked("Stop recording");
+                mixpanel.track("Time recording one video");
+                mixpanel.track("Stop recording");
+            }
+        }
+        return true;
+    }
+
+    @OnClick(R.id.flashButton)
+    public void toggleFlash() {
+        recordPresenter.toggleFlash();
+        mixpanel.track("Toggle flash Button clicked", null);
+    }
+
+    @OnClick(R.id.toggleCameraButton)
+    public void changeCamera() {
+        recordPresenter.setFlashOff();
+        recordPresenter.changeCamera();
+        if (recording)
+            mixpanel.track("Change camera Button clicked while recording", null);
+        else
+            mixpanel.track("Change camera Button clicked on preview", null);
+    }
+
+    @OnClick(R.id.shareButton)
+    public void exportAndShare() {
+        if (!recording) {
+            showProgressDialog();
+            sendMetadataTracking();
+            startExportThread();
+        }
+    }
+
+    private void sendMetadataTracking() {
+//        try {
+//            int projectDuration = recordPresenter.getProjectDuration();
+//            int numVideosOnProject = recordPresenter.getNumVideosOnProject();
+//            JSONObject props = new JSONObject();
+//            props.put("Number of videos", numVideosOnProject);
+//            props.put("Duration of the exported video in msec", projectDuration);
+//            mixpanel.track("Exported video", props);
+//        } catch (JSONException e) {
+//            Log.e("TRACK_FAILED", String.valueOf(e));
+//        }
+    }
+
+    private void startExportThread() {
+        final Thread t = new Thread() {
+            @Override
+            public void run() {
+                recordPresenter.startExport();
+            }
+        };
+        t.start();
+    }
+
+    @OnClick(R.id.settingsButton)
+    public void navigateToSettings() {
+        if (!recording)
+            mixpanel.track("Navigate settings Button clicked in Record Activity", null);
+        Intent intent = new Intent(this, SettingsActivity.class);
+        startActivity(intent);
+    }
+
     @Override
     public void showRecordButton() {
-
+//        recButton.setImageResource(R.drawable.activity_record_icon_rec_normal);
+        recButton.setAlpha(1f);
+        recording = false;
     }
 
     @Override
     public void showStopButton() {
-
+//        recButton.setImageResource(R.drawable.activity_record_icon_stop_normal);
+        recButton.setAlpha(1f);
+        recording = true;
     }
 
     @Override
     public void showSettings() {
-
+        settingsButton.setVisibility(View.VISIBLE);
     }
 
     @Override
     public void hideSettings() {
-
-    }
-
-    @Override
-    public void lockScreenRotation() {
-
-    }
-
-    @Override
-    public void unlockScreenRotation() {
-
-    }
-
-    @Override
-    public void reStartScreenRotation() {
-
+        settingsButton.setVisibility(View.INVISIBLE);
     }
 
     @Override
     public void showFlashOn(boolean on) {
-
+        flashButton.setActivated(on);
     }
 
     @Override
-    public void showFlashSupported(boolean state) {
-
+    public void showFlashSupported(boolean supported) {
+        if (supported) {
+            flashButton.setImageAlpha(255);
+            flashButton.setActivated(false);
+            flashButton.setActivated(false);
+            flashButton.setEnabled(true);
+        } else {
+            flashButton.setImageAlpha(65);
+            flashButton.setActivated(false);
+            flashButton.setEnabled(false);
+        }
     }
 
     @Override
     public void showFrontCameraSelected() {
-
+        rotateCameraButton.setActivated(false);
+        mixpanel.track("Front camera selected", null);
     }
 
     @Override
     public void showBackCameraSelected() {
-
+        rotateCameraButton.setActivated(false);
+        mixpanel.track("Back camera selected", null);
     }
 
     @Override
     public void showError(String errorMessage) {
-
+        Toast.makeText(this, errorMessage, Toast.LENGTH_SHORT).show();
     }
 
     @Override
     public void showError(int stringResourceId) {
-
+        Toast.makeText(this, this.getText(stringResourceId), Toast.LENGTH_SHORT).show();
     }
 
     @Override
     public void goToShare(String videoToSharePath) {
+        recordPresenter.removeMasterVideos();
+        Intent intent = new Intent(this, ShareActivity.class);
+        intent.putExtra("VIDEO_EDITED", videoToSharePath);
+        startActivity(intent);
+    }
 
+    @Override
+    public void onBackPressed() {
+        if (buttonBackPressed) {
+            buttonBackPressed = false;
+            Intent intent = new Intent(Intent.ACTION_MAIN);
+            intent.addCategory(Intent.CATEGORY_HOME);
+            intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);//***Change Here***
+            startActivity(intent);
+            finish();
+            System.exit(0);
+        } else {
+            buttonBackPressed = true;
+//            Toast.makeText(getApplicationContext(), getString(R.string.toast_exit),
+//                    Toast.LENGTH_SHORT).show();
+        }
     }
 
     @Override
     public void showProgressDialog() {
-
+        progressDialog.show();
     }
 
     @Override
     public void hideProgressDialog() {
-
+        if (progressDialog != null && progressDialog.isShowing())
+            progressDialog.dismiss();
     }
 
     @Override
-    public void showMessage(int stringToast) {
-
+    public void showMessage(final int message) {
+        this.runOnUiThread(new Runnable() {
+            public void run() {
+                Toast.makeText(getApplicationContext(), message, Toast.LENGTH_SHORT).show();
+            }
+        });
     }
 
     @Override
     public void enableShareButton() {
-
+        shareButton.setAlpha(1f);
+        shareButton.setClickable(true);
     }
 
     @Override
     public void disableShareButton() {
+        shareButton.setAlpha(0.25f);
+        shareButton.setClickable(false);
+    }
 
+    @OnClick({R.id.recordButton, R.id.flashButton, R.id.toggleCameraButton})
+    public void clickListener(View view) {
+        sendButtonTracked(view.getId());
+    }
+
+    private void sendButtonTracked(String label) {
+        tracker.send(new HitBuilders.EventBuilder()
+                .setCategory("RecordActivity")
+                .setAction("button clicked")
+                .setLabel(label)
+                .build());
+        GoogleAnalytics.getInstance(this.getApplication().getBaseContext()).dispatchLocalHits();
+    }
+
+    /**
+     * Sends button clicks to Google Analytics
+     *
+     * @param id identifier of the clicked view
+     */
+    private void sendButtonTracked(int id) {
+        String label;
+        switch (id) {
+            case R.id.recordButton:
+                label = "Capture";
+                break;
+            case R.id.toggleCameraButton:
+                label = "Change camera";
+                break;
+            case R.id.flashButton:
+                label = "Flash camera";
+                break;
+            default:
+                label = "Other";
+        }
+        sendButtonTracked(label);
     }
 }

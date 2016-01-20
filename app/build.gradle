@@ -59,5 +59,6 @@ dependencies {
     compile 'com.google.android.gms:play-services-identity:8.4.0'
     compile 'com.google.android.gms:play-services-gcm:8.4.0'
     compile 'com.github.paolorotolo:appintro:3.3.0'
+    compile 'de.greenrobot:eventbus:2.4.0'
     compile 'com.karumi:dexter:2.1.4'
 }
