@@ -19,7 +19,7 @@ import com.videonasocialmedia.camarada.R;
 import com.videonasocialmedia.camarada.presentation.mvp.presenters.PreferencesPresenter;
 import com.videonasocialmedia.camarada.presentation.mvp.presenters.PreferencesView;
 import com.videonasocialmedia.camarada.presentation.views.dialog.CamaradaDialogFragment;
-import com.videonasocialmedia.camarada.presentation.views.listener.OnCamaradaDialogClickListener;
+import com.videonasocialmedia.camarada.presentation.listener.OnCamaradaDialogClickListener;
 import com.videonasocialmedia.camarada.utils.ConfigPreferences;
 
 import java.util.ArrayList;
@@ -28,18 +28,15 @@ public class SettingsFragment extends PreferenceFragment implements SharedPrefer
         PreferencesView, OnCamaradaDialogClickListener {
 
 
+    private final int REQUEST_CODE_DIALOG_EXIT = 1;
+    private final int REQUEST_CODE_DOWNLOAD_BETA = 2;
     protected PreferencesPresenter preferencesPresenter;
     protected Context context;
     protected SharedPreferences sharedPreferences;
     protected SharedPreferences.Editor editor;
-
     /* Dialogs*/
     private CamaradaDialogFragment dialogExitApp;
-    private final int REQUEST_CODE_DIALOG_EXIT = 1;
-
     private CamaradaDialogFragment dialogDownloadVideona;
-    private final int REQUEST_CODE_DOWNLOAD_BETA = 2;
-
 
     @Override
     public void onCreate(Bundle savedInstanceState) {

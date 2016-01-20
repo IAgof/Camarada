@@ -20,7 +20,7 @@ import android.widget.TextView;
 
 import com.videonasocialmedia.camarada.BuildConfig;
 import com.videonasocialmedia.camarada.R;
-import com.videonasocialmedia.camarada.presentation.views.listener.OnInitAppEventListener;
+import com.videonasocialmedia.camarada.presentation.listener.OnInitAppEventListener;
 import com.videonasocialmedia.camarada.presentation.mvp.views.InitAppView;
 import com.videonasocialmedia.camarada.utils.AppStart;
 import com.videonasocialmedia.camarada.utils.ConfigPreferences;

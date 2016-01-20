@@ -10,6 +10,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
 
+import com.videonasocialmedia.camarada.presentation.views.listener.OnCamaradaDialogClickListener;
 import com.videonasocialmedia.camarada.R;
 import com.videonasocialmedia.camarada.presentation.views.listener.OnCamaradaDialogClickListener;
 
@@ -20,8 +21,6 @@ import butterknife.OnClick;
 public class CamaradaDialogFragment extends DialogFragment {
 
     OnCamaradaDialogClickListener clickListener;
-    private int idDialog;
-
     @Bind(R.id.acceptDialog)
     Button acceptDialog;
     @Bind(R.id.cancelDialog)
@@ -30,6 +29,7 @@ public class CamaradaDialogFragment extends DialogFragment {
     TextView titleDialog;
     @Bind(R.id.messageDialog )
     TextView messageDialog;
+    private int idDialog;
 
 
     public CamaradaDialogFragment(){

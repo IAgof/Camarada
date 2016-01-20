@@ -50,9 +50,9 @@ public class ShareActivity extends AppCompatActivity implements ShareView, Previ
         videoPreview.setOnPreparedListener(videoPreviewEventListener);
     }
 
-    private void initSocialNetworkContainer(){
-        RecyclerView.LayoutManager layoutManager=
-                new LinearLayoutManager(this,LinearLayoutManager.VERTICAL,false);
+    private void initSocialNetworkContainer() {
+        RecyclerView.LayoutManager layoutManager =
+                new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false);
         socialNetworkRecycler.setLayoutManager(layoutManager);
         SocialNetworkAdapter socialNetworkAdapter = new SocialNetworkAdapter(this);
         socialNetworkRecycler.setAdapter(socialNetworkAdapter);
@@ -94,7 +94,7 @@ public class ShareActivity extends AppCompatActivity implements ShareView, Previ
         presenter.shareVideo(videoPath, socialNetwork, this);
     }
 
-    class VideoPreviewEventListener implements MediaPlayer.OnCompletionListener, MediaPlayer.OnPreparedListener{
+    class VideoPreviewEventListener implements MediaPlayer.OnCompletionListener, MediaPlayer.OnPreparedListener {
         @Override
         public void onCompletion(MediaPlayer mp) {
 

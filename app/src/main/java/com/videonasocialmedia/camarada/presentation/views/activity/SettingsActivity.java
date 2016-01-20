@@ -12,18 +12,17 @@ import com.videonasocialmedia.camarada.presentation.views.dialog.CamaradaDialogA
 import com.videonasocialmedia.camarada.presentation.views.fragment.SettingsFragment;
 import com.videonasocialmedia.camarada.presentation.views.listener.OnCamaradaDialogClickListener;
 
-import butterknife.ButterKnife;
+
 
 public class SettingsActivity extends CamaradaActivity implements OnCamaradaDialogClickListener {
 
-    private CamaradaDialogActivity dialogVote;
     private final int REQUEST_CODE_DIALOG_VOTE = 1;
+    private CamaradaDialogActivity dialogVote;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_settings);
-        ButterKnife.bind(this);
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);

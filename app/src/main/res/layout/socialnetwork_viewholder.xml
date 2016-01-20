@@ -11,14 +11,14 @@
         android:id="@+id/icon"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        tools:src="@mipmap/ic_launcher"/>
+        tools:src="@mipmap/ic_launcher" />
 
     <TextView
         android:id="@+id/name"
-        android:layout_marginStart="8dp"
-        android:layout_gravity="center_vertical"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        tools:text="Social Network Name"/>
+        android:layout_gravity="center_vertical"
+        android:layout_marginStart="8dp"
+        tools:text="Social Network Name" />
 
 </LinearLayout>

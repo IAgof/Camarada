@@ -25,7 +25,7 @@ import com.mixpanel.android.mpmetrics.MixpanelAPI;
 import com.videonasocialmedia.camarada.BuildConfig;
 import com.videonasocialmedia.camarada.CamaradaApplication;
 import com.videonasocialmedia.camarada.presentation.views.dialog.CamaradaDialogActivity;
-import com.videonasocialmedia.camarada.presentation.views.listener.OnCamaradaDialogClickListener;
+import com.videonasocialmedia.camarada.presentation.listener.OnCamaradaDialogClickListener;
 import com.videonasocialmedia.camarada.utils.PermissionConstants;
 
 import java.util.List;
@@ -122,11 +122,9 @@ public class CamaradaActivity extends AppCompatActivity {
         private final String message;
         private final String positiveButtonText;
         private final Drawable icon;
-
-        private AlertDialog dialog;
-
-        private CamaradaDialogActivity dialogPermission;
         private final int REQUEST_CODE_DIALOG_PERMISSION = 1;
+        private AlertDialog dialog;
+        private CamaradaDialogActivity dialogPermission;
 
         private CustomPermissionListener(Context context, String title,
                                          String message, String positiveButtonText, Drawable icon) {

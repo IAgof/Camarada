@@ -17,12 +17,10 @@
         android:id="@+id/socialNetworkRecycler"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        tools:listitem="@layout/socialnetwork_viewholder">
-    </android.support.v7.widget.RecyclerView>
+        tools:listitem="@layout/socialnetwork_viewholder" />
 
     <ImageButton
         android:layout_width="wrap_content"
         android:layout_height="wrap_content" />
-
 
 </LinearLayout>

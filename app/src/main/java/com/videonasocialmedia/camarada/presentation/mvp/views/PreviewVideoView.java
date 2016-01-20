@@ -5,6 +5,8 @@ package com.videonasocialmedia.camarada.presentation.mvp.views;
  */
 public interface PreviewVideoView {
     void play();
+
     void pause();
+
     void seekTo(int milliseconds);
 }
