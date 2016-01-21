@@ -10,9 +10,8 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
 
-import com.videonasocialmedia.camarada.presentation.views.listener.OnCamaradaDialogClickListener;
 import com.videonasocialmedia.camarada.R;
-import com.videonasocialmedia.camarada.presentation.views.listener.OnCamaradaDialogClickListener;
+import com.videonasocialmedia.camarada.presentation.listener.OnCamaradaDialogClickListener;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
