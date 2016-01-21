@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<selector xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <!-- selected state -->
+    <item android:drawable="@mipmap/activity_record_filter_blue_icon_selected" android:state_activated="true" />
+
+    <!-- default state -->
+    <item android:drawable="@mipmap/activity_record_filter_blue_icon_normal" />
+
+</selector>

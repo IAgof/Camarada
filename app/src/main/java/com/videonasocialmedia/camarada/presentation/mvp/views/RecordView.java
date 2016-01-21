@@ -9,10 +9,6 @@ public interface RecordView {
 
     void showStopButton();
 
-    void showSettings();
-
-    void hideSettings();
-
     void showFlashOn(boolean on);
 
     void showFlashSupported(boolean state);

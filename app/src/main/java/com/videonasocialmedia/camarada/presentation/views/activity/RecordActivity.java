@@ -9,6 +9,7 @@ import android.os.Build;
 import android.os.Bundle;
 import android.view.MotionEvent;
 import android.view.View;
+import android.view.WindowManager;
 import android.widget.ImageButton;
 import android.widget.Toast;
 
@@ -19,6 +20,7 @@ import com.videonasocialmedia.camarada.R;
 import com.videonasocialmedia.camarada.presentation.mvp.presenters.RecordPresenter;
 import com.videonasocialmedia.camarada.presentation.mvp.views.RecordView;
 import com.videonasocialmedia.camarada.utils.ConfigPreferences;
+import com.videonasocialmedia.camarada.utils.Utils;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
@@ -36,8 +38,6 @@ public class RecordActivity extends CamaradaActivity implements RecordView {
     GLCameraEncoderView cameraView;
     @Bind(R.id.toggleCameraButton)
     ImageButton rotateCameraButton;
-    @Bind(R.id.settingsButton)
-    ImageButton settingsButton;
     @Bind(R.id.flashButton)
     ImageButton flashButton;
     @Bind(R.id.shareButton)
@@ -66,11 +66,11 @@ public class RecordActivity extends CamaradaActivity implements RecordView {
     }
 
     private void createProgressDialog() {
-//        AlertDialog.Builder builder = new AlertDialog.Builder(this);
-//        View dialogView = getLayoutInflater().inflate(R.layout.dialog_export_progress, null);
-//        progressDialog = builder.setCancelable(false)
-//                .setView(dialogView)
-//                .create();
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        View dialogView = getLayoutInflater().inflate(R.layout.dialog_export_progress, null);
+        progressDialog = builder.setCancelable(false)
+                .setView(dialogView)
+                .create();
     }
 
     @Override
@@ -90,12 +90,12 @@ public class RecordActivity extends CamaradaActivity implements RecordView {
     }
 
     private void hideSystemUi() {
-//        if (!Utils.isKitKat() || !mUseImmersiveMode) {
-//            getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,
-//                    WindowManager.LayoutParams.FLAG_FULLSCREEN);
-//        } else if (mUseImmersiveMode) {
-//            setKitKatWindowFlags();
-//        }
+        if (!Utils.isKitKat() || !mUseImmersiveMode) {
+            getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,
+                    WindowManager.LayoutParams.FLAG_FULLSCREEN);
+        } else if (mUseImmersiveMode) {
+            setKitKatWindowFlags();
+        }
     }
 
     @Override
@@ -122,9 +122,9 @@ public class RecordActivity extends CamaradaActivity implements RecordView {
     @Override
     public void onWindowFocusChanged(boolean hasFocus) {
         super.onWindowFocusChanged(hasFocus);
-//        if (Utils.isKitKat() && hasFocus && mUseImmersiveMode) {
-//            setKitKatWindowFlags();
-//        }
+        if (Utils.isKitKat() && hasFocus && mUseImmersiveMode) {
+            setKitKatWindowFlags();
+        }
     }
 
     @TargetApi(Build.VERSION_CODES.KITKAT)
@@ -204,36 +204,18 @@ public class RecordActivity extends CamaradaActivity implements RecordView {
         t.start();
     }
 
-    @OnClick(R.id.settingsButton)
-    public void navigateToSettings() {
-        if (!recording)
-            mixpanel.track("Navigate settings Button clicked in Record Activity", null);
-        Intent intent = new Intent(this, SettingsActivity.class);
-        startActivity(intent);
-    }
-
     @Override
     public void showRecordButton() {
-//        recButton.setImageResource(R.drawable.activity_record_icon_rec_normal);
+        recButton.setActivated(false);
         recButton.setAlpha(1f);
         recording = false;
     }
 
     @Override
     public void showStopButton() {
-//        recButton.setImageResource(R.drawable.activity_record_icon_stop_normal);
+        recButton.setActivated(true);
         recButton.setAlpha(1f);
         recording = true;
-    }
-
-    @Override
-    public void showSettings() {
-        settingsButton.setVisibility(View.VISIBLE);
-    }
-
-    @Override
-    public void hideSettings() {
-        settingsButton.setVisibility(View.INVISIBLE);
     }
 
     @Override

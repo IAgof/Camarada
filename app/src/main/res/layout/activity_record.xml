@@ -4,48 +4,107 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:orientation="vertical"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:background="@mipmap/activity_record_background_wood"
+    android:padding="16dp">
+
+    <ImageButton
+        android:id="@+id/shareButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:background="@null"
+        android:layout_marginBottom="8dp"
+        android:alpha="0.25"
+        android:src="@drawable/activity_record_share_icon_selector"/>
 
     <com.videonasocialmedia.avrecorder.view.GLCameraEncoderView
         android:id="@+id/cameraPreview"
         android:layout_width="match_parent"
-        android:layout_height="200dp" />
+        android:layout_height="200dp"
+        android:layout_marginBottom="4dp"
+        android:layout_gravity="center"/>
 
-    <ImageButton
-        android:id="@+id/shareButton"
-        android:layout_width="30dp"
-        android:layout_height="30dp"
-        android:layout_margin="5dp"/>
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:orientation="horizontal"
+        android:layout_weight="1"
+        android:layout_gravity="center">
 
-    <ImageButton
-        android:id="@+id/recordButton"
-        android:layout_width="30dp"
-        android:layout_height="30dp"
-        android:layout_margin="5dp"
-        android:src="@android:drawable/ic_lock_idle_charging"/>
+        <ImageButton
+            android:id="@+id/skinButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:background="@null"
+            android:layout_marginEnd="4dp"
+            android:src="@drawable/activity_record_skin_leather_icon_selector"/>
+
+        <ImageButton
+            android:id="@+id/recordButton"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_weight="1"
+            android:background="@null"
+            android:src="@drawable/activity_record_rec_icon_selector"/>
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:layout_marginStart="4dp"
+            android:layout_gravity="center">
+
+            <ImageButton
+                android:id="@+id/filterBWIcon"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:background="@null"
+                android:src="@drawable/activity_record_filter_bw_icon_selector"/>
+
+            <ImageButton
+                android:id="@+id/filterSepiaIcon"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:background="@null"
+                android:src="@drawable/activity_record_filter_sepia_icon_selector"/>
+
+            <ImageButton
+                android:id="@+id/filterBlueIcon"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:background="@null"
+                android:src="@drawable/activity_record_filter_blue_icon_selector"/>
+
+        </LinearLayout>
+
+    </LinearLayout>
 
     <LinearLayout
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:orientation="horizontal">
+        android:orientation="horizontal"
+        android:layout_marginTop="4dp"
+        android:layout_gravity="center">
         <ImageButton
             android:id="@+id/flashButton"
-            android:layout_width="30dp"
-            android:layout_height="30dp"
-            android:layout_margin="5dp"
-            android:src="@android:drawable/ic_lock_idle_low_battery"/>
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:background="@null"
+            android:src="@drawable/activity_record_flash_icon_selector"/>
         <ImageButton
             android:id="@+id/toggleCameraButton"
-            android:layout_width="30dp"
-            android:layout_height="30dp"
-            android:layout_margin="5dp"
-            android:src="@android:drawable/arrow_up_float"/>
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:background="@null"
+            android:src="@drawable/activity_record_change_camera_icon_selector"/>
     </LinearLayout>
-
-    <ImageButton
-        android:id="@+id/settingsButton"
-        android:layout_width="30dp"
-        android:layout_height="30dp"
-        android:layout_margin="5dp" />
 
 </LinearLayout>

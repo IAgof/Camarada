@@ -72,6 +72,7 @@ public class RecordPresenter implements OnExportFinishedListener {
     }
 
     private SessionConfig getConfigFromPreferences(SharedPreferences sharedPreferences) {
+        // TODO comprobar la máxima resolución que puede coger y usarla aquí
         String destinationFolderPath = Constants.PATH_APP_TEMP;
         int width = 1280;
         int height = 720;
@@ -103,8 +104,11 @@ public class RecordPresenter implements OnExportFinishedListener {
     }
 
     public void stopRecord() {
-        if (recorder.isRecording())
+        if (recorder.isRecording()) {
             recorder.stopRecording();
+            recordView.showRecordButton();
+            recordView.enableShareButton();
+        }
         //TODO show a gif to indicate the process is running til the video is added to the project
     }
 
@@ -138,7 +142,6 @@ public class RecordPresenter implements OnExportFinishedListener {
     private void startRecord() {
         recorder.startRecording();
         recordView.showStopButton();
-        recordView.hideSettings();
         recordView.disableShareButton();
         firstTimeRecording = false;
     }
@@ -188,7 +191,6 @@ public class RecordPresenter implements OnExportFinishedListener {
 //    public void onEvent(AddMediaItemToTrackSuccessEvent e) {
 //        recordView.showRecordButton();
 //        recordView.enableShareButton();
-//        recordView.showSettings();
 //    }
 
     public void changeCamera() {

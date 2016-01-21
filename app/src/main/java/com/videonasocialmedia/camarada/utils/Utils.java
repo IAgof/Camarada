@@ -6,6 +6,7 @@ import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
 import android.net.Uri;
+import android.os.Build;
 import android.provider.MediaStore;
 
 import com.coremedia.iso.boxes.Container;
@@ -123,5 +124,12 @@ public class Utils {
         content.put(MediaStore.Video.Media.DATA, videoPath);
         return resolver.insert(MediaStore.Video.Media.EXTERNAL_CONTENT_URI,
                 content);
+    }
+
+    /**
+     * Returns whether the current device is running Android 4.4, KitKat, or newer
+     */
+    public static boolean isKitKat() {
+        return Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT;
     }
 }
