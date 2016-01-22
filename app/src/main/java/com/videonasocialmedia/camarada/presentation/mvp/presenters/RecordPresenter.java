@@ -2,9 +2,12 @@ package com.videonasocialmedia.camarada.presentation.mvp.presenters;
 
 import android.content.Context;
 import android.content.SharedPreferences;
+import android.graphics.drawable.Drawable;
+import android.support.annotation.NonNull;
 import android.util.Log;
 
 import com.videonasocialmedia.avrecorder.AVRecorder;
+import com.videonasocialmedia.avrecorder.Filters;
 import com.videonasocialmedia.avrecorder.SessionConfig;
 import com.videonasocialmedia.avrecorder.event.CameraEncoderResetEvent;
 import com.videonasocialmedia.avrecorder.event.MuxerFinishedEvent;
@@ -20,6 +23,7 @@ import com.videonasocialmedia.camarada.utils.Constants;
 import java.io.File;
 import java.io.IOException;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -61,20 +65,34 @@ public class RecordPresenter implements OnExportFinishedListener {
         exportUseCase = new ExportUseCase(this);
         getVideosFromTempFolderUseCase = new GetVideosFromTempFolderUseCase();
         removeFilesInTempFolderUseCase = new RemoveFilesInTempFolderUseCase();
-        initRecorder(context, cameraPreview, sharedPreferences);
+        initRecorder(cameraPreview, sharedPreferences);
     }
 
-    private void initRecorder(Context context, GLCameraEncoderView cameraPreview,
+    private void initRecorder(GLCameraEncoderView cameraPreview,
                               SharedPreferences sharedPreferences) {
 
         config = getConfigFromPreferences(sharedPreferences);
         try {
             recorder = new AVRecorder(config);
             recorder.setPreviewDisplay(cameraPreview);
+            recorder.applyFilter(Filters.FILTER_MONO);
+            List<Drawable> animatedOverlayFrames = getAnimatedOverlay();
+            recorder.addAnimatedOverlayFilter(animatedOverlayFrames);
             firstTimeRecording = true;
         } catch (IOException ioe) {
             Log.e("ERROR", "ERROR", ioe);
         }
+    }
+
+    @NonNull
+    private List<Drawable> getAnimatedOverlay() {
+        List<Drawable> animatedOverlayFrames = new ArrayList<>();
+        animatedOverlayFrames.add(context.getResources().getDrawable(R.mipmap.noise_1));
+        animatedOverlayFrames.add(context.getResources().getDrawable(R.mipmap.noise_2));
+        animatedOverlayFrames.add(context.getResources().getDrawable(R.mipmap.noise_3));
+        animatedOverlayFrames.add(context.getResources().getDrawable(R.mipmap.noise_4));
+        animatedOverlayFrames.add(context.getResources().getDrawable(R.mipmap.noise_5));
+        return animatedOverlayFrames;
     }
 
     private SessionConfig getConfigFromPreferences(SharedPreferences sharedPreferences) {
@@ -94,13 +112,14 @@ public class RecordPresenter implements OnExportFinishedListener {
     public void onStart() {
         if (recorder.isReleased()) {
             cameraPreview.releaseCamera();
-            initRecorder(context, cameraPreview, sharedPreferences);
+            initRecorder(cameraPreview, sharedPreferences);
         }
     }
 
     public void onResume() {
         EventBus.getDefault().register(this);
         recorder.onHostActivityResumed();
+        setBlackAndWitheFilter();
     }
 
     public void onPause() {
@@ -224,5 +243,15 @@ public class RecordPresenter implements OnExportFinishedListener {
     public void onExportSuccess(String path) {
         recordView.hideProgressDialog();
         recordView.goToShare(path);
+    }
+
+    public void setSepiaFilter(){
+        recorder.applyFilter(Filters.FILTER_SEPIA);
+    }
+    public void setBlackAndWitheFilter(){
+        recorder.applyFilter(Filters.FILTER_MONO);
+    }
+    public void setBlueFilter(){
+        recorder.applyFilter(Filters.FILTER_AQUA);
     }
 }
