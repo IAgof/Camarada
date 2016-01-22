@@ -33,4 +33,10 @@ public interface RecordView {
 
     void disableShareButton();
 
+    void changeSkin(int backgroundId);
+
+    void showSkinWoodButton();
+
+    void showSkinLeatherButton();
+
 }

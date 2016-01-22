@@ -214,6 +214,16 @@ public class RecordPresenter implements OnExportFinishedListener {
         recordView.showFlashOn(on);
     }
 
+    public void changeToWoodSkin() {
+        recordView.changeSkin(R.mipmap.activity_record_background_wood);
+        recordView.showSkinLeatherButton();
+    }
+
+    public void changeToLeatherSkin() {
+        recordView.changeSkin(R.mipmap.activity_record_background_leather);
+        recordView.showSkinWoodButton();
+    }
+
     @Override
     public void onExportError(String error) {
         recordView.hideProgressDialog();

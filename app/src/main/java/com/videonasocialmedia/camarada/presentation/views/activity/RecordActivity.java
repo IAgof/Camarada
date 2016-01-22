@@ -11,6 +11,7 @@ import android.view.MotionEvent;
 import android.view.View;
 import android.view.WindowManager;
 import android.widget.ImageButton;
+import android.widget.LinearLayout;
 import android.widget.Toast;
 
 import com.google.android.gms.analytics.GoogleAnalytics;
@@ -32,6 +33,8 @@ import butterknife.OnTouch;
  */
 public class RecordActivity extends CamaradaActivity implements RecordView {
 
+    @Bind(R.id.recordLayout)
+    LinearLayout recordLayout;
     @Bind(R.id.recordButton)
     ImageButton recButton;
     @Bind(R.id.cameraPreview)
@@ -42,6 +45,10 @@ public class RecordActivity extends CamaradaActivity implements RecordView {
     ImageButton flashButton;
     @Bind(R.id.shareButton)
     ImageButton shareButton;
+    @Bind(R.id.skinWoodButton)
+    ImageButton skinWoodButton;
+    @Bind(R.id.skinLeatherButton)
+    ImageButton skinLeatherButton;
 
     private RecordPresenter recordPresenter;
     private boolean buttonBackPressed;
@@ -167,6 +174,16 @@ public class RecordActivity extends CamaradaActivity implements RecordView {
             mixpanel.track("Change camera Button clicked while recording", null);
         else
             mixpanel.track("Change camera Button clicked on preview", null);
+    }
+
+    @OnClick(R.id.skinLeatherButton)
+    public void changeToLeatherSkin() {
+        recordPresenter.changeToLeatherSkin();
+    }
+
+    @OnClick(R.id.skinWoodButton)
+    public void changeToWoodSkin() {
+        recordPresenter.changeToWoodSkin();
     }
 
     @OnClick(R.id.shareButton)
@@ -311,6 +328,23 @@ public class RecordActivity extends CamaradaActivity implements RecordView {
     public void disableShareButton() {
         shareButton.setAlpha(0.25f);
         shareButton.setClickable(false);
+    }
+
+    @Override
+    public void changeSkin(int backgroundId) {
+        recordLayout.setBackgroundResource(backgroundId);
+    }
+
+    @Override
+    public void showSkinWoodButton() {
+        skinLeatherButton.setVisibility(View.GONE);
+        skinWoodButton.setVisibility(View.VISIBLE);
+    }
+
+    @Override
+    public void showSkinLeatherButton() {
+        skinWoodButton.setVisibility(View.GONE);
+        skinLeatherButton.setVisibility(View.VISIBLE);
     }
 
     @OnClick({R.id.recordButton, R.id.flashButton, R.id.toggleCameraButton})
