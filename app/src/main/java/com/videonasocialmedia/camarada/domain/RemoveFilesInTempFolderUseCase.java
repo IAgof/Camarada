@@ -13,6 +13,6 @@ public class RemoveFilesInTempFolderUseCase {
     public RemoveFilesInTempFolderUseCase() {}
 
     public void removeFilesInTempFolder() {
-        Utils.cleanDirectory(new File(Constants.PATH_APP_TEMP));
+        Utils.cleanFilesInDirectory(new File(Constants.PATH_APP_TEMP));
     }
 }

@@ -138,16 +138,13 @@ public class Utils {
         return Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT;
     }
 
-    public static void cleanDirectory(File directory) {
+    public static void cleanFilesInDirectory(File directory) {
         if (directory.exists()) {
             File[] files = directory.listFiles();
             if (files != null) { //some JVMs return null for empty dirs
                 for (File f : files) {
-                    if (f.isDirectory()) {
-                        cleanDirectory(f);
-                    } else {
+                    if (!f.isDirectory())
                         f.delete();
-                    }
                 }
             }
         }
@@ -162,7 +159,6 @@ public class Utils {
         String nameFile = String.valueOf(rawResourceId);
         File file = new File(Constants.VIDEO_MUSIC_FOLDER + File.separator + nameFile +
                 fileTypeExtensionConstant);
-        Log.d("copy", "dentro 2");
 
         if (!file.exists() || !file.isFile()) {
             if (!file.isFile())
@@ -178,7 +174,7 @@ public class Utils {
                 }
                 out.close();
             } catch (FileNotFoundException e) {
-                //TODO show error message
+                Log.e("ERROR", "FileNotFoundException", e);
             } finally {
                 in.close();
             }

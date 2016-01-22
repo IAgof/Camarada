@@ -1,6 +1,7 @@
 package com.videonasocialmedia.camarada.domain;
 
 import com.googlecode.mp4parser.authoring.Movie;
+import com.videonasocialmedia.camarada.R;
 import com.videonasocialmedia.camarada.domain.muxer.Muxer;
 import com.videonasocialmedia.camarada.utils.Constants;
 import com.videonasocialmedia.camarada.utils.Utils;
@@ -53,7 +54,7 @@ public class ExportUseCase {
     }
 
     private String getAudioPath() {
-        return Constants.VIDEO_MUSIC_FILE;
+        return Utils.getMusicFileById(R.raw.audio).getAbsolutePath();
     }
 
     private double getMovieDuration(List<String> videoPaths) {

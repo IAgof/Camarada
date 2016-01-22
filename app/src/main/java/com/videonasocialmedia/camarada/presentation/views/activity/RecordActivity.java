@@ -259,9 +259,9 @@ public class RecordActivity extends CamaradaActivity implements RecordView {
     @Override
     public void goToShare(String videoToSharePath) {
         recordPresenter.removeTempVideos();
-//        Intent intent = new Intent(this, ShareActivity.class);
-//        intent.putExtra("VIDEO_EDITED", videoToSharePath);
-//        startActivity(intent);
+        Intent intent = new Intent(this, ShareActivity.class);
+        intent.putExtra("VIDEO_EDITED", videoToSharePath);
+        startActivity(intent);
     }
 
     @Override

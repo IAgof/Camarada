@@ -263,8 +263,8 @@ public class InitAppActivity extends CamaradaActivity implements InitAppView, On
      */
     private void setupPathsApp(OnInitAppEventListener listener) {
         try {
-            initPaths();
             cleanTempPath();
+            initPaths();
             listener.onCheckPathsAppSuccess();
         } catch (IOException e) {
             Log.e("CHECK PATH", "error", e);
@@ -293,7 +293,6 @@ public class InitAppActivity extends CamaradaActivity implements InitAppView, On
 
     private void copyMusicFromResources() {
         try {
-            Log.d("copy", "dentro");
             Utils.copyMusicResourceToTemp(this, R.raw.audio);
         } catch (IOException e) {
             Log.e("Error", "IOException", e);
