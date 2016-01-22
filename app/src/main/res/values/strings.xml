@@ -6,6 +6,8 @@
         record audio.\nWithout them Videona can\'t continue and will be closed.</string>
     <string name="CloseBecauseOfPermissionsTitle">Permissions not granted</string>
 
+    <!-- Export video -->
+    <string name="exportingVideo">"I'm\n working\n on your\n video"</string>
 
     <!-- Share Activity -->
     <string name="shareError">Ups, we couldn\'t share this video. Sorry</string>
@@ -20,7 +22,8 @@
 
     <!-- Rate Videona -->
     <string name="rateUsDialogTitle">¿Do you want to rate us?</string>
-    <string name="rateUsDialogMessage">If you like Videona give us five stars. If you have any suggestion or doubt write us</string>
+    <string name="rateUsDialogMessage">If you like Videona give us five stars. If you have any
+        suggestion or doubt write us</string>
     <string name="acceptDialogRateUs">Love it</string>
     <string name="cancelDialogRateUs">Hate it</string>
     <string name="error_rate_app">Could not launch Google Play</string>

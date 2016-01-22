@@ -42,6 +42,8 @@ public class RecordActivity extends CamaradaActivity implements RecordView {
     ImageButton flashButton;
     @Bind(R.id.shareButton)
     ImageButton shareButton;
+//    @Bind(R.id.exportingVideoText)
+//    TextView exportText;
 
     private final String LOG_TAG = getClass().getSimpleName();
     private RecordPresenter recordPresenter;
