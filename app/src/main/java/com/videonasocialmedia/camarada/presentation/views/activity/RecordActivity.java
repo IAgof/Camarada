@@ -49,6 +49,12 @@ public class RecordActivity extends CamaradaActivity implements RecordView {
     ImageButton skinWoodButton;
     @Bind(R.id.skinLeatherButton)
     ImageButton skinLeatherButton;
+    @Bind(R.id.filterBlueButton)
+    ImageButton filterBlueButton;
+    @Bind(R.id.filterBlackAndWhiteButton)
+    ImageButton filterBlackAndWhiteButton;
+    @Bind(R.id.filterSepiaButton)
+    ImageButton filterSepiaButton;
 
     private RecordPresenter recordPresenter;
     private boolean buttonBackPressed;
@@ -216,6 +222,31 @@ public class RecordActivity extends CamaradaActivity implements RecordView {
             }
         };
         t.start();
+    }
+
+    @OnClick(R.id.filterBlackAndWhiteButton)
+    public void selectBlackAndWhiteFilter(){
+        recordPresenter.setBlackAndWitheFilter();
+        resetSelections();
+        filterBlackAndWhiteButton.setSelected(true);
+    }
+    @OnClick(R.id.filterSepiaButton)
+    public void selectSepiaFilter(){
+        recordPresenter.setSepiaFilter();
+        resetSelections();
+        filterSepiaButton.setSelected(true);
+    }
+    @OnClick(R.id.filterBlueButton)
+    public void selectBlueFilter(){
+        recordPresenter.setBlueFilter();
+        resetSelections();
+        filterBlueButton.setSelected(true);
+    }
+
+    private void resetSelections(){
+        filterBlackAndWhiteButton.setSelected(false);
+        filterBlueButton.setSelected(false);
+        filterSepiaButton.setSelected(false);
     }
 
     @Override
