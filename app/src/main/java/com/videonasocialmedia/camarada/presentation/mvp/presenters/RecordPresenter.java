@@ -7,15 +7,21 @@ import android.util.Log;
 import com.videonasocialmedia.avrecorder.AVRecorder;
 import com.videonasocialmedia.avrecorder.SessionConfig;
 import com.videonasocialmedia.avrecorder.event.CameraEncoderResetEvent;
-import com.videonasocialmedia.avrecorder.event.CameraOpenedEvent;
 import com.videonasocialmedia.avrecorder.event.MuxerFinishedEvent;
 import com.videonasocialmedia.avrecorder.view.GLCameraEncoderView;
+import com.videonasocialmedia.camarada.R;
 import com.videonasocialmedia.camarada.domain.ExportUseCase;
+import com.videonasocialmedia.camarada.domain.GetVideosFromTempFolderUseCase;
 import com.videonasocialmedia.camarada.domain.OnExportFinishedListener;
+import com.videonasocialmedia.camarada.domain.RemoveFilesInTempFolderUseCase;
 import com.videonasocialmedia.camarada.presentation.mvp.views.RecordView;
 import com.videonasocialmedia.camarada.utils.Constants;
 
+import java.io.File;
 import java.io.IOException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+import java.util.List;
 
 import de.greenrobot.event.EventBus;
 
@@ -40,10 +46,10 @@ public class RecordPresenter implements OnExportFinishedListener {
      */
     private ExportUseCase exportUseCase;
     /**
-     * Get media list from project use case
+     * Get media list use case
      */
-//    private GetMediaListFromProjectUseCase getMediaListFromProjectUseCase;
-//    private RemoveVideosUseCase removeVideosUseCase;
+    private GetVideosFromTempFolderUseCase getVideosFromTempFolderUseCase;
+    private RemoveFilesInTempFolderUseCase removeFilesInTempFolderUseCase;
 
     public RecordPresenter(Context context, RecordView recordView,
                            GLCameraEncoderView cameraPreview, SharedPreferences sharedPreferences) {
@@ -53,8 +59,8 @@ public class RecordPresenter implements OnExportFinishedListener {
         this.cameraPreview = cameraPreview;
         this.sharedPreferences = sharedPreferences;
         exportUseCase = new ExportUseCase(this);
-//        removeVideosUseCase = new RemoveVideosUseCase();
-//        getMediaListFromProjectUseCase = new GetMediaListFromProjectUseCase();
+        getVideosFromTempFolderUseCase = new GetVideosFromTempFolderUseCase();
+        removeFilesInTempFolderUseCase = new RemoveFilesInTempFolderUseCase();
         initRecorder(context, cameraPreview, sharedPreferences);
     }
 
@@ -147,51 +153,34 @@ public class RecordPresenter implements OnExportFinishedListener {
     }
 
     public void startExport() {
-        // TODO ver cómo coger los vídeos que acaba de grabar
-//        List<String> videoList = getMediaListFromProjectUseCase.getMediaListFromProject();
-//        if (videoList.size() > 0) {
-//            exportUseCase.export(videoList);
-//        } else {
-//            recordView.hideProgressDialog();
-//            recordView.showMessage(R.string.add_videos_to_project);
-//        }
+        List<String> videoList = getVideosFromTempFolderUseCase.getVideosFromTempFolder();
+        if (videoList.size() > 0) {
+            exportUseCase.export(videoList);
+        } else {
+            recordView.hideProgressDialog();
+            recordView.showMessage(R.string.add_videos_to_project);
+        }
     }
 
-    public void removeMasterVideos() {
-//        removeVideosUseCase.removeMediaItemsFromProject();
+    public void removeTempVideos() {
+        removeFilesInTempFolderUseCase.removeFilesInTempFolder();
     }
 
     public void onEventMainThread(CameraEncoderResetEvent e) {
         startRecord();
     }
 
-    public void onEventMainThread(CameraOpenedEvent e) {
-        //Calculate orientation, rotate if needed
-        //recordView.unlockScreenRotation();
-        if (firstTimeRecording) {
-//            recordView.unlockScreenRotation();
-        }
-
-    }
-
     public void onEventMainThread(MuxerFinishedEvent e) {
-//        String finalPath = moveVideoToMastersFolder();
-//        addVideoToProjectUseCase.addVideoToTrack(finalPath);
+        renameOutputVideo(config.getOutputPath());
     }
 
-//    private String moveVideoToMastersFolder() {
-//        File originalFile = new File(config.getOutputPath());
-//        String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss").format(new Date());
-//        String fileName = "VID_" + timeStamp + ".mp4";
-//        File destinationFile = new File(Constants.PATH_APP_MASTERS, fileName);
-//        originalFile.renameTo(destinationFile);
-//        return destinationFile.getAbsolutePath();
-//    }
-
-//    public void onEvent(AddMediaItemToTrackSuccessEvent e) {
-//        recordView.showRecordButton();
-//        recordView.enableShareButton();
-//    }
+    private void renameOutputVideo(String path) {
+        File originalFile = new File(path);
+        String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss").format(new Date());
+        String fileName = "VID_" + timeStamp + ".mp4";
+        File destinationFile = new File(Constants.PATH_APP_TEMP, fileName);
+        originalFile.renameTo(destinationFile);
+    }
 
     public void changeCamera() {
         //TODO controlar el estado del flash
@@ -228,8 +217,7 @@ public class RecordPresenter implements OnExportFinishedListener {
     @Override
     public void onExportError(String error) {
         recordView.hideProgressDialog();
-        //TODO modify error message
-        recordView.showError("Export error");
+        recordView.showError(R.string.errorExportingVideo);
     }
 
     @Override

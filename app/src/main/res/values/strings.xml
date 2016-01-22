@@ -6,8 +6,13 @@
         record audio.\nWithout them Videona can\'t continue and will be closed.</string>
     <string name="CloseBecauseOfPermissionsTitle">Permissions not granted</string>
 
+    <!-- Record Activity -->
+    <string name="toast_exit">Press back to exit</string>
+
     <!-- Export video -->
+    <string name="add_videos_to_project">Please, add videos to project</string>
     <string name="exportingVideo">"I'm\n working\n on your\n video"</string>
+    <string name="errorExportingVideo">"Sorry, something was wrong. Try again!"</string>
 
     <!-- Share Activity -->
     <string name="shareError">Ups, we couldn\'t share this video. Sorry</string>

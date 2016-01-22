@@ -1,9 +1,8 @@
 package com.videonasocialmedia.camarada.domain;
 
-import android.os.Environment;
-
 import com.googlecode.mp4parser.authoring.Movie;
 import com.videonasocialmedia.camarada.domain.muxer.Muxer;
+import com.videonasocialmedia.camarada.utils.Constants;
 import com.videonasocialmedia.camarada.utils.Utils;
 
 import java.io.File;
@@ -26,9 +25,7 @@ public class ExportUseCase {
     }
 
     public void export(List<String> videoPaths) {
-        // TODO definir dónde se va a guardar el vídeo y con qué nombre
-        pathVideoExported = Environment.getExternalStoragePublicDirectory(
-                Environment.DIRECTORY_MOVIES) + File.separator + "V_EDIT_" +
+        pathVideoExported = Constants.PATH_APP + File.separator + "V_EDIT_" +
                 new SimpleDateFormat("yyyyMMdd_HHmmss").format(new Date()) + ".mp4";
         Movie mergedVideoWithoutAudio = appendVideos(videoPaths);
         if(mergedVideoWithoutAudio != null) {
@@ -56,9 +53,7 @@ public class ExportUseCase {
     }
 
     private String getAudioPath() {
-        // TODO ver de dónde coger la música
-        return Environment.getExternalStoragePublicDirectory(
-                Environment.DIRECTORY_MOVIES) + File.separator + "audio.m4a";
+        return Constants.VIDEO_MUSIC_FILE;
     }
 
     private double getMovieDuration(List<String> videoPaths) {

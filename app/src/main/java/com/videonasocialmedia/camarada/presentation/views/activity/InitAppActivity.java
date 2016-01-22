@@ -20,11 +20,13 @@ import android.widget.TextView;
 
 import com.videonasocialmedia.camarada.BuildConfig;
 import com.videonasocialmedia.camarada.R;
+import com.videonasocialmedia.camarada.domain.RemoveFilesInTempFolderUseCase;
 import com.videonasocialmedia.camarada.presentation.listener.OnInitAppEventListener;
 import com.videonasocialmedia.camarada.presentation.mvp.views.InitAppView;
 import com.videonasocialmedia.camarada.utils.AppStart;
 import com.videonasocialmedia.camarada.utils.ConfigPreferences;
 import com.videonasocialmedia.camarada.utils.Constants;
+import com.videonasocialmedia.camarada.utils.Utils;
 
 import java.io.File;
 import java.io.IOException;
@@ -61,12 +63,11 @@ public class InitAppActivity extends CamaradaActivity implements InitAppView, On
     private int numSupportedCameras;
     private long startTime;
     private String androidId = null;
+    private RemoveFilesInTempFolderUseCase removeFilesInTempFolderUseCase;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-
         requestWindowFeature(Window.FEATURE_NO_TITLE);
-
         super.onCreate(savedInstanceState);
 
         //remove title, mode fullscreen
@@ -75,7 +76,7 @@ public class InitAppActivity extends CamaradaActivity implements InitAppView, On
 
         setContentView(R.layout.activity_init_app);
         ButterKnife.bind(this);
-
+        removeFilesInTempFolderUseCase = new RemoveFilesInTempFolderUseCase();
         setVersionCode();
         if (BuildConfig.DEBUG) {
             MINIMUN_WAIT_TIME = 2000;
@@ -159,9 +160,7 @@ public class InitAppActivity extends CamaradaActivity implements InitAppView, On
                 // Repeat this method for security, if user delete app data miss this configs.
                 setupCameraSettings();
                 createUserProfile();
-
                 initSettings();
-
                 break;
             case FIRST_TIME:
                 Log.d(LOG_TAG, " AppStart State FIRST_TIME");
@@ -265,6 +264,7 @@ public class InitAppActivity extends CamaradaActivity implements InitAppView, On
     private void setupPathsApp(OnInitAppEventListener listener) {
         try {
             initPaths();
+            cleanTempPath();
             listener.onCheckPathsAppSuccess();
         } catch (IOException e) {
             Log.e("CHECK PATH", "error", e);
@@ -280,15 +280,27 @@ public class InitAppActivity extends CamaradaActivity implements InitAppView, On
         checkRootPathMovies();
         checkAndInitPath(Constants.PATH_APP);
         checkAndInitPath(Constants.PATH_APP_TEMP);
-        checkAndInitPath(Constants.VIDEO_MUSIC_TEMP_FILE);
-
+        checkAndInitPath(Constants.VIDEO_MUSIC_FOLDER);
+        copyMusicFromResources();
         File privateDataFolderModel = getDir(Constants.FOLDER_VIDEONA_PRIVATE_MODEL, Context.MODE_PRIVATE);
         String privatePath = privateDataFolderModel.getAbsolutePath();
         editor.putString(ConfigPreferences.PRIVATE_PATH, privatePath).commit();
-
     }
 
-      private void checkRootPathMovies() {
+    private void cleanTempPath() {
+        removeFilesInTempFolderUseCase.removeFilesInTempFolder();
+    }
+
+    private void copyMusicFromResources() {
+        try {
+            Log.d("copy", "dentro");
+            Utils.copyMusicResourceToTemp(this, R.raw.audio);
+        } catch (IOException e) {
+            Log.e("Error", "IOException", e);
+        }
+    }
+
+    private void checkRootPathMovies() {
         File fMovies = Environment.getExternalStoragePublicDirectory(
                 Environment.DIRECTORY_MOVIES);
         if (!fMovies.exists()) {
@@ -354,7 +366,6 @@ public class InitAppActivity extends CamaradaActivity implements InitAppView, On
 
         private void exitSplashScreen() {
             if(sharedPreferences.getBoolean(ConfigPreferences.FIRST_TIME, true)) {
-               ///TODO Intro navigate(IntroAppActivity.class);
                 navigate(IntroAppActivity.class);
             } else {
                 navigate(RecordActivity.class);

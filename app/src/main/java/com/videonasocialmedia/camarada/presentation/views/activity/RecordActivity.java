@@ -42,10 +42,7 @@ public class RecordActivity extends CamaradaActivity implements RecordView {
     ImageButton flashButton;
     @Bind(R.id.shareButton)
     ImageButton shareButton;
-//    @Bind(R.id.exportingVideoText)
-//    TextView exportText;
 
-    private final String LOG_TAG = getClass().getSimpleName();
     private RecordPresenter recordPresenter;
     private boolean buttonBackPressed;
     private boolean recording;
@@ -145,12 +142,10 @@ public class RecordActivity extends CamaradaActivity implements RecordView {
         if (event.getAction() == MotionEvent.ACTION_DOWN) {
             if (!recording) {
                 recordPresenter.requestRecord();
-//                sendButtonTracked("Start recording");
                 mixpanel.timeEvent("Time recording one video");
                 mixpanel.track("Start recording");
             } else {
                 recordPresenter.stopRecord();
-//                sendButtonTracked("Stop recording");
                 mixpanel.track("Time recording one video");
                 mixpanel.track("Stop recording");
             }
@@ -263,10 +258,10 @@ public class RecordActivity extends CamaradaActivity implements RecordView {
 
     @Override
     public void goToShare(String videoToSharePath) {
-        recordPresenter.removeMasterVideos();
-        Intent intent = new Intent(this, ShareActivity.class);
-        intent.putExtra("VIDEO_EDITED", videoToSharePath);
-        startActivity(intent);
+        recordPresenter.removeTempVideos();
+//        Intent intent = new Intent(this, ShareActivity.class);
+//        intent.putExtra("VIDEO_EDITED", videoToSharePath);
+//        startActivity(intent);
     }
 
     @Override
@@ -281,8 +276,8 @@ public class RecordActivity extends CamaradaActivity implements RecordView {
             System.exit(0);
         } else {
             buttonBackPressed = true;
-//            Toast.makeText(getApplicationContext(), getString(R.string.toast_exit),
-//                    Toast.LENGTH_SHORT).show();
+            Toast.makeText(getApplicationContext(), getString(R.string.toast_exit),
+                    Toast.LENGTH_SHORT).show();
         }
     }
 
