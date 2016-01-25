@@ -8,10 +8,9 @@ import android.view.Menu;
 import android.view.MenuItem;
 
 import com.videonasocialmedia.camarada.R;
+import com.videonasocialmedia.camarada.presentation.listener.OnCamaradaDialogClickListener;
 import com.videonasocialmedia.camarada.presentation.views.dialog.CamaradaDialogActivity;
 import com.videonasocialmedia.camarada.presentation.views.fragment.SettingsFragment;
-import com.videonasocialmedia.camarada.presentation.views.listener.OnCamaradaDialogClickListener;
-
 
 
 public class SettingsActivity extends CamaradaActivity implements OnCamaradaDialogClickListener {

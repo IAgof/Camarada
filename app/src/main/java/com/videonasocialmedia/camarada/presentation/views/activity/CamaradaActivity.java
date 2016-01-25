@@ -24,8 +24,8 @@ import com.karumi.dexter.listener.multi.MultiplePermissionsListener;
 import com.mixpanel.android.mpmetrics.MixpanelAPI;
 import com.videonasocialmedia.camarada.BuildConfig;
 import com.videonasocialmedia.camarada.CamaradaApplication;
-import com.videonasocialmedia.camarada.presentation.views.dialog.CamaradaDialogActivity;
 import com.videonasocialmedia.camarada.presentation.listener.OnCamaradaDialogClickListener;
+import com.videonasocialmedia.camarada.presentation.views.dialog.CamaradaDialogActivity;
 import com.videonasocialmedia.camarada.utils.PermissionConstants;
 
 import java.util.List;

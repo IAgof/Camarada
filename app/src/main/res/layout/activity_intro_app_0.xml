@@ -13,6 +13,6 @@
         android:layout_marginRight="10dp"
         android:layout_marginBottom="70dp"
         android:layout_centerVertical="true"
-        android:src="@drawable/intro_app_slide_welcome" />
+        android:src="@mipmap/intro_app_slide_welcome" />
 
 </RelativeLayout>
