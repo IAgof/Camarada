@@ -31,7 +31,6 @@
         <item name="android:toolbarStyle">@style/CamaradaToolbar</item>
         <item name="android:preferenceCategoryStyle">@style/CamaradaCategoryPreference</item>
 
-
         <item name="android:editTextStyle">@style/CamaradaEditText</item>
 
  </style>

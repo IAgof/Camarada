@@ -29,6 +29,7 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:id="@+id/scrollView"
+        android:background="@mipmap/activity_settings_background"
         android:layout_below="@id/toolbar" >
 
         <LinearLayout

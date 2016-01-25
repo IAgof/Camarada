@@ -55,6 +55,8 @@ public class RecordActivity extends CamaradaActivity implements RecordView {
     ImageButton filterBlackAndWhiteButton;
     @Bind(R.id.filterSepiaButton)
     ImageButton filterSepiaButton;
+    @Bind(R.id.settingsButton)
+    ImageButton settingsButton;
 
     private RecordPresenter recordPresenter;
     private boolean buttonBackPressed;
@@ -200,6 +202,14 @@ public class RecordActivity extends CamaradaActivity implements RecordView {
             sendMetadataTracking();
             startExportThread();
         }
+    }
+
+    @OnClick(R.id.settingsButton)
+    public void goToSettings(){
+
+        Intent intent = new Intent(this, SettingsActivity.class);
+        startActivity(intent);
+
     }
 
     private void sendMetadataTracking() {

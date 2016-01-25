@@ -30,6 +30,7 @@
     <FrameLayout
         android:id="@+id/fragment_preferences"
         android:layout_width="match_parent"
+        android:background="@mipmap/activity_settings_background"
         android:layout_below="@id/toolbar"
         android:layout_height="match_parent"
         android:paddingLeft="16dp"
