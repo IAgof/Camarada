@@ -36,7 +36,7 @@ public class SharePresenter {
 
     public void obtainSocialNetworksAvailableToShare() {
         ObtainSocialNetworksToShareUseCase useCase = new ObtainSocialNetworksToShareUseCase();
-        List<SocialNetwork> socialNetworks = useCase.getSocialNetworks();
+        List<SocialNetwork> socialNetworks = useCase.getKnownSocialNetworks();
         shareView.showAppsToShareWith(socialNetworks);
     }
 
