@@ -7,6 +7,7 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Build;
 import android.os.Bundle;
+import android.view.Gravity;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.WindowManager;
@@ -16,8 +17,14 @@ import android.widget.Toast;
 
 import com.google.android.gms.analytics.GoogleAnalytics;
 import com.google.android.gms.analytics.HitBuilders;
+import com.videonasocialmedia.avrecorder.view.AspectFrameLayout;
 import com.videonasocialmedia.avrecorder.view.GLCameraEncoderView;
 import com.videonasocialmedia.camarada.R;
+import com.videonasocialmedia.camarada.model.entities.editor.effects.Effect;
+import com.videonasocialmedia.camarada.presentation.adapter.EffectAdapter;
+import com.videonasocialmedia.camarada.presentation.listener.OnEffectSelectedListener;
+import com.videonasocialmedia.camarada.presentation.listener.OnSwipeListener;
+import com.videonasocialmedia.camarada.presentation.listener.OnSwipeTouchListener;
 import com.videonasocialmedia.camarada.presentation.mvp.presenters.RecordPresenter;
 import com.videonasocialmedia.camarada.presentation.mvp.views.RecordView;
 import com.videonasocialmedia.camarada.utils.ConfigPreferences;
@@ -31,7 +38,8 @@ import butterknife.OnTouch;
 /**
  * Created by Veronica Lago Fominaya on 19/01/2016.
  */
-public class RecordActivity extends CamaradaActivity implements RecordView {
+public class RecordActivity extends CamaradaActivity implements RecordView, OnEffectSelectedListener,
+        OnSwipeListener {
 
     @Bind(R.id.recordLayout)
     LinearLayout recordLayout;
@@ -57,12 +65,18 @@ public class RecordActivity extends CamaradaActivity implements RecordView {
     ImageButton filterSepiaButton;
     @Bind(R.id.settingsButton)
     ImageButton settingsButton;
+    @Bind(R.id.aspectFrameLayout)
+    AspectFrameLayout swipeFiltersView;
+    private OnSwipeTouchListener swipeListener;
 
     private RecordPresenter recordPresenter;
     private boolean buttonBackPressed;
     private boolean recording;
     private AlertDialog progressDialog;
     private boolean mUseImmersiveMode = true;
+    private EffectAdapter cameraShaderEffectsAdapter;
+    private enum SWIPE_TYPE { LEFT, RIGHT  }
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -72,11 +86,16 @@ public class RecordActivity extends CamaradaActivity implements RecordView {
 
         cameraView.setKeepScreenOn(true);
 
+        swipeListener = new OnSwipeTouchListener(this, this);
+       // swipeFiltersView.setOnTouchListener(swipeListener);
+
         SharedPreferences sharedPreferences = getSharedPreferences(
                 ConfigPreferences.SETTINGS_SHARED_PREFERENCES_FILE_NAME,
                 Context.MODE_PRIVATE);
         recordPresenter = new RecordPresenter(this, this, cameraView, sharedPreferences);
         createProgressDialog();
+
+        cameraShaderEffectsAdapter = new EffectAdapter(recordPresenter.getShaderEffectList(), this);
     }
 
     private void createProgressDialog() {
@@ -151,6 +170,12 @@ public class RecordActivity extends CamaradaActivity implements RecordView {
                         | View.SYSTEM_UI_FLAG_FULLSCREEN
                         | View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY
         );
+    }
+
+    @Override
+    public boolean dispatchTouchEvent(MotionEvent ev){
+        swipeListener.getGestureDetector().onTouchEvent(ev);
+        return super.dispatchTouchEvent(ev);
     }
 
     @OnTouch(R.id.recordButton)
@@ -238,22 +263,22 @@ public class RecordActivity extends CamaradaActivity implements RecordView {
     @OnClick(R.id.filterBlackAndWhiteButton)
     public void selectBlackAndWhiteFilter() {
         recordPresenter.setBlackAndWitheFilter();
-        resetSelections();
-        filterBlackAndWhiteButton.setSelected(true);
+
+        setFilerButtonSelected(0);
     }
 
     @OnClick(R.id.filterSepiaButton)
     public void selectSepiaFilter() {
         recordPresenter.setSepiaFilter();
-        resetSelections();
-        filterSepiaButton.setSelected(true);
+
+        setFilerButtonSelected(1);
     }
 
     @OnClick(R.id.filterBlueButton)
     public void selectBlueFilter() {
         recordPresenter.setBlueFilter();
-        resetSelections();
-        filterBlueButton.setSelected(true);
+
+        setFilerButtonSelected(2);
     }
 
     private void resetSelections() {
@@ -427,4 +452,81 @@ public class RecordActivity extends CamaradaActivity implements RecordView {
         }
         sendButtonTracked(label);
     }
+
+    @Override
+    public void onEffectSelected(Effect effect) {
+        recordPresenter.applyEffect(effect);
+        sendButtonTracked(effect.getIconId());
+    }
+
+    @Override
+    public void onEffectSelectionCancel(Effect effect) {
+        recordPresenter.removeEffect(effect);
+
+    }
+
+    @Override
+    public void onSwipeLeft() {
+        effectChangedSwipe(SWIPE_TYPE.LEFT);
+    }
+
+    @Override
+    public void onSwipeRight() {
+        effectChangedSwipe(SWIPE_TYPE.RIGHT);
+    }
+
+
+    private void effectChangedSwipe(SWIPE_TYPE swipe) {
+
+        int position = cameraShaderEffectsAdapter.getSelectionPosition();
+
+        int sizeEffectList = cameraShaderEffectsAdapter.getElementList().size() - 1;
+
+        switch(swipe) {
+            case LEFT:
+                if (position == 0) {
+                    position = sizeEffectList;
+                } else {
+                    position--;
+                }
+                break;
+            case RIGHT:
+                if(position == sizeEffectList){
+                    position = 0;
+                } else {
+                    position++;
+                }
+                break;
+        }
+
+        Effect effect = cameraShaderEffectsAdapter.getEffect(position);
+
+        onEffectSelected(effect);
+
+        cameraShaderEffectsAdapter.setNextEffectPosition(position);
+
+        setFilerButtonSelected(position);
+    }
+
+    private void setFilerButtonSelected(int position) {
+
+        resetSelections();
+        if(position == 0) {
+            filterBlackAndWhiteButton.setSelected(true);
+        } else {
+            if(position == 1){
+                filterSepiaButton.setSelected(true);
+            } else {
+                if(position == 2) {
+                    filterBlueButton.setSelected(true);
+                }
+            }
+        }
+
+        Toast toast = Toast.makeText(this, "Effect " +
+                cameraShaderEffectsAdapter.getEffect(position).getName(), Toast.LENGTH_SHORT);
+        toast.setGravity(Gravity.CENTER, 0, -150);
+        toast.show();
+    }
+
 }

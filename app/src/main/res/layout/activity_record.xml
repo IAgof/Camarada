@@ -38,20 +38,22 @@
     </RelativeLayout>
 
     <com.videonasocialmedia.avrecorder.view.AspectFrameLayout
-        android:id="@+id/aspectFrameLayout"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="center"
-        android:layout_marginBottom="4dp"
-        android:background="#ffb86a"
-        android:padding="6dp"
-        app:aspect="four_three">
-
-        <com.videonasocialmedia.avrecorder.view.GLCameraEncoderView
-            android:id="@+id/cameraPreview"
+            android:id="@+id/aspectFrameLayout"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content" />
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_marginBottom="4dp"
+            android:background="#ffb86a"
+            android:padding="6dp"
+            app:aspect="four_three">
+
+            <com.videonasocialmedia.avrecorder.view.GLCameraEncoderView
+                android:id="@+id/cameraPreview"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content" />
+
     </com.videonasocialmedia.avrecorder.view.AspectFrameLayout>
+
 
     <RelativeLayout
         android:layout_width="match_parent"
@@ -124,7 +126,7 @@
 
         </RelativeLayout>
 
-        <LinearLayout
+       <LinearLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignParentEnd="true"
