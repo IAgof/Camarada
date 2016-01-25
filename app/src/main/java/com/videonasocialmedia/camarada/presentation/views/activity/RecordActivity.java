@@ -62,12 +62,16 @@ public class RecordActivity extends CamaradaActivity implements RecordView {
     private AlertDialog progressDialog;
     private boolean mUseImmersiveMode = true;
 
+    //TODO sacar esta variable de aquí (hay que guardarlo en disco: shared prefs o algo así)
+    private int backgroundResourceId;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_record);
         ButterKnife.bind(this);
 
+        changeSkin(R.mipmap.activity_record_background_leather);
         cameraView.setKeepScreenOn(true);
 
         SharedPreferences sharedPreferences = getSharedPreferences(
@@ -311,7 +315,9 @@ public class RecordActivity extends CamaradaActivity implements RecordView {
     public void goToShare(String videoToSharePath) {
         recordPresenter.removeTempVideos();
         Intent intent = new Intent(this, ShareActivity.class);
-        intent.putExtra("VIDEO_EDITED", videoToSharePath);
+        intent.putExtra(ShareActivity.INTENT_EXTRA_VIDEO_PATH, videoToSharePath);
+        //TODO once the resource id is saved on shared preference the extra will be necessary
+        intent.putExtra(ShareActivity.INTENT_EXTRA_BACKGROND, backgroundResourceId);
         startActivity(intent);
     }
 
@@ -367,6 +373,7 @@ public class RecordActivity extends CamaradaActivity implements RecordView {
     @Override
     public void changeSkin(int backgroundId) {
         recordLayout.setBackgroundResource(backgroundId);
+        backgroundResourceId = backgroundId;
     }
 
     @Override

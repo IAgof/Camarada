@@ -98,8 +98,8 @@ public class RecordPresenter implements OnExportFinishedListener {
     private SessionConfig getConfigFromPreferences(SharedPreferences sharedPreferences) {
         // TODO comprobar la máxima resolución que puede coger y usarla aquí
         String destinationFolderPath = Constants.PATH_APP_TEMP;
-        int width = 1280;
-        int height = 720;
+        int width = 640;
+        int height = 480;
         int videoBitrate = 5000000;
         int audioChannels = 1;
         int audioFrequency = 48000;
