@@ -123,7 +123,8 @@
         <activity
             android:name=".presentation.views.activity.SettingsActivity"
             android:label="@string/app_name"
-            android:screenOrientation="sensorPortrait" />
+            android:screenOrientation="sensorPortrait"
+            android:parentActivityName=".presentation.views.activity.RecordActivity"/>
 
         <activity
             android:name=".presentation.views.activity.AboutActivity"
