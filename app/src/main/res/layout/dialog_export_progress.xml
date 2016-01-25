@@ -3,25 +3,25 @@
     xmlns:customAttrs="http://schemas.android.com/apk/res-auto"
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
+    android:background="@mipmap/dialog_export_background"
     android:orientation="horizontal"
-    android:padding="16dp"
-    android:background="@mipmap/dialog_export_background">
+    android:padding="16dp">
 
     <ImageView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center"
-        android:src="@mipmap/dialog_export_progress_icon"/>
+        android:src="@mipmap/dialog_export_progress_icon" />
 
     <com.videonasocialmedia.camarada.presentation.views.widget.CustomFontTextView
         android:id="@+id/exportingVideoText"
         android:layout_width="wrap_content"
         android:layout_height="match_parent"
         android:layout_gravity="center"
-        android:gravity="center"
         android:layout_marginStart="8dp"
+        android:gravity="center"
+        android:text="@string/exportingVideo"
         android:textSize="15sp"
-        customAttrs:customFont="birmingham"
-        android:text="@string/exportingVideo"/>
+        customAttrs:customFont="birmingham" />
 
 </LinearLayout>

@@ -10,7 +10,8 @@ import java.io.File;
  */
 public class RemoveFilesInTempFolderUseCase {
 
-    public RemoveFilesInTempFolderUseCase() {}
+    public RemoveFilesInTempFolderUseCase() {
+    }
 
     public void removeFilesInTempFolder() {
         Utils.cleanFilesInDirectory(new File(Constants.PATH_APP_TEMP));

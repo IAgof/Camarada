@@ -3,36 +3,36 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/recordLayout"
-    android:orientation="vertical"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@mipmap/activity_record_background_wood"
+    android:orientation="vertical"
     android:padding="16dp">
 
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="8dp"
-        android:layout_gravity="center">
+        android:layout_gravity="center"
+        android:layout_marginBottom="8dp">
 
         <ImageButton
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:background="@null"
             android:layout_centerVertical="true"
             android:layout_marginStart="22dp"
-            android:src="@mipmap/common_icon_settings_normal"/>
+            android:background="@null"
+            android:src="@mipmap/common_icon_settings_normal" />
 
         <ImageButton
             android:id="@+id/shareButton"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_centerVertical="true"
             android:layout_centerHorizontal="true"
-            android:background="@null"
+            android:layout_centerVertical="true"
             android:alpha="0.25"
-            tools:alpha="1"
-            android:src="@drawable/activity_record_share_icon_selector"/>
+            android:background="@null"
+            android:src="@drawable/activity_record_share_icon_selector"
+            tools:alpha="1" />
 
     </RelativeLayout>
 
@@ -40,10 +40,10 @@
         android:id="@+id/aspectFrameLayout"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:layout_marginBottom="4dp"
         android:background="#ffb86a"
         android:padding="6dp"
-        android:layout_marginBottom="4dp"
-        android:layout_gravity="center"
         app:aspect="four_three">
 
         <com.videonasocialmedia.avrecorder.view.GLCameraEncoderView
@@ -55,31 +55,31 @@
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:orientation="horizontal"
-        android:layout_weight="1"
-        android:layout_marginStart="25dp"
+        android:layout_gravity="center"
         android:layout_marginEnd="25dp"
-        android:layout_gravity="center">
+        android:layout_marginStart="25dp"
+        android:layout_weight="1"
+        android:orientation="horizontal">
 
         <ImageButton
             android:id="@+id/skinLeatherButton"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_centerVertical="true"
-            android:background="@null"
             android:layout_marginEnd="4dp"
-            android:visibility="visible"
-            android:src="@drawable/activity_record_skin_leather_icon_selector"/>
+            android:background="@null"
+            android:src="@drawable/activity_record_skin_leather_icon_selector"
+            android:visibility="visible" />
 
         <ImageButton
             android:id="@+id/skinWoodButton"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_centerVertical="true"
-            android:background="@null"
             android:layout_marginEnd="4dp"
-            android:visibility="gone"
-            android:src="@drawable/activity_record_skin_wood_icon_selector"/>
+            android:background="@null"
+            android:src="@drawable/activity_record_skin_wood_icon_selector"
+            android:visibility="gone" />
 
         <RelativeLayout
             android:layout_width="wrap_content"
@@ -94,29 +94,31 @@
                 android:layout_height="wrap_content"
                 android:layout_centerInParent="true"
                 android:background="@null"
-                android:src="@drawable/activity_record_rec_icon_selector"/>
+                android:src="@drawable/activity_record_rec_icon_selector" />
 
             <LinearLayout
                 android:id="@+id/settings"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:orientation="horizontal"
                 android:layout_alignParentBottom="true"
-                android:layout_gravity="center_horizontal|bottom">
+                android:layout_gravity="center_horizontal|bottom"
+                android:orientation="horizontal">
+
                 <ImageButton
                     android:id="@+id/flashButton"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center"
                     android:background="@null"
-                    android:src="@drawable/activity_record_flash_icon_selector"/>
+                    android:src="@drawable/activity_record_flash_icon_selector" />
+
                 <ImageButton
                     android:id="@+id/toggleCameraButton"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center"
                     android:background="@null"
-                    android:src="@drawable/activity_record_change_camera_icon_selector"/>
+                    android:src="@drawable/activity_record_change_camera_icon_selector" />
             </LinearLayout>
 
         </RelativeLayout>
@@ -124,10 +126,10 @@
         <LinearLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:orientation="vertical"
-            android:layout_marginStart="4dp"
+            android:layout_alignParentEnd="true"
             android:layout_centerVertical="true"
-            android:layout_alignParentEnd="true">
+            android:layout_marginStart="4dp"
+            android:orientation="vertical">
 
             <ImageButton
                 android:id="@+id/filterBlackAndWhiteButton"
@@ -136,7 +138,7 @@
                 android:layout_gravity="center"
                 android:layout_marginBottom="4dp"
                 android:background="@null"
-                android:src="@drawable/activity_record_filter_bw_icon_selector"/>
+                android:src="@drawable/activity_record_filter_bw_icon_selector" />
 
             <ImageButton
                 android:id="@+id/filterSepiaButton"
@@ -145,7 +147,7 @@
                 android:layout_gravity="center"
                 android:layout_marginBottom="4dp"
                 android:background="@null"
-                android:src="@drawable/activity_record_filter_sepia_icon_selector"/>
+                android:src="@drawable/activity_record_filter_sepia_icon_selector" />
 
             <ImageButton
                 android:id="@+id/filterBlueButton"
@@ -153,7 +155,7 @@
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
                 android:background="@null"
-                android:src="@drawable/activity_record_filter_blue_icon_selector"/>
+                android:src="@drawable/activity_record_filter_blue_icon_selector" />
 
         </LinearLayout>
 

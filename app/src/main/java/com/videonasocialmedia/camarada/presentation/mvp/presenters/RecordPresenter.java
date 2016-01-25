@@ -255,13 +255,15 @@ public class RecordPresenter implements OnExportFinishedListener {
         recordView.goToShare(path);
     }
 
-    public void setSepiaFilter(){
+    public void setSepiaFilter() {
         recorder.applyFilter(Filters.FILTER_SEPIA);
     }
-    public void setBlackAndWitheFilter(){
+
+    public void setBlackAndWitheFilter() {
         recorder.applyFilter(Filters.FILTER_MONO);
     }
-    public void setBlueFilter(){
+
+    public void setBlueFilter() {
         recorder.applyFilter(Filters.FILTER_AQUA);
     }
 }

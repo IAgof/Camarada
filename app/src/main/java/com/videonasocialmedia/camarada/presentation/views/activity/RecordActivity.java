@@ -151,7 +151,8 @@ public class RecordActivity extends CamaradaActivity implements RecordView {
         );
     }
 
-    @OnTouch(R.id.recordButton) boolean onTouch(MotionEvent event) {
+    @OnTouch(R.id.recordButton)
+    boolean onTouch(MotionEvent event) {
         if (event.getAction() == MotionEvent.ACTION_DOWN) {
             if (!recording) {
                 recordPresenter.requestRecord();
@@ -225,25 +226,27 @@ public class RecordActivity extends CamaradaActivity implements RecordView {
     }
 
     @OnClick(R.id.filterBlackAndWhiteButton)
-    public void selectBlackAndWhiteFilter(){
+    public void selectBlackAndWhiteFilter() {
         recordPresenter.setBlackAndWitheFilter();
         resetSelections();
         filterBlackAndWhiteButton.setSelected(true);
     }
+
     @OnClick(R.id.filterSepiaButton)
-    public void selectSepiaFilter(){
+    public void selectSepiaFilter() {
         recordPresenter.setSepiaFilter();
         resetSelections();
         filterSepiaButton.setSelected(true);
     }
+
     @OnClick(R.id.filterBlueButton)
-    public void selectBlueFilter(){
+    public void selectBlueFilter() {
         recordPresenter.setBlueFilter();
         resetSelections();
         filterBlueButton.setSelected(true);
     }
 
-    private void resetSelections(){
+    private void resetSelections() {
         filterBlackAndWhiteButton.setSelected(false);
         filterBlueButton.setSelected(false);
         filterSepiaButton.setSelected(false);

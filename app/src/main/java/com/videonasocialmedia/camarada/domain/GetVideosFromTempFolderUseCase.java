@@ -11,7 +11,8 @@ import java.util.List;
  */
 public class GetVideosFromTempFolderUseCase {
 
-    public GetVideosFromTempFolderUseCase() {}
+    public GetVideosFromTempFolderUseCase() {
+    }
 
     public List<String> getVideosFromTempFolder() {
         File directory = new File(Constants.PATH_APP_TEMP);

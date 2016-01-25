@@ -155,7 +155,7 @@ public class Utils {
     }
 
     private static void copyResourceToTemp(Context ctx, int rawResourceId,
-                                          String fileTypeExtensionConstant) throws IOException {
+                                           String fileTypeExtensionConstant) throws IOException {
         String nameFile = String.valueOf(rawResourceId);
         File file = new File(Constants.VIDEO_MUSIC_FOLDER + File.separator + nameFile +
                 fileTypeExtensionConstant);
