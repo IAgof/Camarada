@@ -108,7 +108,7 @@ public class RecordActivity extends CamaradaActivity implements RecordView {
     }
 
     private void hideSystemUi() {
-        if (!Utils.isKitKat() || !mUseImmersiveMode) {
+        if (!Utils.isKitKatOrHigher() || !mUseImmersiveMode) {
             getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,
                     WindowManager.LayoutParams.FLAG_FULLSCREEN);
         } else if (mUseImmersiveMode) {
@@ -140,7 +140,7 @@ public class RecordActivity extends CamaradaActivity implements RecordView {
     @Override
     public void onWindowFocusChanged(boolean hasFocus) {
         super.onWindowFocusChanged(hasFocus);
-        if (Utils.isKitKat() && hasFocus && mUseImmersiveMode) {
+        if (Utils.isKitKatOrHigher() && hasFocus && mUseImmersiveMode) {
             setKitKatWindowFlags();
         }
     }

@@ -54,6 +54,7 @@ public class RecordPresenter implements OnExportFinishedListener {
      */
     private GetVideosFromTempFolderUseCase getVideosFromTempFolderUseCase;
     private RemoveFilesInTempFolderUseCase removeFilesInTempFolderUseCase;
+    private int selectedFilter;
 
     public RecordPresenter(Context context, RecordView recordView,
                            GLCameraEncoderView cameraPreview, SharedPreferences sharedPreferences) {
@@ -75,7 +76,7 @@ public class RecordPresenter implements OnExportFinishedListener {
         try {
             recorder = new AVRecorder(config);
             recorder.setPreviewDisplay(cameraPreview);
-            recorder.applyFilter(Filters.FILTER_MONO);
+            setBlackAndWitheFilter();
             List<Drawable> animatedOverlayFrames = getAnimatedOverlay();
             recorder.addAnimatedOverlayFilter(animatedOverlayFrames);
             firstTimeRecording = true;
@@ -119,7 +120,7 @@ public class RecordPresenter implements OnExportFinishedListener {
     public void onResume() {
         EventBus.getDefault().register(this);
         recorder.onHostActivityResumed();
-        setBlackAndWitheFilter();
+        recorder.applyFilter(selectedFilter);
     }
 
     public void onPause() {
@@ -164,6 +165,11 @@ public class RecordPresenter implements OnExportFinishedListener {
         recorder.reset(config);
     }
 
+    public void onEventMainThread(CameraEncoderResetEvent e) {
+        recorder.applyFilter(selectedFilter);
+        startRecord();
+    }
+
     private void startRecord() {
         recorder.startRecording();
         recordView.showStopButton();
@@ -185,9 +191,6 @@ public class RecordPresenter implements OnExportFinishedListener {
         removeFilesInTempFolderUseCase.removeFilesInTempFolder();
     }
 
-    public void onEventMainThread(CameraEncoderResetEvent e) {
-        startRecord();
-    }
 
     public void onEventMainThread(MuxerFinishedEvent e) {
         renameOutputVideo(config.getOutputPath());
@@ -256,14 +259,17 @@ public class RecordPresenter implements OnExportFinishedListener {
     }
 
     public void setSepiaFilter() {
+        selectedFilter = Filters.FILTER_SEPIA;
         recorder.applyFilter(Filters.FILTER_SEPIA);
     }
 
     public void setBlackAndWitheFilter() {
+        selectedFilter = Filters.FILTER_MONO;
         recorder.applyFilter(Filters.FILTER_MONO);
     }
 
     public void setBlueFilter() {
+        selectedFilter = Filters.FILTER_AQUA;
         recorder.applyFilter(Filters.FILTER_AQUA);
     }
 }
