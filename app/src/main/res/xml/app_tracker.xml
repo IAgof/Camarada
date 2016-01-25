@@ -6,31 +6,17 @@
     <bool name="ga_autoActivityTracking">true</bool>
 
     <!-- The screen names that will appear in reports -->
-    <screenName name="com.videonasocialmedia.camarada.presentation.views.login.LoginActivity">
-        CamaradaApplication-Android LoginActivity
-    </screenName>
-    <screenName name="com.videonasocialmedia.camarada.presentation.views.login.UserSignUpActivity">
-        CamaradaApplication-Android UserSignUpActivity
-    </screenName>
     <screenName name="com.videonasocialmedia.camarada.presentation.views.activity.RecordActivity">
         CamaradaApplication-Android RecordActivity
-    </screenName>
-    <screenName name="com.videonasocialmedia.camarada.presentation.views.activity.EditActivity">
-        CamaradaApplication-Android EditActivity
     </screenName>
     <screenName name="com.videonasocialmedia.camarada.presentation.views.activity.ShareActivity">
         CamaradaApplication-Android ShareActivity
     </screenName>
-    <screenName name="com.videonasocialmedia.camarada.presentation.views.activity.MusicActivity">
-        CamaradaApplication-Android MusicActivity
+    <screenName name="com.videonasocialmedia.camarada.presentation.views.activity.SettingsActivity">
+        CamaradaApplication-Android SettingsActivity
     </screenName>
-    <screenName name="com.videonasocialmedia.camarada.presentation.views.activity.AboutActivity">
-        CamaradaApplication-Android AboutActivity
-    </screenName>
-    <screenName name="com.videonasocialmedia.camarada.presentation.views.activity.GalleryActivity">
-        CamaradaApplication-Android GalleryActivity
-    </screenName>
+
     <!--  The following value should be replaced with correct property id. -->
-    <string name="ga_trackingId">UA-59687187-1</string>
+    <string name="ga_trackingId">UA-72714943-1</string>
     <!--<string name="ga_trackingId">UA-XXXXXXXX-1</string>-->
 </resources>
