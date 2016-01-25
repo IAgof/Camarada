@@ -18,6 +18,7 @@ import android.view.Window;
 import android.view.WindowManager;
 import android.widget.TextView;
 
+import com.mixpanel.android.mpmetrics.InAppNotification;
 import com.videonasocialmedia.camarada.BuildConfig;
 import com.videonasocialmedia.camarada.R;
 import com.videonasocialmedia.camarada.domain.RemoveFilesInTempFolderUseCase;
@@ -105,6 +106,8 @@ public class InitAppActivity extends CamaradaActivity implements InitAppView, On
         PreferenceManager.setDefaultValues(this, R.xml.preferences, false);
         SplashScreenTask splashScreenTask = new SplashScreenTask();
         splashScreenTask.execute();
+        //TODO define where check notification, Record Screen?
+        checkNewNotification();
     }
 
     @Override
@@ -128,6 +131,15 @@ public class InitAppActivity extends CamaradaActivity implements InitAppView, On
     protected void onDestroy() {
         super.onDestroy();
         handler.removeCallbacksAndMessages(null);
+    }
+
+    private void checkNewNotification(){
+
+        InAppNotification notification = mixpanel.getPeople().getNotificationIfAvailable();
+        if (notification != null) {
+            mixpanel.getPeople().showGivenNotification(notification, this);
+        }
+        Log.d(LOG_TAG, "Checked for new mixpanel in app notification");
     }
 
     /**

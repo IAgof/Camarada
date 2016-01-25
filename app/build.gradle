@@ -14,7 +14,7 @@ android {
 
     buildTypes {
         release {
-            buildConfigField "String", "MIXPANEL_TOKEN", "\"985b2aeb535dbc92b81fb5cce7ad1212\""
+            buildConfigField "String", "MIXPANEL_TOKEN", "\"bb9e99661ccafc2a391dc292aa007e75\""
             minifyEnabled true
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
@@ -59,7 +59,7 @@ dependencies {
 
     compile 'com.karumi:dexter:2.1.4'
 
-    compile 'com.mixpanel.android:mixpanel-android:4.6.4'
+    compile 'com.mixpanel.android:mixpanel-android:4.7.0'
 
     compile 'de.greenrobot:eventbus:2.4.0'
 }
