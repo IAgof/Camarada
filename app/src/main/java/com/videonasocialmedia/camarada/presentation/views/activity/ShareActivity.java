@@ -38,12 +38,14 @@ public class ShareActivity extends CamaradaActivity implements ShareView, Previe
     VideoView videoPreview;
     @Bind(R.id.socialNetworkRecycler)
     RecyclerView socialNetworkRecycler;
+
     private SharePresenter presenter;
     private String videoPath;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        setContentView(R.layout.share_activity);
         ButterKnife.bind(this);
 
         presenter = new SharePresenter(this, this);
