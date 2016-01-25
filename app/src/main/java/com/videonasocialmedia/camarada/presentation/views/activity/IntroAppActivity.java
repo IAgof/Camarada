@@ -39,7 +39,7 @@ public class IntroAppActivity extends AppIntro {
 
     private void loadMainActivity() {
         editor.putBoolean(ConfigPreferences.FIRST_TIME, false).commit();
-        Intent intent = new Intent(this, SettingsActivity.class);
+        Intent intent = new Intent(this, RecordActivity.class);
         startActivity(intent);
     }
 

@@ -10,6 +10,7 @@ android {
         targetSdkVersion 23
         versionCode 1
         versionName "1.0"
+        // Enabling multidex support.
         multiDexEnabled true
     }
 
@@ -39,7 +40,9 @@ dependencies {
     testCompile 'junit:junit:4.12'
     compile(name: 'avrecorder-1.0.0', ext: 'aar')
 
+    compile 'com.android.support:appcompat-v7:23.1.1'
     compile 'com.android.support:cardview-v7:23.1.1'
+    compile 'com.android.support:multidex:1.0.1'
     compile 'com.android.support:recyclerview-v7:23.1.1'
     compile 'com.android.support:support-v13:23.1.1'
 
@@ -50,6 +53,8 @@ dependencies {
     compile 'com.google.android.gms:play-services-identity:8.4.0'
     compile 'com.google.android.gms:play-services-gcm:8.4.0'
 
+    compile 'com.google.code.gson:gson:2.3.1'
+    
     compile 'com.googlecode.mp4parser:isoparser:1.0.5.4'
 
     compile 'com.jakewharton:butterknife:7.0.1'
@@ -57,4 +62,6 @@ dependencies {
     compile 'com.karumi:dexter:2.1.4'
 
     compile 'com.mixpanel.android:mixpanel-android:4.6.4'
+
+    compile 'de.greenrobot:eventbus:2.4.0'
 }

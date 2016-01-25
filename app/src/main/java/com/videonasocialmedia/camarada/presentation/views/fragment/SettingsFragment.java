@@ -16,10 +16,10 @@ import android.widget.TextView;
 
 import com.videonasocialmedia.camarada.BuildConfig;
 import com.videonasocialmedia.camarada.R;
+import com.videonasocialmedia.camarada.presentation.listener.OnCamaradaDialogClickListener;
 import com.videonasocialmedia.camarada.presentation.mvp.presenters.PreferencesPresenter;
 import com.videonasocialmedia.camarada.presentation.mvp.presenters.PreferencesView;
 import com.videonasocialmedia.camarada.presentation.views.dialog.CamaradaDialogFragment;
-import com.videonasocialmedia.camarada.presentation.listener.OnCamaradaDialogClickListener;
 import com.videonasocialmedia.camarada.utils.ConfigPreferences;
 
 import java.util.ArrayList;
