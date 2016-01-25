@@ -11,5 +11,7 @@ public class ConfigPreferences {
     public final static int FRONT_CAMERA = 1;
     public final static String CAMERA_ID = "camera_id";
     public final static String PRIVATE_PATH = "private_path";
-
+    public final static String VIDEO_DURATION = "video_duration";
+    public final static String NUMBER_OF_CLIPS = "number_of_clips";
+    public final static String RESOLUTION = "resolution";
 }

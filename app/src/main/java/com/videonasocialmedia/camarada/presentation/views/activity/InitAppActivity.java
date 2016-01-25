@@ -28,6 +28,9 @@ import com.videonasocialmedia.camarada.utils.ConfigPreferences;
 import com.videonasocialmedia.camarada.utils.Constants;
 import com.videonasocialmedia.camarada.utils.Utils;
 
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import java.io.File;
 import java.io.IOException;
 
@@ -64,6 +67,7 @@ public class InitAppActivity extends CamaradaActivity implements InitAppView, On
     private long startTime;
     private String androidId = null;
     private RemoveFilesInTempFolderUseCase removeFilesInTempFolderUseCase;
+    private String initState;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -101,7 +105,6 @@ public class InitAppActivity extends CamaradaActivity implements InitAppView, On
         PreferenceManager.setDefaultValues(this, R.xml.preferences, false);
         SplashScreenTask splashScreenTask = new SplashScreenTask();
         splashScreenTask.execute();
-        mixpanel.timeEvent("Time in Init Activity");
     }
 
     @Override
@@ -114,7 +117,6 @@ public class InitAppActivity extends CamaradaActivity implements InitAppView, On
     protected void onPause() {
         super.onPause();
         releaseCamera();
-        mixpanel.track("Time in Init Activity");
     }
 
     @Override
@@ -139,6 +141,17 @@ public class InitAppActivity extends CamaradaActivity implements InitAppView, On
         }
     }
 
+    private void sendStartupAppTracking() {
+        JSONObject initAppProperties = new JSONObject();
+        try {
+            initAppProperties.put("type", "organic");
+            initAppProperties.put("initState", initState);
+            mixpanel.track("App Started", initAppProperties);
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+    }
+
     private void setup() {
         androidId = Settings.Secure.getString(getContentResolver(), Settings.Secure.ANDROID_ID);
         setupPathsApp(this);
@@ -150,10 +163,12 @@ public class InitAppActivity extends CamaradaActivity implements InitAppView, On
         switch (appStart.checkAppStart(this, sharedPreferences)) {
             case NORMAL:
                 Log.d(LOG_TAG, " AppStart State NORMAL");
+                initState = "returning";
                 initSettings();
                 break;
             case FIRST_TIME_VERSION:
                 Log.d(LOG_TAG, " AppStart State FIRST_TIME_VERSION");
+                initState = "upgrade";
                 // example: show what's new
                 // could be appear a mix panel popup with improvements.
 
@@ -164,6 +179,7 @@ public class InitAppActivity extends CamaradaActivity implements InitAppView, On
                 break;
             case FIRST_TIME:
                 Log.d(LOG_TAG, " AppStart State FIRST_TIME");
+                initState = "firstTime";
                 // example: show a tutorial
                 setupCameraSettings();
                 createUserProfile();
@@ -341,6 +357,7 @@ public class InitAppActivity extends CamaradaActivity implements InitAppView, On
             try {
                 waitForCriticalPermissions();
                 setup();
+                sendStartupAppTracking();
             } catch (Exception e) {
                 Log.e("SETUP", "setup failed", e);
             }

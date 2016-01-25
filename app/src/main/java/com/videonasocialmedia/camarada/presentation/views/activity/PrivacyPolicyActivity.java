@@ -26,19 +26,6 @@ public class PrivacyPolicyActivity extends CamaradaActivity {
         getSupportActionBar().setDisplayShowTitleEnabled(false);
         ActionBar ab = getSupportActionBar();
         ab.setDisplayHomeAsUpEnabled(true);
-
-    }
-
-    @Override
-    protected void onStart() {
-        super.onStart();
-        mixpanel.timeEvent("Time in Privacy Policy Activity");
-    }
-
-    @Override
-    protected void onPause() {
-        super.onPause();
-        mixpanel.track("Time in Privacy Policy Activity");
     }
 
 }

@@ -14,14 +14,15 @@ import android.widget.ImageButton;
 import android.widget.LinearLayout;
 import android.widget.Toast;
 
-import com.google.android.gms.analytics.GoogleAnalytics;
-import com.google.android.gms.analytics.HitBuilders;
 import com.videonasocialmedia.avrecorder.view.GLCameraEncoderView;
 import com.videonasocialmedia.camarada.R;
 import com.videonasocialmedia.camarada.presentation.mvp.presenters.RecordPresenter;
 import com.videonasocialmedia.camarada.presentation.mvp.views.RecordView;
 import com.videonasocialmedia.camarada.utils.ConfigPreferences;
 import com.videonasocialmedia.camarada.utils.Utils;
+
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
@@ -92,7 +93,6 @@ public class RecordActivity extends CamaradaActivity implements RecordView {
         super.onStart();
         checkAndRequestPermissions();
         recordPresenter.onStart();
-        mixpanel.timeEvent("Time in Record Activity");
     }
 
     @Override
@@ -116,7 +116,6 @@ public class RecordActivity extends CamaradaActivity implements RecordView {
     public void onPause() {
         super.onPause();
         recordPresenter.onPause();
-        mixpanel.track("Time in Record Activity");
     }
 
     @Override
@@ -158,12 +157,8 @@ public class RecordActivity extends CamaradaActivity implements RecordView {
         if (event.getAction() == MotionEvent.ACTION_DOWN) {
             if (!recording) {
                 recordPresenter.requestRecord();
-                mixpanel.timeEvent("Time recording one video");
-                mixpanel.track("Start recording");
             } else {
                 recordPresenter.stopRecord();
-                mixpanel.track("Time recording one video");
-                mixpanel.track("Stop recording");
             }
         }
         return true;
@@ -172,17 +167,12 @@ public class RecordActivity extends CamaradaActivity implements RecordView {
     @OnClick(R.id.flashButton)
     public void toggleFlash() {
         recordPresenter.toggleFlash();
-        mixpanel.track("Toggle flash Button clicked", null);
     }
 
     @OnClick(R.id.toggleCameraButton)
     public void changeCamera() {
         recordPresenter.setFlashOff();
         recordPresenter.changeCamera();
-        if (recording)
-            mixpanel.track("Change camera Button clicked while recording", null);
-        else
-            mixpanel.track("Change camera Button clicked on preview", null);
     }
 
     @OnClick(R.id.skinLeatherButton)
@@ -206,23 +196,35 @@ public class RecordActivity extends CamaradaActivity implements RecordView {
 
     @OnClick(R.id.settingsButton)
     public void goToSettings(){
-
+        sendUserInteractedTracking();
         Intent intent = new Intent(this, SettingsActivity.class);
         startActivity(intent);
 
     }
 
+    private void sendUserInteractedTracking() {
+        JSONObject userInteractionsProperties = new JSONObject();
+        try {
+            userInteractionsProperties.put("acitivity", getClass().getSimpleName());
+            userInteractionsProperties.put("recording", recording);
+            userInteractionsProperties.put("interaction", "open settings");
+            userInteractionsProperties.put("result", null);
+            mixpanel.track("User Interacted", userInteractionsProperties);
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+    }
+
     private void sendMetadataTracking() {
-//        try {
-//            int projectDuration = recordPresenter.getProjectDuration();
-//            int numVideosOnProject = recordPresenter.getNumVideosOnProject();
-//            JSONObject props = new JSONObject();
-//            props.put("Number of videos", numVideosOnProject);
-//            props.put("Duration of the exported video in msec", projectDuration);
-//            mixpanel.track("Exported video", props);
-//        } catch (JSONException e) {
-//            Log.e("TRACK_FAILED", String.valueOf(e));
-//        }
+        JSONObject videoExportedProperties = new JSONObject();
+        try {
+            videoExportedProperties.put("videoLength", recordPresenter.getVideoLength());
+            videoExportedProperties.put("resolution", recordPresenter.getResolution());
+            videoExportedProperties.put("numberOfClips", recordPresenter.getNumberOfClipsRecorded());
+            mixpanel.track("Video Exported", videoExportedProperties);
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
     }
 
     private void startExportThread() {
@@ -298,13 +300,11 @@ public class RecordActivity extends CamaradaActivity implements RecordView {
     @Override
     public void showFrontCameraSelected() {
         rotateCameraButton.setActivated(false);
-        mixpanel.track("Front camera selected", null);
     }
 
     @Override
     public void showBackCameraSelected() {
         rotateCameraButton.setActivated(false);
-        mixpanel.track("Back camera selected", null);
     }
 
     @Override
@@ -391,40 +391,4 @@ public class RecordActivity extends CamaradaActivity implements RecordView {
         skinLeatherButton.setVisibility(View.VISIBLE);
     }
 
-    @OnClick({R.id.recordButton, R.id.flashButton, R.id.toggleCameraButton})
-    public void clickListener(View view) {
-        sendButtonTracked(view.getId());
-    }
-
-    private void sendButtonTracked(String label) {
-        tracker.send(new HitBuilders.EventBuilder()
-                .setCategory("RecordActivity")
-                .setAction("button clicked")
-                .setLabel(label)
-                .build());
-        GoogleAnalytics.getInstance(this.getApplication().getBaseContext()).dispatchLocalHits();
-    }
-
-    /**
-     * Sends button clicks to Google Analytics
-     *
-     * @param id identifier of the clicked view
-     */
-    private void sendButtonTracked(int id) {
-        String label;
-        switch (id) {
-            case R.id.recordButton:
-                label = "Capture";
-                break;
-            case R.id.toggleCameraButton:
-                label = "Change camera";
-                break;
-            case R.id.flashButton:
-                label = "Flash camera";
-                break;
-            default:
-                label = "Other";
-        }
-        sendButtonTracked(label);
-    }
 }

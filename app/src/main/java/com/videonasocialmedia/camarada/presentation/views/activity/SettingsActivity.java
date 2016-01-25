@@ -36,25 +36,6 @@ public class SettingsActivity extends CamaradaActivity implements OnCamaradaDial
     }
 
     @Override
-    protected void onStart() {
-        super.onStart();
-        mixpanel.timeEvent("Time in Settings Activity");
-    }
-
-    @Override
-    protected void onResume() {
-        super.onResume();
-
-    }
-
-    @Override
-    protected void onPause() {
-        super.onPause();
-        mixpanel.track("Time in Settings Activity");
-
-    }
-
-    @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.menu_settings, menu);
         return true;

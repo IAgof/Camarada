@@ -41,13 +41,11 @@ public class AboutActivity extends CamaradaActivity {
     @Override
     protected void onStart() {
         super.onStart();
-        mixpanel.timeEvent("Time in About Activity");
     }
 
     @Override
     protected void onPause() {
         super.onPause();
-        mixpanel.track("Time in About Activity");
     }
 
     /**

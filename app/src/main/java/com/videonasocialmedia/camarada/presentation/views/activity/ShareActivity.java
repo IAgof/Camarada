@@ -1,8 +1,9 @@
 package com.videonasocialmedia.camarada.presentation.views.activity;
 
+import android.content.Context;
+import android.content.SharedPreferences;
 import android.media.MediaPlayer;
 import android.os.Bundle;
-import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
@@ -17,6 +18,7 @@ import com.videonasocialmedia.camarada.presentation.listener.OnSocialNetworkClic
 import com.videonasocialmedia.camarada.presentation.mvp.presenters.SharePresenter;
 import com.videonasocialmedia.camarada.presentation.mvp.views.PreviewVideoView;
 import com.videonasocialmedia.camarada.presentation.mvp.views.ShareView;
+import com.videonasocialmedia.camarada.utils.ConfigPreferences;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -48,7 +50,10 @@ public class ShareActivity extends CamaradaActivity implements ShareView, Previe
         setContentView(R.layout.share_activity);
         ButterKnife.bind(this);
 
-        presenter = new SharePresenter(this, this);
+        SharedPreferences sharedPreferences =
+                getSharedPreferences(ConfigPreferences.SETTINGS_SHARED_PREFERENCES_FILE_NAME,
+                Context.MODE_PRIVATE);
+        presenter = new SharePresenter(this, this, sharedPreferences);
 
         initVideoPreview();
         initSocialNetworkContainer();
@@ -119,7 +124,10 @@ public class ShareActivity extends CamaradaActivity implements ShareView, Previe
         GoogleAnalytics.getInstance(this.getApplication().getBaseContext()).dispatchLocalHits();
         JSONObject socialNetworkProperties = new JSONObject();
         try {
-            socialNetworkProperties.put("Social Network", socialNetwork.getName());
+            socialNetworkProperties.put("socialNetwork", socialNetwork.getName());
+            socialNetworkProperties.put("videoLength", presenter.getVideoLength());
+            socialNetworkProperties.put("resolution", presenter.getResolution());
+            socialNetworkProperties.put("numberOfClips", presenter.getNumberOfClips());
             mixpanel.track("More social networks button clicked", socialNetworkProperties);
         } catch (JSONException e) {
             e.printStackTrace();

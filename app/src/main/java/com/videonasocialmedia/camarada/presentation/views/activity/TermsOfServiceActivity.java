@@ -29,16 +29,4 @@ public class TermsOfServiceActivity extends CamaradaActivity {
 
     }
 
-    @Override
-    protected void onStart() {
-        super.onStart();
-        mixpanel.timeEvent("Time in Terms Of Service Activity");
-    }
-
-    @Override
-    protected void onPause() {
-        super.onPause();
-        mixpanel.track("Time in Terms Of Service Activity");
-    }
-
 }

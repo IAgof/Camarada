@@ -27,16 +27,4 @@ public class LegalNoticeActivity extends CamaradaActivity {
         ab.setDisplayHomeAsUpEnabled(true);
     }
 
-    @Override
-    protected void onStart() {
-        super.onStart();
-        mixpanel.timeEvent("Time in Legal Notice Activity");
-    }
-
-    @Override
-    protected void onPause() {
-        super.onPause();
-        mixpanel.track("Time in Legal Notice Activity");
-    }
-
 }

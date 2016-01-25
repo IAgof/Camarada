@@ -121,7 +121,7 @@ public class Muxer {
         double duration = 0;
         for (String path : videoPaths) {
             try {
-                duration = duration + getFileDuration(path);
+                duration += getFileDuration(path);
             } catch (IOException e) {
                 Log.e("IOException", "error", e);
             }

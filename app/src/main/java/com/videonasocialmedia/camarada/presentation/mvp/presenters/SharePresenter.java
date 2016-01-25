@@ -3,12 +3,14 @@ package com.videonasocialmedia.camarada.presentation.mvp.presenters;
 import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.net.Uri;
 
 import com.videonasocialmedia.camarada.domain.ObtainSocialNetworksToShareUseCase;
 import com.videonasocialmedia.camarada.model.SocialNetwork;
 import com.videonasocialmedia.camarada.presentation.mvp.views.PreviewVideoView;
 import com.videonasocialmedia.camarada.presentation.mvp.views.ShareView;
+import com.videonasocialmedia.camarada.utils.ConfigPreferences;
 import com.videonasocialmedia.camarada.utils.Utils;
 
 import java.util.List;
@@ -20,10 +22,13 @@ public class SharePresenter {
 
     private ShareView shareView;
     private PreviewVideoView videoPreview;
+    private SharedPreferences sharedPreferences;
 
-    public SharePresenter(ShareView shareView, PreviewVideoView videoPreview) {
+    public SharePresenter(ShareView shareView, PreviewVideoView videoPreview,
+                          SharedPreferences sharedPreferences) {
         this.shareView = shareView;
         this.videoPreview = videoPreview;
+        this.sharedPreferences = sharedPreferences;
     }
 
     public void onResume() {
@@ -55,5 +60,18 @@ public class SharePresenter {
         intent.setComponent(name);
         ctx.startActivity(intent);
     }
+
+    public double getVideoLength() {
+        return sharedPreferences.getLong(ConfigPreferences.VIDEO_DURATION, 0);
+    }
+
+    public double getNumberOfClips() {
+        return sharedPreferences.getInt(ConfigPreferences.NUMBER_OF_CLIPS, 1);
+    }
+
+    public String getResolution(){
+        return sharedPreferences.getString(ConfigPreferences.RESOLUTION, "1280x720");
+    }
+
 
 }

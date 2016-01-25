@@ -28,6 +28,9 @@ import com.videonasocialmedia.camarada.presentation.listener.OnCamaradaDialogCli
 import com.videonasocialmedia.camarada.presentation.views.dialog.CamaradaDialogActivity;
 import com.videonasocialmedia.camarada.utils.PermissionConstants;
 
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import java.util.List;
 
 public class CamaradaActivity extends AppCompatActivity {
@@ -58,6 +61,25 @@ public class CamaradaActivity extends AppCompatActivity {
                     new CustomPermissionListener(this, "titulo", "mensaje", "ok", null);
             Dexter.continuePendingRequestsIfPossible(dialogMultiplePermissionsListener);
         }
+    }
+
+    @Override
+    protected void onStart() {
+        super.onStart();
+        mixpanel.timeEvent("Time in Activity");
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        JSONObject activityProperties = new JSONObject();
+        try {
+            activityProperties.put("activity", getClass().getSimpleName());
+            mixpanel.track("Time in Activity", activityProperties);
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+        mixpanel.track("Time in Activity", activityProperties);
     }
 
     @Override

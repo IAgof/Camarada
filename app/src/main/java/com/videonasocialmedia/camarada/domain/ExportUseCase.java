@@ -58,7 +58,8 @@ public class ExportUseCase {
     }
 
     private double getMovieDuration(List<String> videoPaths) {
-        return muxer.getFileDuration(videoPaths);
+        return Utils.getFileDuration(videoPaths);
+//        return muxer.getFileDuration(videoPaths);
     }
 
     private Movie addAudio(Movie movie, String audioPath, double durationMovie) {

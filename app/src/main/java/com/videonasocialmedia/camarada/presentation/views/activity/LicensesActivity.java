@@ -26,19 +26,6 @@ public class LicensesActivity extends CamaradaActivity {
         getSupportActionBar().setDisplayShowTitleEnabled(false);
         ActionBar ab = getSupportActionBar();
         ab.setDisplayHomeAsUpEnabled(true);
-
-    }
-
-    @Override
-    protected void onStart() {
-        super.onStart();
-        mixpanel.timeEvent("Time in Licenses Activity");
-    }
-
-    @Override
-    protected void onPause() {
-        super.onPause();
-        mixpanel.track("Time in Licenses Activity");
     }
 
 }

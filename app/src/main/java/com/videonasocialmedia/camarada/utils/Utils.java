@@ -10,6 +10,7 @@ import android.os.Build;
 import android.provider.MediaStore;
 import android.util.Log;
 
+import com.coremedia.iso.IsoFile;
 import com.coremedia.iso.boxes.Container;
 import com.googlecode.mp4parser.authoring.Movie;
 import com.googlecode.mp4parser.authoring.Track;
@@ -23,6 +24,7 @@ import java.io.InputStream;
 import java.io.RandomAccessFile;
 import java.nio.channels.FileChannel;
 import java.util.Arrays;
+import java.util.List;
 
 /**
  * Created by Veronica Lago Fominaya on 26/06/2015.
@@ -187,6 +189,26 @@ public class Utils {
         if (!f.exists())
             f = null;
         return f;
+    }
+
+    public static double getFileDuration(String filePath) throws IOException {
+        IsoFile isoFile = new IsoFile(filePath);
+        double lengthInMSeconds = (double)
+                (isoFile.getMovieBox().getMovieHeaderBox().getDuration()/
+                        isoFile.getMovieBox().getMovieHeaderBox().getTimescale())*1000;
+        return lengthInMSeconds;
+    }
+
+    public static double getFileDuration(List<String> videoPaths) {
+        double duration = 0;
+        for (String path : videoPaths) {
+            try {
+                duration += getFileDuration(path);
+            } catch (IOException e) {
+                Log.e("IOException", "error", e);
+            }
+        }
+        return duration;
     }
 
 }
