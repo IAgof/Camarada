@@ -211,7 +211,7 @@ public class ShareActivity extends CamaradaActivity implements ShareView, Previe
 
     private void updateNumTotalVideosShared() {
         int totalVideosShared = sharedPreferences.getInt(ConfigPreferences.TOTAL_VIDEOS_SHARED, 0);
-        preferencesEditor.putInt(ConfigPreferences.TOTAL_VIDEOS_SHARED, totalVideosShared++);
+        preferencesEditor.putInt(ConfigPreferences.TOTAL_VIDEOS_SHARED, ++totalVideosShared);
         preferencesEditor.commit();
     }
 

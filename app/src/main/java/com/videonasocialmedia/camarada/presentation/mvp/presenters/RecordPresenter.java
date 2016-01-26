@@ -239,7 +239,7 @@ public class RecordPresenter implements OnExportFinishedListener {
         int numTotalVideosRecorded = sharedPreferences
                 .getInt(ConfigPreferences.TOTAL_VIDEOS_RECORDED, 0);
         editor.putInt(ConfigPreferences.TOTAL_VIDEOS_RECORDED,
-                numTotalVideosRecorded++);
+                ++numTotalVideosRecorded);
         editor.commit();
         sendVideoRecordedTracking();
     }
