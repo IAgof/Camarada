@@ -17,6 +17,9 @@ import com.videonasocialmedia.camarada.domain.ExportUseCase;
 import com.videonasocialmedia.camarada.domain.GetVideosFromTempFolderUseCase;
 import com.videonasocialmedia.camarada.domain.OnExportFinishedListener;
 import com.videonasocialmedia.camarada.domain.RemoveFilesInTempFolderUseCase;
+import com.videonasocialmedia.camarada.domain.effects.GetEffectListUseCase;
+import com.videonasocialmedia.camarada.model.entities.editor.effects.Effect;
+import com.videonasocialmedia.camarada.model.entities.editor.effects.ShaderEffect;
 import com.videonasocialmedia.camarada.presentation.mvp.views.RecordView;
 import com.videonasocialmedia.camarada.utils.Constants;
 
@@ -55,6 +58,8 @@ public class RecordPresenter implements OnExportFinishedListener {
     private GetVideosFromTempFolderUseCase getVideosFromTempFolderUseCase;
     private RemoveFilesInTempFolderUseCase removeFilesInTempFolderUseCase;
     private int selectedFilter;
+
+    private Effect selectedShaderEffect;
 
     public RecordPresenter(Context context, RecordView recordView,
                            GLCameraEncoderView cameraPreview, SharedPreferences sharedPreferences) {
@@ -263,6 +268,20 @@ public class RecordPresenter implements OnExportFinishedListener {
         recordView.goToShare(path);
     }
 
+    public void applyEffect(Effect effect){
+
+                int shaderId = ((ShaderEffect) effect).getResourceId();
+                recorder.applyFilter(shaderId);
+                selectedShaderEffect = effect;
+
+    }
+
+    public void removeEffect(Effect effect) {
+
+        recorder.applyFilter(Filters.FILTER_NONE);
+        selectedShaderEffect = null;
+    }
+
     public void setSepiaFilter() {
         selectedFilter = Filters.FILTER_SEPIA;
         recorder.applyFilter(Filters.FILTER_SEPIA);
@@ -276,5 +295,9 @@ public class RecordPresenter implements OnExportFinishedListener {
     public void setBlueFilter() {
         selectedFilter = Filters.FILTER_AQUA;
         recorder.applyFilter(Filters.FILTER_AQUA);
+    }
+
+    public List<Effect> getShaderEffectList() {
+        return GetEffectListUseCase.getShaderEffectsList();
     }
 }
