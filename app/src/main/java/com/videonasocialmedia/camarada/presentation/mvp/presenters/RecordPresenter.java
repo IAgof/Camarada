@@ -87,11 +87,16 @@ public class RecordPresenter implements OnExportFinishedListener {
     @NonNull
     private List<Drawable> getAnimatedOverlay() {
         List<Drawable> animatedOverlayFrames = new ArrayList<>();
-        animatedOverlayFrames.add(context.getResources().getDrawable(R.mipmap.noise_1));
-        animatedOverlayFrames.add(context.getResources().getDrawable(R.mipmap.noise_2));
-        animatedOverlayFrames.add(context.getResources().getDrawable(R.mipmap.noise_3));
-        animatedOverlayFrames.add(context.getResources().getDrawable(R.mipmap.noise_4));
-        animatedOverlayFrames.add(context.getResources().getDrawable(R.mipmap.noise_5));
+        animatedOverlayFrames.add(context.getResources().getDrawable(R.mipmap.silent_film_overlay_a));
+        animatedOverlayFrames.add(context.getResources().getDrawable(R.mipmap.silent_film_overlay_b));
+        animatedOverlayFrames.add(context.getResources().getDrawable(R.mipmap.silent_film_overlay_c));
+        animatedOverlayFrames.add(context.getResources().getDrawable(R.mipmap.silent_film_overlay_d));
+        animatedOverlayFrames.add(context.getResources().getDrawable(R.mipmap.silent_film_overlay_e));
+        animatedOverlayFrames.add(context.getResources().getDrawable(R.mipmap.silent_film_overlay_f));
+        animatedOverlayFrames.add(context.getResources().getDrawable(R.mipmap.silent_film_overlay_g));
+        animatedOverlayFrames.add(context.getResources().getDrawable(R.mipmap.silent_film_overlay_h));
+        animatedOverlayFrames.add(context.getResources().getDrawable(R.mipmap.silent_film_overlay_i));
+        animatedOverlayFrames.add(context.getResources().getDrawable(R.mipmap.silent_film_overlay_j));
         return animatedOverlayFrames;
     }
 
