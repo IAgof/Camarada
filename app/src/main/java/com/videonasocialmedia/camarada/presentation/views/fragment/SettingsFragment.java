@@ -128,7 +128,7 @@ public class SettingsFragment extends PreferenceFragment implements SharedPrefer
         listView.addFooterView(footer, null, false);
 
         TextView footerText = (TextView)v.findViewById(R.id.footerText);
-        String text = getString(R.string.videona) + " v" + BuildConfig.VERSION_NAME + "\n" +
+        String text = getString(R.string.kamarada) + " v" + BuildConfig.VERSION_NAME + "\n" +
                 getString(R.string.madeIn);
         footerText.setText(text);
 
@@ -213,7 +213,8 @@ public class SettingsFragment extends PreferenceFragment implements SharedPrefer
 
         if(id == REQUEST_CODE_DOWNLOAD_BETA){
 
-            String url = "https://play.google.com/apps/testing/com.videonasocialmedia.videona";
+            //String url = getString(R.string.videonaGooglePlayLink);
+            String url = "https://play.google.com/store/apps/details?id=com.videonasocialmedia.videona&referrer=utm_source%3DKamarada%26utm_medium%3DKamaradaApp%26utm_term%3DGetVideona%26utm_content%3DGetVideonaFromKamarada%26utm_campaign%3DDownloadVideona";
             Intent i = new Intent(Intent.ACTION_VIEW);
             i.setData(Uri.parse(url));
             startActivity(i);
