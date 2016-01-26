@@ -86,8 +86,8 @@ public class RecordPresenter implements OnExportFinishedListener {
         exportUseCase = new ExportUseCase(this);
         getVideosFromTempFolderUseCase = new GetVideosFromTempFolderUseCase();
         removeFilesInTempFolderUseCase = new RemoveFilesInTempFolderUseCase();
-        initRecorder(cameraPreview, sharedPreferences);
         mixpanel = MixpanelAPI.getInstance(context, BuildConfig.MIXPANEL_TOKEN);
+        initRecorder(cameraPreview, sharedPreferences);
     }
 
     private void initRecorder(GLCameraEncoderView cameraPreview,
@@ -175,7 +175,7 @@ public class RecordPresenter implements OnExportFinishedListener {
 
     public void stopRecord() {
         if (recorder.isRecording()) {
-            sendUserInteractedTracking(AnalyticsConstants.RECORD, "stop");
+            sendUserInteractedTracking(AnalyticsConstants.RECORD, AnalyticsConstants.STOP);
             recorder.stopRecording();
             recordView.showRecordButton();
             recordView.enableShareButton();
@@ -217,7 +217,7 @@ public class RecordPresenter implements OnExportFinishedListener {
     }
 
     private void startRecord() {
-        sendUserInteractedTracking(AnalyticsConstants.RECORD, "start");
+        sendUserInteractedTracking(AnalyticsConstants.RECORD, AnalyticsConstants.START);
         recorder.startRecording();
         recordView.showStopButton();
         recordView.disableShareButton();

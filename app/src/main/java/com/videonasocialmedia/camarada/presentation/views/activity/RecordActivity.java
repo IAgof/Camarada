@@ -451,47 +451,9 @@ public class RecordActivity extends CamaradaActivity implements RecordView, OnEf
         skinLeatherButton.setVisibility(View.VISIBLE);
     }
 
-    @OnClick({R.id.recordButton, R.id.flashButton, R.id.toggleCameraButton})
-    public void clickListener(View view) {
-        sendButtonTracked(view.getId());
-    }
-
-    private void sendButtonTracked(String label) {
-        tracker.send(new HitBuilders.EventBuilder()
-                .setCategory("RecordActivity")
-                .setAction("button clicked")
-                .setLabel(label)
-                .build());
-        GoogleAnalytics.getInstance(this.getApplication().getBaseContext()).dispatchLocalHits();
-    }
-
-    /**
-     * Sends button clicks to Google Analytics
-     *
-     * @param id identifier of the clicked view
-     */
-    private void sendButtonTracked(int id) {
-        String label;
-        switch (id) {
-            case R.id.recordButton:
-                label = "Capture";
-                break;
-            case R.id.toggleCameraButton:
-                label = "Change camera";
-                break;
-            case R.id.flashButton:
-                label = "Flash camera";
-                break;
-            default:
-                label = "Other";
-        }
-        sendButtonTracked(label);
-    }
-
     @Override
     public void onEffectSelected(Effect effect) {
         recordPresenter.applyEffect(effect);
-        sendButtonTracked(effect.getIconId());
     }
 
     @Override

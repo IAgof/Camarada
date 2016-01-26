@@ -47,6 +47,8 @@ public class AnalyticsConstants {
     public static final String SKIN_WOOD = "wood";
     public static final String SKIN_LEATHER = "leather";
     public static final String RECORD = "record";
+    public static final String START = "start";
+    public static final String STOP = "stop";
     public static final String CHANGE_CAMERA = "change camera";
     public static final String TIME_IN_ACTIVITY = "Time in Activity";
     public static final String VIDEO_SHARED = "Video Shared";
