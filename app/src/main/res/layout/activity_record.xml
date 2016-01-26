@@ -70,7 +70,7 @@
             android:layout_marginEnd="4dp"
             android:background="@null"
             android:src="@drawable/activity_record_skin_leather_icon_selector"
-            android:visibility="visible" />
+            android:visibility="gone" />
 
         <ImageButton
             android:id="@+id/skinWoodButton"
@@ -80,7 +80,7 @@
             android:layout_marginEnd="4dp"
             android:background="@null"
             android:src="@drawable/activity_record_skin_wood_icon_selector"
-            android:visibility="gone" />
+            android:visibility="visible" />
 
         <RelativeLayout
             android:layout_width="wrap_content"
