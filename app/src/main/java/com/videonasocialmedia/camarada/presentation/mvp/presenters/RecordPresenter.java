@@ -22,6 +22,7 @@ import com.videonasocialmedia.camarada.domain.RemoveFilesInTempFolderUseCase;
 import com.videonasocialmedia.camarada.domain.effects.GetEffectListUseCase;
 import com.videonasocialmedia.camarada.model.entities.editor.effects.Effect;
 import com.videonasocialmedia.camarada.model.entities.editor.effects.ShaderEffect;
+import com.videonasocialmedia.camarada.presentation.mvp.views.EffectSelectorView;
 import com.videonasocialmedia.camarada.presentation.mvp.views.RecordView;
 import com.videonasocialmedia.camarada.utils.AnalyticsConstants;
 import com.videonasocialmedia.camarada.utils.ConfigPreferences;
@@ -51,6 +52,7 @@ public class RecordPresenter implements OnExportFinishedListener {
     private static final String LOG_TAG = "RecordPresenter";
     private boolean firstTimeRecording;
     private RecordView recordView;
+    private EffectSelectorView effectSelectorView;
     private SessionConfig config;
     private AVRecorder recorder;
     private SharedPreferences sharedPreferences;
@@ -72,13 +74,13 @@ public class RecordPresenter implements OnExportFinishedListener {
     private GetVideosFromTempFolderUseCase getVideosFromTempFolderUseCase;
     private RemoveFilesInTempFolderUseCase removeFilesInTempFolderUseCase;
     private int selectedFilter;
-
     private Effect selectedShaderEffect;
 
-    public RecordPresenter(Context context, RecordView recordView,
+    public RecordPresenter(Context context, RecordView recordView, EffectSelectorView effectSelectorView,
                            GLCameraEncoderView cameraPreview, SharedPreferences sharedPreferences) {
         Log.d(LOG_TAG, "constructor presenter");
         this.recordView = recordView;
+        this.effectSelectorView = effectSelectorView;
         this.context = context;
         this.cameraPreview = cameraPreview;
         this.sharedPreferences = sharedPreferences;
@@ -97,7 +99,7 @@ public class RecordPresenter implements OnExportFinishedListener {
         try {
             recorder = new AVRecorder(config);
             recorder.setPreviewDisplay(cameraPreview);
-            setBlackAndWitheFilter();
+            setSepiaFilter();
             List<Drawable> animatedOverlayFrames = getAnimatedOverlay();
             recorder.addAnimatedOverlayFilter(animatedOverlayFrames);
             firstTimeRecording = true;
@@ -125,9 +127,9 @@ public class RecordPresenter implements OnExportFinishedListener {
     private SessionConfig getConfigFromPreferences(SharedPreferences sharedPreferences) {
         // TODO comprobar la máxima resolución que puede coger y usarla aquí
         String destinationFolderPath = Constants.PATH_APP_TEMP;
-        width = 1280;
-        height = 720;
-        videoBitrate = 5000000;
+        int width = 640;
+        int height = 480;
+        int videoBitrate = 5000000;
         int audioChannels = 1;
         int audioFrequency = 48000;
         int audioBitrate = 192 * 1000;
@@ -352,6 +354,7 @@ public class RecordPresenter implements OnExportFinishedListener {
                 AnalyticsConstants.FILTER_CODE_SEPIA);
         selectedFilter = Filters.FILTER_SEPIA;
         recorder.applyFilter(Filters.FILTER_SEPIA);
+        effectSelectorView.showSepiaSelected();
     }
 
     public void setBlackAndWitheFilter() {
@@ -359,6 +362,7 @@ public class RecordPresenter implements OnExportFinishedListener {
                 AnalyticsConstants.FILTER_CODE_MONO);
         selectedFilter = Filters.FILTER_MONO;
         recorder.applyFilter(Filters.FILTER_MONO);
+        effectSelectorView.showBlackAndWhiteSelected();
     }
 
     public void setBlueFilter() {
@@ -366,6 +370,7 @@ public class RecordPresenter implements OnExportFinishedListener {
                 AnalyticsConstants.FILTER_CODE_AQUA);
         selectedFilter = Filters.FILTER_AQUA;
         recorder.applyFilter(Filters.FILTER_AQUA);
+        effectSelectorView.showBlueSelected();
     }
 
     public List<Effect> getShaderEffectList() {

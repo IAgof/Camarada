@@ -1,4 +1,4 @@
-package com.videonasocialmedia.camarada.model.entities.sources;
+package com.videonasocialmedia.camarada.model.repository;
 
 import com.videonasocialmedia.avrecorder.Filters;
 import com.videonasocialmedia.camarada.R;

@@ -25,6 +25,7 @@ import com.videonasocialmedia.camarada.presentation.listener.OnEffectSelectedLis
 import com.videonasocialmedia.camarada.presentation.listener.OnSwipeListener;
 import com.videonasocialmedia.camarada.presentation.listener.OnSwipeTouchListener;
 import com.videonasocialmedia.camarada.presentation.mvp.presenters.RecordPresenter;
+import com.videonasocialmedia.camarada.presentation.mvp.views.EffectSelectorView;
 import com.videonasocialmedia.camarada.presentation.mvp.views.RecordView;
 import com.videonasocialmedia.camarada.utils.AnalyticsConstants;
 import com.videonasocialmedia.camarada.utils.ConfigPreferences;
@@ -41,8 +42,9 @@ import butterknife.OnTouch;
 /**
  * Created by Veronica Lago Fominaya on 19/01/2016.
  */
+
 public class RecordActivity extends CamaradaActivity implements RecordView, OnEffectSelectedListener,
-        OnSwipeListener {
+        OnSwipeListener, EffectSelectorView {
 
     @Bind(R.id.recordLayout)
     LinearLayout recordLayout;
@@ -66,19 +68,15 @@ public class RecordActivity extends CamaradaActivity implements RecordView, OnEf
     ImageButton filterBlackAndWhiteButton;
     @Bind(R.id.filterSepiaButton)
     ImageButton filterSepiaButton;
-    @Bind(R.id.settingsButton)
-    ImageButton settingsButton;
-    //@Bind(R.id.manualPreview)
-    //View swipeFiltersView;
-    OnSwipeTouchListener swipeListener;
     @Bind(R.id.textFilterSelected)
     TextView textFilterSelected;
-
+    
     private RecordPresenter recordPresenter;
     private boolean buttonBackPressed;
     private boolean recording;
     private AlertDialog progressDialog;
     private boolean mUseImmersiveMode = true;
+    private OnSwipeTouchListener swipeListener;
     private EffectAdapter cameraShaderEffectsAdapter;
     private enum SWIPE_TYPE { LEFT, RIGHT }
 
@@ -108,9 +106,8 @@ public class RecordActivity extends CamaradaActivity implements RecordView, OnEf
         SharedPreferences sharedPreferences = getSharedPreferences(
                 ConfigPreferences.SETTINGS_SHARED_PREFERENCES_FILE_NAME,
                 Context.MODE_PRIVATE);
-        recordPresenter = new RecordPresenter(this, this, cameraView, sharedPreferences);
+        recordPresenter = new RecordPresenter(this, this, this, cameraView, sharedPreferences);
         createProgressDialog();
-
         cameraShaderEffectsAdapter = new EffectAdapter(recordPresenter.getShaderEffectList(), this);
     }
 
@@ -194,14 +191,7 @@ public class RecordActivity extends CamaradaActivity implements RecordView, OnEf
                         | View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY
         );
     }
-
-
-    /*
-    public boolean dispatchTouchEvent(MotionEvent ev){
-        swipeListener.getGestureDetector().onTouchEvent(ev);
-        return super.dispatchTouchEvent(ev);
-    } */
-
+    
     @OnTouch(R.id.recordButton)
     boolean onTouch(MotionEvent event) {
         if (event.getAction() == MotionEvent.ACTION_DOWN) {
@@ -249,7 +239,6 @@ public class RecordActivity extends CamaradaActivity implements RecordView, OnEf
         sendUserInteractedTracking();
         Intent intent = new Intent(this, SettingsActivity.class);
         startActivity(intent);
-
     }
 
     private void sendUserInteractedTracking() {
@@ -295,22 +284,37 @@ public class RecordActivity extends CamaradaActivity implements RecordView, OnEf
     @OnClick(R.id.filterBlackAndWhiteButton)
     public void selectBlackAndWhiteFilter() {
         recordPresenter.setBlackAndWitheFilter();
-
-        setFilerButtonSelected(0);
+        setFilerButtonSelected(1);
     }
 
     @OnClick(R.id.filterSepiaButton)
     public void selectSepiaFilter() {
         recordPresenter.setSepiaFilter();
-
-        setFilerButtonSelected(1);
+        setFilerButtonSelected(0);
     }
 
     @OnClick(R.id.filterBlueButton)
     public void selectBlueFilter() {
         recordPresenter.setBlueFilter();
-
         setFilerButtonSelected(2);
+    }
+
+    @Override
+    public void showSepiaSelected() {
+        resetSelections();
+        filterSepiaButton.setSelected(true);
+    }
+
+    @Override
+    public void showBlackAndWhiteSelected() {
+        resetSelections();
+        filterBlackAndWhiteButton.setSelected(true);
+    }
+
+    @Override
+    public void showBlueSelected() {
+        resetSelections();
+        filterBlueButton.setSelected(true);
     }
 
     private void resetSelections() {

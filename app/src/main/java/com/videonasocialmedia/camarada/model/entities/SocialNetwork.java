@@ -1,4 +1,4 @@
-package com.videonasocialmedia.camarada.model;
+package com.videonasocialmedia.camarada.model.entities;
 
 import android.graphics.drawable.Drawable;
 

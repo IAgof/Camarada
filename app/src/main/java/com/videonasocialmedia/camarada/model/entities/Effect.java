@@ -10,7 +10,7 @@
  * Danny R. Fonseca Arboleda
  */
 
-package com.videonasocialmedia.camarada.model.entities.editor.effects;
+package com.videonasocialmedia.camarada.model.entities;
 
 /**
  *
