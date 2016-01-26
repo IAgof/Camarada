@@ -1,8 +1,8 @@
 package com.videonasocialmedia.camarada.presentation.views.activity;
 
 import android.content.Context;
-import android.content.SharedPreferences;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.media.MediaPlayer;
 import android.net.Uri;
 import android.os.Bundle;
@@ -16,8 +16,6 @@ import android.widget.ImageButton;
 import android.widget.SeekBar;
 import android.widget.VideoView;
 
-import com.google.android.gms.analytics.GoogleAnalytics;
-import com.google.android.gms.analytics.HitBuilders;
 import com.videonasocialmedia.camarada.R;
 import com.videonasocialmedia.camarada.model.SocialNetwork;
 import com.videonasocialmedia.camarada.presentation.adapter.SocialNetworkAdapter;
@@ -31,6 +29,8 @@ import com.videonasocialmedia.camarada.utils.Utils;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.List;
 
 import butterknife.Bind;
@@ -62,7 +62,6 @@ public class ShareActivity extends CamaradaActivity implements ShareView, Previe
     private String videoPath;
     private SocialNetworkAdapter socialNetworkAdapter;
     private boolean draggingSeekBar;
-
     private Handler updateSeekBarTaskHandler = new Handler();
     private Runnable updateSeekBarTask = new Runnable() {
         @Override
@@ -70,6 +69,8 @@ public class ShareActivity extends CamaradaActivity implements ShareView, Previe
             updateSeekbar();
         }
     };
+    private SharedPreferences sharedPreferences;
+    private SharedPreferences.Editor preferencesEditor;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -77,14 +78,12 @@ public class ShareActivity extends CamaradaActivity implements ShareView, Previe
         setContentView(R.layout.activity_share);
         ButterKnife.bind(this);
 
-        SharedPreferences sharedPreferences =
+        sharedPreferences =
                 getSharedPreferences(ConfigPreferences.SETTINGS_SHARED_PREFERENCES_FILE_NAME,
                 Context.MODE_PRIVATE);
+        preferencesEditor = sharedPreferences.edit();
         presenter = new SharePresenter(this, this, sharedPreferences);
         initBackgorund();
-
-        presenter = new SharePresenter(this, this);
-
         initVideoPreview();
         initSocialNetworkContainer();
     }
@@ -193,7 +192,8 @@ public class ShareActivity extends CamaradaActivity implements ShareView, Previe
 
     @OnClick(R.id.moreSharingOptionsButton)
     public void showMoreNetworks() {
-        trackGenericShare();
+        updateNumTotalVideosShared();
+        trackVideoShared(null);
         Intent intent = new Intent(Intent.ACTION_SEND);
         intent.setType("video/*");
         Uri uri = Utils.obtainUriToShare(this, videoPath);
@@ -201,41 +201,39 @@ public class ShareActivity extends CamaradaActivity implements ShareView, Previe
         startActivity(Intent.createChooser(intent, getString(R.string.share_using)));
     }
 
-    private void trackGenericShare() {
-        tracker.send(new HitBuilders.EventBuilder()
-                .setCategory("ShareVideoActivity")
-                .setAction("video shared")
-                .setLabel("Generic social network")
-                .build());
-        GoogleAnalytics.getInstance(this.getApplication().getBaseContext()).dispatchLocalHits();
-        mixpanel.track("More social networks button clicked", null);
-    }
-
-
     @Override
     public void onSocialNetworkClicked(SocialNetwork socialNetwork) {
         presenter.shareVideo(videoPath, socialNetwork, this);
+        updateNumTotalVideosShared();
         trackVideoShared(socialNetwork);
+    }
+
+    private void updateNumTotalVideosShared() {
+        int totalVideosShared = sharedPreferences.getInt(ConfigPreferences.TOTAL_VIDEOS_SHARED, 0);
+        preferencesEditor.putInt(ConfigPreferences.TOTAL_VIDEOS_SHARED, totalVideosShared++);
+        preferencesEditor.commit();
     }
 
 
     private void trackVideoShared(SocialNetwork socialNetwork) {
-        tracker.send(new HitBuilders.EventBuilder()
-                .setCategory("ShareVideoActivity")
-                .setAction("video shared")
-                .setLabel(socialNetwork.getName())
-                .build());
-        GoogleAnalytics.getInstance(this.getApplication().getBaseContext()).dispatchLocalHits();
+        String socialNetworkName = null;
+        if(socialNetwork != null)
+            socialNetworkName = socialNetwork.getName();
         JSONObject socialNetworkProperties = new JSONObject();
         try {
-            socialNetworkProperties.put("socialNetwork", socialNetwork.getName());
+            socialNetworkProperties.put("socialNetwork", socialNetworkName);
             socialNetworkProperties.put("videoLength", presenter.getVideoLength());
             socialNetworkProperties.put("resolution", presenter.getResolution());
             socialNetworkProperties.put("numberOfClips", presenter.getNumberOfClips());
+            socialNetworkProperties.put("totalSharedVideos",
+                    sharedPreferences.getInt(ConfigPreferences.TOTAL_VIDEOS_SHARED, 0));
             mixpanel.track("Video Shared", socialNetworkProperties);
         } catch (JSONException e) {
             e.printStackTrace();
         }
+        mixpanel.getPeople().increment("totalSharedVideos", 1);
+        mixpanel.getPeople().set("lastVideoShared", new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ssZ")
+                .format(new Date()));
     }
 
     class VideoPreviewEventListener implements MediaPlayer.OnCompletionListener, MediaPlayer.OnPreparedListener {

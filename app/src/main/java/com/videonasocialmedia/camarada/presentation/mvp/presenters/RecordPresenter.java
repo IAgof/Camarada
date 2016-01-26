@@ -50,10 +50,12 @@ public class RecordPresenter implements OnExportFinishedListener {
     private SessionConfig config;
     private AVRecorder recorder;
     private SharedPreferences sharedPreferences;
+    private SharedPreferences.Editor editor;
     private Context context;
     private GLCameraEncoderView cameraPreview;
     private int width;
     private int height;
+    private int videoBitrate;
     private MixpanelAPI mixpanel;
     private String fileName;
     /**
@@ -73,6 +75,7 @@ public class RecordPresenter implements OnExportFinishedListener {
         this.context = context;
         this.cameraPreview = cameraPreview;
         this.sharedPreferences = sharedPreferences;
+        editor = sharedPreferences.edit();
         exportUseCase = new ExportUseCase(this);
         getVideosFromTempFolderUseCase = new GetVideosFromTempFolderUseCase();
         removeFilesInTempFolderUseCase = new RemoveFilesInTempFolderUseCase();
@@ -112,7 +115,7 @@ public class RecordPresenter implements OnExportFinishedListener {
         String destinationFolderPath = Constants.PATH_APP_TEMP;
         width = 1280;
         height = 720;
-        int videoBitrate = 5000000;
+        videoBitrate = 5000000;
         int audioChannels = 1;
         int audioFrequency = 48000;
         int audioBitrate = 192 * 1000;
@@ -123,7 +126,19 @@ public class RecordPresenter implements OnExportFinishedListener {
 
     public String getResolution() {
         String resolution = width+"x"+height;
-        sharedPreferences.edit().putString(ConfigPreferences.RESOLUTION, resolution);
+        editor.putString(ConfigPreferences.RESOLUTION, resolution);
+        editor.putInt(ConfigPreferences.QUALITY, videoBitrate);
+        editor.commit();
+        JSONObject userProfileProperties = new JSONObject();
+        try {
+            userProfileProperties.put("resolution", sharedPreferences.getString(
+                    ConfigPreferences.RESOLUTION, resolution));
+            userProfileProperties.put("quality", sharedPreferences.getInt(ConfigPreferences.QUALITY,
+                    videoBitrate));
+            mixpanel.getPeople().set(userProfileProperties);
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
         return resolution;
     }
 
@@ -220,19 +235,28 @@ public class RecordPresenter implements OnExportFinishedListener {
         fileName = "VID_" + timeStamp + ".mp4";
         File destinationFile = new File(Constants.PATH_APP_TEMP, fileName);
         originalFile.renameTo(destinationFile);
+        int numTotalVideosRecorded = sharedPreferences
+                .getInt(ConfigPreferences.TOTAL_VIDEOS_RECORDED, 0);
+        editor.putInt(ConfigPreferences.TOTAL_VIDEOS_RECORDED,
+                numTotalVideosRecorded++);
+        editor.commit();
         sendVideoRecordedTracking();
     }
 
     private void sendVideoRecordedTracking() {
         JSONObject videoRecordedProperties = new JSONObject();
+        int totalVideosRecorded = sharedPreferences.getInt(ConfigPreferences.TOTAL_VIDEOS_RECORDED, 0);
         try {
             videoRecordedProperties.put("videoLength", getClipDuration());
             videoRecordedProperties.put("resolution", getResolution());
-            // TODO videos last month and total
+            videoRecordedProperties.put("totalRecordedVideos", totalVideosRecorded);
             mixpanel.track("Video Recorded", videoRecordedProperties);
         } catch (JSONException | IOException e) {
             e.printStackTrace();
         }
+        mixpanel.getPeople().increment("totalRecordedVideos", 1);
+        mixpanel.getPeople().set("lastVideoRecorded", new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ssZ")
+                .format(new Date()));
     }
 
     public void changeCamera() {
@@ -350,13 +374,15 @@ public class RecordPresenter implements OnExportFinishedListener {
         double duration = 0.0;
         if (videoList.size() > 0)
             duration = Utils.getFileDuration(videoList);
-        sharedPreferences.edit().putLong(ConfigPreferences.VIDEO_DURATION, (long) duration);
+        editor.putLong(ConfigPreferences.VIDEO_DURATION, (long) duration);
+        editor.commit();
         return duration;
     }
 
     public int getNumberOfClipsRecorded() {
         int numberOfClipsRecorded = getVideosFromTempFolderUseCase.getVideosFromTempFolder().size();
-        sharedPreferences.edit().putInt(ConfigPreferences.NUMBER_OF_CLIPS, numberOfClipsRecorded);
+        editor.putInt(ConfigPreferences.NUMBER_OF_CLIPS, numberOfClipsRecorded);
+        editor.commit();
         return numberOfClipsRecorded;
     }
 

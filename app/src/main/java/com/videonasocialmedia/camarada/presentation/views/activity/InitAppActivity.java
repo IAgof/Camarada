@@ -18,12 +18,12 @@ import android.view.Window;
 import android.view.WindowManager;
 import android.widget.TextView;
 
-import com.mixpanel.android.mpmetrics.InAppNotification;
 import com.videonasocialmedia.camarada.BuildConfig;
 import com.videonasocialmedia.camarada.R;
 import com.videonasocialmedia.camarada.domain.RemoveFilesInTempFolderUseCase;
 import com.videonasocialmedia.camarada.presentation.listener.OnInitAppEventListener;
 import com.videonasocialmedia.camarada.presentation.mvp.views.InitAppView;
+import com.videonasocialmedia.camarada.utils.AnalyticsConstants;
 import com.videonasocialmedia.camarada.utils.AppStart;
 import com.videonasocialmedia.camarada.utils.ConfigPreferences;
 import com.videonasocialmedia.camarada.utils.Constants;
@@ -34,6 +34,9 @@ import org.json.JSONObject;
 
 import java.io.File;
 import java.io.IOException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+import java.util.Locale;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
@@ -62,7 +65,7 @@ public class InitAppActivity extends CamaradaActivity implements InitAppView, On
     TextView versionName;
     private long MINIMUN_WAIT_TIME;
     private SharedPreferences sharedPreferences;
-    private SharedPreferences.Editor editor;
+    private SharedPreferences.Editor preferencesEditor;
     private Camera camera;
     private int numSupportedCameras;
     private long startTime;
@@ -102,12 +105,10 @@ public class InitAppActivity extends CamaradaActivity implements InitAppView, On
         checkAndRequestPermissions();
         sharedPreferences = getSharedPreferences(ConfigPreferences.SETTINGS_SHARED_PREFERENCES_FILE_NAME,
                 Context.MODE_PRIVATE);
-        editor = sharedPreferences.edit();
+        preferencesEditor = sharedPreferences.edit();
         PreferenceManager.setDefaultValues(this, R.xml.preferences, false);
         SplashScreenTask splashScreenTask = new SplashScreenTask();
         splashScreenTask.execute();
-        //TODO define where check notification, Record Screen?
-        checkNewNotification();
     }
 
     @Override
@@ -133,15 +134,6 @@ public class InitAppActivity extends CamaradaActivity implements InitAppView, On
         handler.removeCallbacksAndMessages(null);
     }
 
-    private void checkNewNotification(){
-
-        InAppNotification notification = mixpanel.getPeople().getNotificationIfAvailable();
-        if (notification != null) {
-            mixpanel.getPeople().showGivenNotification(notification, this);
-        }
-        Log.d(LOG_TAG, "Checked for new mixpanel in app notification");
-    }
-
     /**
      * Releases the camera object
      */
@@ -156,9 +148,9 @@ public class InitAppActivity extends CamaradaActivity implements InitAppView, On
     private void sendStartupAppTracking() {
         JSONObject initAppProperties = new JSONObject();
         try {
-            initAppProperties.put("type", "organic");
-            initAppProperties.put("initState", initState);
-            mixpanel.track("App Started", initAppProperties);
+            initAppProperties.put(AnalyticsConstants.TYPE, AnalyticsConstants.TYPE_ORGANIC);
+            initAppProperties.put(AnalyticsConstants.INIT_STATE, initState);
+            mixpanel.track(AnalyticsConstants.APP_STARTED, initAppProperties);
         } catch (JSONException e) {
             e.printStackTrace();
         }
@@ -205,14 +197,25 @@ public class InitAppActivity extends CamaradaActivity implements InitAppView, On
     private void createUserProfile() {
         mixpanel.identify(androidId);
         mixpanel.getPeople().identify(androidId);
-        mixpanel.getPeople().set("User Type", "Free");
+        JSONObject userProfileProperties = new JSONObject();
+        try {
+            userProfileProperties.put(AnalyticsConstants.TYPE, AnalyticsConstants.TYPE_PAID);
+            userProfileProperties.put(AnalyticsConstants.CREATED,
+                    new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ssZ").format(new Date()));
+            userProfileProperties.put(AnalyticsConstants.LOCALE,
+                    Locale.getDefault().getDisplayLanguage());
+            userProfileProperties.put(AnalyticsConstants.LANG, Locale.getDefault().getISO3Language());
+            mixpanel.getPeople().setOnce(userProfileProperties);
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
     }
 
     /**
      * Initializes the camera id parameter in shared preferences to back camera
      */
     private void initSettings() {
-        editor.putInt(ConfigPreferences.CAMERA_ID, ConfigPreferences.BACK_CAMERA).commit();
+        preferencesEditor.putInt(ConfigPreferences.CAMERA_ID, ConfigPreferences.BACK_CAMERA).commit();
     }
 
     /**
@@ -233,10 +236,10 @@ public class InitAppActivity extends CamaradaActivity implements InitAppView, On
         }
         camera = getCameraInstance(sharedPreferences.getInt(ConfigPreferences.CAMERA_ID,
                 ConfigPreferences.BACK_CAMERA));
-        editor.putBoolean(ConfigPreferences.BACK_CAMERA_SUPPORTED, true).commit();
+        preferencesEditor.putBoolean(ConfigPreferences.BACK_CAMERA_SUPPORTED, true).commit();
         numSupportedCameras = Camera.getNumberOfCameras();
         if (numSupportedCameras > 1) {
-            editor.putBoolean(ConfigPreferences.FRONT_CAMERA_SUPPORTED, true).commit();
+            preferencesEditor.putBoolean(ConfigPreferences.FRONT_CAMERA_SUPPORTED, true).commit();
         }
         releaseCamera();
     }
@@ -251,17 +254,17 @@ public class InitAppActivity extends CamaradaActivity implements InitAppView, On
         if (numSupportedCameras > 1) {
             camera = getCameraInstance(ConfigPreferences.FRONT_CAMERA);
             if (camera.getParameters().getSupportedFlashModes() != null) {
-                editor.putBoolean(ConfigPreferences.FRONT_CAMERA_FLASH_SUPPORTED, true).commit();
+                preferencesEditor.putBoolean(ConfigPreferences.FRONT_CAMERA_FLASH_SUPPORTED, true).commit();
             } else {
-                editor.putBoolean(ConfigPreferences.FRONT_CAMERA_FLASH_SUPPORTED, false).commit();
+                preferencesEditor.putBoolean(ConfigPreferences.FRONT_CAMERA_FLASH_SUPPORTED, false).commit();
             }
             releaseCamera();
         }
         camera = getCameraInstance(ConfigPreferences.BACK_CAMERA);
         if (camera.getParameters().getSupportedFlashModes() != null) {
-            editor.putBoolean(ConfigPreferences.BACK_CAMERA_FLASH_SUPPORTED, true).commit();
+            preferencesEditor.putBoolean(ConfigPreferences.BACK_CAMERA_FLASH_SUPPORTED, true).commit();
         } else {
-            editor.putBoolean(ConfigPreferences.BACK_CAMERA_FLASH_SUPPORTED, false).commit();
+            preferencesEditor.putBoolean(ConfigPreferences.BACK_CAMERA_FLASH_SUPPORTED, false).commit();
         }
         releaseCamera();
     }
@@ -312,7 +315,7 @@ public class InitAppActivity extends CamaradaActivity implements InitAppView, On
         copyMusicFromResources();
         File privateDataFolderModel = getDir(Constants.FOLDER_VIDEONA_PRIVATE_MODEL, Context.MODE_PRIVATE);
         String privatePath = privateDataFolderModel.getAbsolutePath();
-        editor.putString(ConfigPreferences.PRIVATE_PATH, privatePath).commit();
+        preferencesEditor.putString(ConfigPreferences.PRIVATE_PATH, privatePath).commit();
     }
 
     private void cleanTempPath() {

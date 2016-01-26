@@ -14,6 +14,7 @@ import android.widget.ImageButton;
 import android.widget.LinearLayout;
 import android.widget.Toast;
 
+import com.mixpanel.android.mpmetrics.InAppNotification;
 import com.videonasocialmedia.avrecorder.view.GLCameraEncoderView;
 import com.videonasocialmedia.camarada.R;
 import com.videonasocialmedia.camarada.presentation.mvp.presenters.RecordPresenter;
@@ -105,6 +106,7 @@ public class RecordActivity extends CamaradaActivity implements RecordView {
         recordPresenter.onResume();
         recording = false;
         hideSystemUi();
+        checkNewNotification();
     }
 
     private void hideSystemUi() {
@@ -113,6 +115,13 @@ public class RecordActivity extends CamaradaActivity implements RecordView {
                     WindowManager.LayoutParams.FLAG_FULLSCREEN);
         } else if (mUseImmersiveMode) {
             setKitKatWindowFlags();
+        }
+    }
+
+    private void checkNewNotification(){
+        InAppNotification notification = mixpanel.getPeople().getNotificationIfAvailable();
+        if (notification != null) {
+            mixpanel.getPeople().showGivenNotification(notification, this);
         }
     }
 
@@ -220,6 +229,7 @@ public class RecordActivity extends CamaradaActivity implements RecordView {
     }
 
     private void sendMetadataTracking() {
+        mixpanel.timeEvent("Time Exporting Video");
         JSONObject videoExportedProperties = new JSONObject();
         try {
             videoExportedProperties.put("videoLength", recordPresenter.getVideoLength());
@@ -313,6 +323,7 @@ public class RecordActivity extends CamaradaActivity implements RecordView {
 
     @Override
     public void showError(String errorMessage) {
+        mixpanel.track("Time Exporting Video");
         Toast.makeText(this, errorMessage, Toast.LENGTH_SHORT).show();
     }
 
@@ -323,6 +334,7 @@ public class RecordActivity extends CamaradaActivity implements RecordView {
 
     @Override
     public void goToShare(String videoToSharePath) {
+        mixpanel.track("Time Exporting Video");
         recordPresenter.removeTempVideos();
         Intent intent = new Intent(this, ShareActivity.class);
         intent.putExtra(ShareActivity.INTENT_EXTRA_VIDEO_PATH, videoToSharePath);
