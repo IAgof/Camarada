@@ -19,6 +19,7 @@ import com.google.android.gms.analytics.HitBuilders;
 import com.videonasocialmedia.avrecorder.view.GLCameraEncoderView;
 import com.videonasocialmedia.camarada.R;
 import com.videonasocialmedia.camarada.presentation.mvp.presenters.RecordPresenter;
+import com.videonasocialmedia.camarada.presentation.mvp.views.EffectSelectorView;
 import com.videonasocialmedia.camarada.presentation.mvp.views.RecordView;
 import com.videonasocialmedia.camarada.utils.ConfigPreferences;
 import com.videonasocialmedia.camarada.utils.Utils;
@@ -31,7 +32,7 @@ import butterknife.OnTouch;
 /**
  * Created by Veronica Lago Fominaya on 19/01/2016.
  */
-public class RecordActivity extends CamaradaActivity implements RecordView {
+public class RecordActivity extends CamaradaActivity implements RecordView, EffectSelectorView {
 
     @Bind(R.id.recordLayout)
     LinearLayout recordLayout;
@@ -55,8 +56,6 @@ public class RecordActivity extends CamaradaActivity implements RecordView {
     ImageButton filterBlackAndWhiteButton;
     @Bind(R.id.filterSepiaButton)
     ImageButton filterSepiaButton;
-    @Bind(R.id.settingsButton)
-    ImageButton settingsButton;
 
     private RecordPresenter recordPresenter;
     private boolean buttonBackPressed;
@@ -79,7 +78,7 @@ public class RecordActivity extends CamaradaActivity implements RecordView {
         SharedPreferences sharedPreferences = getSharedPreferences(
                 ConfigPreferences.SETTINGS_SHARED_PREFERENCES_FILE_NAME,
                 Context.MODE_PRIVATE);
-        recordPresenter = new RecordPresenter(this, this, cameraView, sharedPreferences);
+        recordPresenter = new RecordPresenter(this, this, this, cameraView, sharedPreferences);
         createProgressDialog();
     }
 
@@ -209,11 +208,9 @@ public class RecordActivity extends CamaradaActivity implements RecordView {
     }
 
     @OnClick(R.id.settingsButton)
-    public void goToSettings(){
-
+    public void goToSettings() {
         Intent intent = new Intent(this, SettingsActivity.class);
         startActivity(intent);
-
     }
 
     private void sendMetadataTracking() {
@@ -242,20 +239,32 @@ public class RecordActivity extends CamaradaActivity implements RecordView {
     @OnClick(R.id.filterBlackAndWhiteButton)
     public void selectBlackAndWhiteFilter() {
         recordPresenter.setBlackAndWitheFilter();
-        resetSelections();
-        filterBlackAndWhiteButton.setSelected(true);
     }
 
     @OnClick(R.id.filterSepiaButton)
     public void selectSepiaFilter() {
         recordPresenter.setSepiaFilter();
-        resetSelections();
-        filterSepiaButton.setSelected(true);
     }
 
     @OnClick(R.id.filterBlueButton)
     public void selectBlueFilter() {
         recordPresenter.setBlueFilter();
+    }
+
+    @Override
+    public void showSepiaSelected() {
+        resetSelections();
+        filterSepiaButton.setSelected(true);
+    }
+
+    @Override
+    public void showBlackAndWhiteSelected() {
+        resetSelections();
+        filterBlackAndWhiteButton.setSelected(true);
+    }
+
+    @Override
+    public void showBlueSelected() {
         resetSelections();
         filterBlueButton.setSelected(true);
     }

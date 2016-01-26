@@ -19,8 +19,9 @@
             android:id="@+id/settingsButton"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
             android:layout_centerVertical="true"
-            android:layout_marginStart="22dp"
+            android:layout_marginRight="8dp"
             android:background="@null"
             android:src="@mipmap/common_icon_settings_normal" />
 
@@ -133,15 +134,6 @@
             android:orientation="vertical">
 
             <ImageButton
-                android:id="@+id/filterBlackAndWhiteButton"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center"
-                android:layout_marginBottom="4dp"
-                android:background="@null"
-                android:src="@drawable/activity_record_filter_bw_icon_selector" />
-
-            <ImageButton
                 android:id="@+id/filterSepiaButton"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -149,6 +141,15 @@
                 android:layout_marginBottom="4dp"
                 android:background="@null"
                 android:src="@drawable/activity_record_filter_sepia_icon_selector" />
+
+            <ImageButton
+                android:id="@+id/filterBlackAndWhiteButton"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_marginBottom="4dp"
+                android:background="@null"
+                android:src="@drawable/activity_record_filter_bw_icon_selector" />
 
             <ImageButton
                 android:id="@+id/filterBlueButton"

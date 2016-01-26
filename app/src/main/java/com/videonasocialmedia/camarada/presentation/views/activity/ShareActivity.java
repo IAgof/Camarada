@@ -180,6 +180,7 @@ public class ShareActivity extends CamaradaActivity implements ShareView, Previe
     @Override
     public void pause() {
         videoPreview.pause();
+        playButton.setVisibility(View.VISIBLE);
     }
 
 
@@ -209,6 +210,25 @@ public class ShareActivity extends CamaradaActivity implements ShareView, Previe
     @Override
     public void onStopTrackingTouch(SeekBar seekBar) {
         draggingSeekBar = false;
+    }
+
+    @OnClick(R.id.settingsButton)
+    public void goToSettings() {
+        Intent intent = new Intent(this, SettingsActivity.class);
+        startActivity(intent);
+    }
+
+    @OnClick(R.id.backButton)
+    public void goBack() {
+        Intent intent = new Intent(this, RecordActivity.class);
+        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+        startActivity(intent);
+    }
+
+    @Override
+    public void onBackPressed() {
+        super.onBackPressed();
+        goBack();
     }
 
     @OnClick(R.id.moreSharingOptionsButton)
@@ -272,7 +292,7 @@ public class ShareActivity extends CamaradaActivity implements ShareView, Previe
                 Log.d("Share", "error while preparing preview");
             }
             initSeekBar(videoPreview.getCurrentPosition(), videoPreview.getDuration());
-            mediaPlayer.pause();
+            pause();
         }
     }
 

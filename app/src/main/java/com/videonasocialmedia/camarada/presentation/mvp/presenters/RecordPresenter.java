@@ -17,6 +17,7 @@ import com.videonasocialmedia.camarada.domain.ExportUseCase;
 import com.videonasocialmedia.camarada.domain.GetVideosFromTempFolderUseCase;
 import com.videonasocialmedia.camarada.domain.OnExportFinishedListener;
 import com.videonasocialmedia.camarada.domain.RemoveFilesInTempFolderUseCase;
+import com.videonasocialmedia.camarada.presentation.mvp.views.EffectSelectorView;
 import com.videonasocialmedia.camarada.presentation.mvp.views.RecordView;
 import com.videonasocialmedia.camarada.utils.Constants;
 
@@ -40,6 +41,7 @@ public class RecordPresenter implements OnExportFinishedListener {
     private static final String LOG_TAG = "RecordPresenter";
     private boolean firstTimeRecording;
     private RecordView recordView;
+    private EffectSelectorView effectSelectorView;
     private SessionConfig config;
     private AVRecorder recorder;
     private SharedPreferences sharedPreferences;
@@ -56,10 +58,11 @@ public class RecordPresenter implements OnExportFinishedListener {
     private RemoveFilesInTempFolderUseCase removeFilesInTempFolderUseCase;
     private int selectedFilter;
 
-    public RecordPresenter(Context context, RecordView recordView,
+    public RecordPresenter(Context context, RecordView recordView, EffectSelectorView effectSelectorView,
                            GLCameraEncoderView cameraPreview, SharedPreferences sharedPreferences) {
         Log.d(LOG_TAG, "constructor presenter");
         this.recordView = recordView;
+        this.effectSelectorView = effectSelectorView;
         this.context = context;
         this.cameraPreview = cameraPreview;
         this.sharedPreferences = sharedPreferences;
@@ -76,7 +79,7 @@ public class RecordPresenter implements OnExportFinishedListener {
         try {
             recorder = new AVRecorder(config);
             recorder.setPreviewDisplay(cameraPreview);
-            setBlackAndWitheFilter();
+            setSepiaFilter();
             List<Drawable> animatedOverlayFrames = getAnimatedOverlay();
             recorder.addAnimatedOverlayFilter(animatedOverlayFrames);
             firstTimeRecording = true;
@@ -266,15 +269,18 @@ public class RecordPresenter implements OnExportFinishedListener {
     public void setSepiaFilter() {
         selectedFilter = Filters.FILTER_SEPIA;
         recorder.applyFilter(Filters.FILTER_SEPIA);
+        effectSelectorView.showSepiaSelected();
     }
 
     public void setBlackAndWitheFilter() {
         selectedFilter = Filters.FILTER_MONO;
         recorder.applyFilter(Filters.FILTER_MONO);
+        effectSelectorView.showBlackAndWhiteSelected();
     }
 
     public void setBlueFilter() {
         selectedFilter = Filters.FILTER_AQUA;
         recorder.applyFilter(Filters.FILTER_AQUA);
+        effectSelectorView.showBlueSelected();
     }
 }
