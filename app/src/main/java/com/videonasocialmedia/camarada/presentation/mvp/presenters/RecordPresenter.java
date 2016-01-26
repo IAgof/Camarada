@@ -20,6 +20,7 @@ import com.videonasocialmedia.camarada.domain.GetVideosFromTempFolderUseCase;
 import com.videonasocialmedia.camarada.domain.OnExportFinishedListener;
 import com.videonasocialmedia.camarada.domain.RemoveFilesInTempFolderUseCase;
 import com.videonasocialmedia.camarada.presentation.mvp.views.RecordView;
+import com.videonasocialmedia.camarada.utils.AnalyticsConstants;
 import com.videonasocialmedia.camarada.utils.ConfigPreferences;
 import com.videonasocialmedia.camarada.utils.Constants;
 import com.videonasocialmedia.camarada.utils.Utils;
@@ -131,10 +132,10 @@ public class RecordPresenter implements OnExportFinishedListener {
         editor.commit();
         JSONObject userProfileProperties = new JSONObject();
         try {
-            userProfileProperties.put("resolution", sharedPreferences.getString(
+            userProfileProperties.put(AnalyticsConstants.RESOLUTION, sharedPreferences.getString(
                     ConfigPreferences.RESOLUTION, resolution));
-            userProfileProperties.put("quality", sharedPreferences.getInt(ConfigPreferences.QUALITY,
-                    videoBitrate));
+            userProfileProperties.put(AnalyticsConstants.QUALITY,
+                    sharedPreferences.getInt(ConfigPreferences.QUALITY, videoBitrate));
             mixpanel.getPeople().set(userProfileProperties);
         } catch (JSONException e) {
             e.printStackTrace();
@@ -163,7 +164,7 @@ public class RecordPresenter implements OnExportFinishedListener {
 
     public void stopRecord() {
         if (recorder.isRecording()) {
-            sendUserInteractedTracking("record", "stop");
+            sendUserInteractedTracking(AnalyticsConstants.RECORD, "stop");
             recorder.stopRecording();
             recordView.showRecordButton();
             recordView.enableShareButton();
@@ -188,7 +189,7 @@ public class RecordPresenter implements OnExportFinishedListener {
                     //recordView.showError();
                 }
             } else {
-                mixpanel.timeEvent("Video Recorded");
+                mixpanel.timeEvent(AnalyticsConstants.VIDEO_RECORDED);
                 startRecord();
             }
         }
@@ -200,7 +201,7 @@ public class RecordPresenter implements OnExportFinishedListener {
     }
 
     private void startRecord() {
-        sendUserInteractedTracking("record", "start");
+        sendUserInteractedTracking(AnalyticsConstants.RECORD, "start");
         recorder.startRecording();
         recordView.showStopButton();
         recordView.disableShareButton();
@@ -247,27 +248,28 @@ public class RecordPresenter implements OnExportFinishedListener {
         JSONObject videoRecordedProperties = new JSONObject();
         int totalVideosRecorded = sharedPreferences.getInt(ConfigPreferences.TOTAL_VIDEOS_RECORDED, 0);
         try {
-            videoRecordedProperties.put("videoLength", getClipDuration());
-            videoRecordedProperties.put("resolution", getResolution());
-            videoRecordedProperties.put("totalRecordedVideos", totalVideosRecorded);
-            mixpanel.track("Video Recorded", videoRecordedProperties);
+            videoRecordedProperties.put(AnalyticsConstants.VIDEO_LENGTH, getClipDuration());
+            videoRecordedProperties.put(AnalyticsConstants.RESOLUTION, getResolution());
+            videoRecordedProperties.put(AnalyticsConstants.TOTAL_RECORDED_VIDEOS,
+                    totalVideosRecorded);
+            mixpanel.track(AnalyticsConstants.VIDEO_RECORDED, videoRecordedProperties);
         } catch (JSONException | IOException e) {
             e.printStackTrace();
         }
-        mixpanel.getPeople().increment("totalRecordedVideos", 1);
-        mixpanel.getPeople().set("lastVideoRecorded", new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ssZ")
-                .format(new Date()));
+        mixpanel.getPeople().increment(AnalyticsConstants.TOTAL_RECORDED_VIDEOS, 1);
+        mixpanel.getPeople().set(AnalyticsConstants.LAST_VIDEO_RECORDED,
+                new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ssZ").format(new Date()));
     }
 
     public void changeCamera() {
         //TODO controlar el estado del flash
         int camera = recorder.requestOtherCamera();
         if (camera == 0) {
-            sendUserInteractedTracking("change camera", "back");
+            sendUserInteractedTracking(AnalyticsConstants.CHANGE_CAMERA, "back");
             recordView.showBackCameraSelected();
         } else {
             if (camera == 1) {
-                sendUserInteractedTracking("change camera", "front");
+                sendUserInteractedTracking(AnalyticsConstants.CHANGE_CAMERA, "front");
                 recordView.showFrontCameraSelected();
             }
         }
@@ -290,18 +292,18 @@ public class RecordPresenter implements OnExportFinishedListener {
 
     public void toggleFlash() {
         boolean on = recorder.toggleFlash();
-        sendUserInteractedTracking("change flash", String.valueOf(on));
+        sendUserInteractedTracking(AnalyticsConstants.CHANGE_FLASH, String.valueOf(on));
         recordView.showFlashOn(on);
     }
 
     public void changeToWoodSkin() {
-        sendUserInteractedTracking("change skin", "wood");
+        sendUserInteractedTracking(AnalyticsConstants.CHANGE_SKIN, AnalyticsConstants.SKIN_WOOD);
         recordView.changeSkin(R.mipmap.activity_record_background_wood);
         recordView.showSkinLeatherButton();
     }
 
     public void changeToLeatherSkin() {
-        sendUserInteractedTracking("change skin", "leather");
+        sendUserInteractedTracking(AnalyticsConstants.CHANGE_SKIN, AnalyticsConstants.SKIN_LEATHER);
         recordView.changeSkin(R.mipmap.activity_record_background_leather);
         recordView.showSkinWoodButton();
     }
@@ -319,17 +321,20 @@ public class RecordPresenter implements OnExportFinishedListener {
     }
 
     public void setSepiaFilter() {
-        sendFilterSelectedTracking("sepia", "ad8");
+        sendFilterSelectedTracking(AnalyticsConstants.FILTER_NAME_SEPIA,
+                AnalyticsConstants.FILTER_CODE_SEPIA);
         recorder.applyFilter(Filters.FILTER_SEPIA);
     }
 
     public void setBlackAndWitheFilter() {
-        sendFilterSelectedTracking("mono", "ad4");
+        sendFilterSelectedTracking(AnalyticsConstants.FILTER_NAME_MONO,
+                AnalyticsConstants.FILTER_CODE_MONO);
         recorder.applyFilter(Filters.FILTER_MONO);
     }
 
     public void setBlueFilter() {
-        sendFilterSelectedTracking("aqua", "ad1");
+        sendFilterSelectedTracking(AnalyticsConstants.FILTER_NAME_AQUA,
+                AnalyticsConstants.FILTER_CODE_AQUA);
         recorder.applyFilter(Filters.FILTER_AQUA);
     }
 
@@ -342,11 +347,11 @@ public class RecordPresenter implements OnExportFinishedListener {
     private void sendUserInteractedTracking(String interaction, String result) {
         JSONObject userInteractionsProperties = new JSONObject();
         try {
-            userInteractionsProperties.put("acitivity", context.getClass().getSimpleName());
-            userInteractionsProperties.put("recording", recorder.isRecording());
-            userInteractionsProperties.put("interaction", interaction);
-            userInteractionsProperties.put("result", result);
-            mixpanel.track("User Interacted", userInteractionsProperties);
+            userInteractionsProperties.put(AnalyticsConstants.ACTIVITY, context.getClass().getSimpleName());
+            userInteractionsProperties.put(AnalyticsConstants.RECORDING, recorder.isRecording());
+            userInteractionsProperties.put(AnalyticsConstants.INTERACTION, interaction);
+            userInteractionsProperties.put(AnalyticsConstants.RESULT, result);
+            mixpanel.track(AnalyticsConstants.USER_INTERACTED, userInteractionsProperties);
         } catch (JSONException e) {
             e.printStackTrace();
         }
@@ -355,11 +360,11 @@ public class RecordPresenter implements OnExportFinishedListener {
     private void sendFilterSelectedTracking(String name, String code) {
         JSONObject userInteractionsProperties = new JSONObject();
         try {
-            userInteractionsProperties.put("type", "color");
-            userInteractionsProperties.put("name", name);
-            userInteractionsProperties.put("code", code);
-            userInteractionsProperties.put("recording", recorder.isRecording());
-            mixpanel.track("Filter Selected", userInteractionsProperties);
+            userInteractionsProperties.put(AnalyticsConstants.TYPE, AnalyticsConstants.TYPE_COLOR);
+            userInteractionsProperties.put(AnalyticsConstants.NAME, name);
+            userInteractionsProperties.put(AnalyticsConstants.CODE, code);
+            userInteractionsProperties.put(AnalyticsConstants.RECORDING, recorder.isRecording());
+            mixpanel.track(AnalyticsConstants.FILTER_SELECTED, userInteractionsProperties);
         } catch (JSONException e) {
             e.printStackTrace();
         }

@@ -23,6 +23,7 @@ import com.videonasocialmedia.camarada.presentation.listener.OnSocialNetworkClic
 import com.videonasocialmedia.camarada.presentation.mvp.presenters.SharePresenter;
 import com.videonasocialmedia.camarada.presentation.mvp.views.PreviewVideoView;
 import com.videonasocialmedia.camarada.presentation.mvp.views.ShareView;
+import com.videonasocialmedia.camarada.utils.AnalyticsConstants;
 import com.videonasocialmedia.camarada.utils.ConfigPreferences;
 import com.videonasocialmedia.camarada.utils.Utils;
 
@@ -221,19 +222,19 @@ public class ShareActivity extends CamaradaActivity implements ShareView, Previe
             socialNetworkName = socialNetwork.getName();
         JSONObject socialNetworkProperties = new JSONObject();
         try {
-            socialNetworkProperties.put("socialNetwork", socialNetworkName);
-            socialNetworkProperties.put("videoLength", presenter.getVideoLength());
-            socialNetworkProperties.put("resolution", presenter.getResolution());
-            socialNetworkProperties.put("numberOfClips", presenter.getNumberOfClips());
-            socialNetworkProperties.put("totalSharedVideos",
+            socialNetworkProperties.put(AnalyticsConstants.SOCIAL_NETWORK, socialNetworkName);
+            socialNetworkProperties.put(AnalyticsConstants.VIDEO_LENGTH, presenter.getVideoLength());
+            socialNetworkProperties.put(AnalyticsConstants.RESOLUTION, presenter.getResolution());
+            socialNetworkProperties.put(AnalyticsConstants.NUMBER_OF_CLIPS, presenter.getNumberOfClips());
+            socialNetworkProperties.put(AnalyticsConstants.TOTAL_SHARED_VIDEOS,
                     sharedPreferences.getInt(ConfigPreferences.TOTAL_VIDEOS_SHARED, 0));
-            mixpanel.track("Video Shared", socialNetworkProperties);
+            mixpanel.track(AnalyticsConstants.VIDEO_SHARED, socialNetworkProperties);
         } catch (JSONException e) {
             e.printStackTrace();
         }
-        mixpanel.getPeople().increment("totalSharedVideos", 1);
-        mixpanel.getPeople().set("lastVideoShared", new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ssZ")
-                .format(new Date()));
+        mixpanel.getPeople().increment(AnalyticsConstants.TOTAL_SHARED_VIDEOS, 1);
+        mixpanel.getPeople().set(AnalyticsConstants.LAST_VIDEO_SHARED,
+                new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ssZ").format(new Date()));
     }
 
     class VideoPreviewEventListener implements MediaPlayer.OnCompletionListener, MediaPlayer.OnPreparedListener {

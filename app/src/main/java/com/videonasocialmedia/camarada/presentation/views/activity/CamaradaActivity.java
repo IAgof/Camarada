@@ -26,6 +26,7 @@ import com.videonasocialmedia.camarada.BuildConfig;
 import com.videonasocialmedia.camarada.CamaradaApplication;
 import com.videonasocialmedia.camarada.presentation.listener.OnCamaradaDialogClickListener;
 import com.videonasocialmedia.camarada.presentation.views.dialog.CamaradaDialogActivity;
+import com.videonasocialmedia.camarada.utils.AnalyticsConstants;
 import com.videonasocialmedia.camarada.utils.PermissionConstants;
 
 import org.json.JSONException;
@@ -66,7 +67,7 @@ public class CamaradaActivity extends AppCompatActivity {
     @Override
     protected void onStart() {
         super.onStart();
-        mixpanel.timeEvent("Time in Activity");
+        mixpanel.timeEvent(AnalyticsConstants.TIME_IN_ACTIVITY);
     }
 
     @Override
@@ -74,12 +75,11 @@ public class CamaradaActivity extends AppCompatActivity {
         super.onPause();
         JSONObject activityProperties = new JSONObject();
         try {
-            activityProperties.put("activity", getClass().getSimpleName());
-            mixpanel.track("Time in Activity", activityProperties);
+            activityProperties.put(AnalyticsConstants.ACTIVITY, getClass().getSimpleName());
+            mixpanel.track(AnalyticsConstants.TIME_IN_ACTIVITY, activityProperties);
         } catch (JSONException e) {
             e.printStackTrace();
         }
-        mixpanel.track("Time in Activity", activityProperties);
     }
 
     @Override

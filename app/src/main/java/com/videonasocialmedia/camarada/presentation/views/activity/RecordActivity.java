@@ -7,6 +7,7 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Build;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.WindowManager;
@@ -19,6 +20,7 @@ import com.videonasocialmedia.avrecorder.view.GLCameraEncoderView;
 import com.videonasocialmedia.camarada.R;
 import com.videonasocialmedia.camarada.presentation.mvp.presenters.RecordPresenter;
 import com.videonasocialmedia.camarada.presentation.mvp.views.RecordView;
+import com.videonasocialmedia.camarada.utils.AnalyticsConstants;
 import com.videonasocialmedia.camarada.utils.ConfigPreferences;
 import com.videonasocialmedia.camarada.utils.Utils;
 
@@ -57,8 +59,6 @@ public class RecordActivity extends CamaradaActivity implements RecordView {
     ImageButton filterBlackAndWhiteButton;
     @Bind(R.id.filterSepiaButton)
     ImageButton filterSepiaButton;
-    @Bind(R.id.settingsButton)
-    ImageButton settingsButton;
 
     private RecordPresenter recordPresenter;
     private boolean buttonBackPressed;
@@ -121,6 +121,7 @@ public class RecordActivity extends CamaradaActivity implements RecordView {
     private void checkNewNotification(){
         InAppNotification notification = mixpanel.getPeople().getNotificationIfAvailable();
         if (notification != null) {
+            Log.d("INAPP", "in-app notification received");
             mixpanel.getPeople().showGivenNotification(notification, this);
         }
     }
@@ -218,24 +219,28 @@ public class RecordActivity extends CamaradaActivity implements RecordView {
     private void sendUserInteractedTracking() {
         JSONObject userInteractionsProperties = new JSONObject();
         try {
-            userInteractionsProperties.put("acitivity", getClass().getSimpleName());
-            userInteractionsProperties.put("recording", recording);
-            userInteractionsProperties.put("interaction", "open settings");
-            userInteractionsProperties.put("result", null);
-            mixpanel.track("User Interacted", userInteractionsProperties);
+            userInteractionsProperties.put(AnalyticsConstants.ACTIVITY, getClass().getSimpleName());
+            userInteractionsProperties.put(AnalyticsConstants.RECORDING, recording);
+            userInteractionsProperties.put(AnalyticsConstants.INTERACTION,
+                    AnalyticsConstants.INTERACTION_OPEN_SETTINGS);
+            userInteractionsProperties.put(AnalyticsConstants.RESULT, null);
+            mixpanel.track(AnalyticsConstants.USER_INTERACTED, userInteractionsProperties);
         } catch (JSONException e) {
             e.printStackTrace();
         }
     }
 
     private void sendMetadataTracking() {
-        mixpanel.timeEvent("Time Exporting Video");
+        mixpanel.timeEvent(AnalyticsConstants.TIME_EXPORTING_VIDEO);
         JSONObject videoExportedProperties = new JSONObject();
         try {
-            videoExportedProperties.put("videoLength", recordPresenter.getVideoLength());
-            videoExportedProperties.put("resolution", recordPresenter.getResolution());
-            videoExportedProperties.put("numberOfClips", recordPresenter.getNumberOfClipsRecorded());
-            mixpanel.track("Video Exported", videoExportedProperties);
+            videoExportedProperties.put(AnalyticsConstants.VIDEO_LENGTH,
+                    recordPresenter.getVideoLength());
+            videoExportedProperties.put(AnalyticsConstants.RESOLUTION,
+                    recordPresenter.getResolution());
+            videoExportedProperties.put(AnalyticsConstants.NUMBER_OF_CLIPS,
+                    recordPresenter.getNumberOfClipsRecorded());
+            mixpanel.track(AnalyticsConstants.VIDEO_EXPORTED, videoExportedProperties);
         } catch (JSONException e) {
             e.printStackTrace();
         }
@@ -323,7 +328,7 @@ public class RecordActivity extends CamaradaActivity implements RecordView {
 
     @Override
     public void showError(String errorMessage) {
-        mixpanel.track("Time Exporting Video");
+        mixpanel.track(AnalyticsConstants.TIME_EXPORTING_VIDEO);
         Toast.makeText(this, errorMessage, Toast.LENGTH_SHORT).show();
     }
 
@@ -334,7 +339,7 @@ public class RecordActivity extends CamaradaActivity implements RecordView {
 
     @Override
     public void goToShare(String videoToSharePath) {
-        mixpanel.track("Time Exporting Video");
+        mixpanel.track(AnalyticsConstants.TIME_EXPORTING_VIDEO);
         recordPresenter.removeTempVideos();
         Intent intent = new Intent(this, ShareActivity.class);
         intent.putExtra(ShareActivity.INTENT_EXTRA_VIDEO_PATH, videoToSharePath);

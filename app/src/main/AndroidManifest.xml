@@ -34,9 +34,9 @@
         android:supportsRtl="true"
         android:theme="@style/CamaradaTheme">
 
-        <!--<meta-data
+        <meta-data
             android:name="com.mixpanel.android.MPConfig.AutoShowMixpanelUpdates"
-            android:value="false" /> -->
+            android:value="false" />
 
         <activity
             android:name="com.mixpanel.android.surveys.SurveyActivity"
