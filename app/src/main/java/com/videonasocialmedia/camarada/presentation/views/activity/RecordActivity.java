@@ -7,17 +7,16 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Build;
 import android.os.Bundle;
-import android.view.Gravity;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.WindowManager;
 import android.widget.ImageButton;
 import android.widget.LinearLayout;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.android.gms.analytics.GoogleAnalytics;
 import com.google.android.gms.analytics.HitBuilders;
-import com.videonasocialmedia.avrecorder.view.AspectFrameLayout;
 import com.videonasocialmedia.avrecorder.view.GLCameraEncoderView;
 import com.videonasocialmedia.camarada.R;
 import com.videonasocialmedia.camarada.model.entities.editor.effects.Effect;
@@ -65,9 +64,11 @@ public class RecordActivity extends CamaradaActivity implements RecordView, OnEf
     ImageButton filterSepiaButton;
     @Bind(R.id.settingsButton)
     ImageButton settingsButton;
-    @Bind(R.id.aspectFrameLayout)
-    AspectFrameLayout swipeFiltersView;
-    private OnSwipeTouchListener swipeListener;
+    //@Bind(R.id.manualPreview)
+    //View swipeFiltersView;
+    OnSwipeTouchListener swipeListener;
+    @Bind(R.id.textFilterSelected)
+    TextView textFilterSelected;
 
     private RecordPresenter recordPresenter;
     private boolean buttonBackPressed;
@@ -87,7 +88,14 @@ public class RecordActivity extends CamaradaActivity implements RecordView, OnEf
         cameraView.setKeepScreenOn(true);
 
         swipeListener = new OnSwipeTouchListener(this, this);
-       // swipeFiltersView.setOnTouchListener(swipeListener);
+
+        cameraView.setOnTouchListener(new View.OnTouchListener() {
+            @Override
+            public boolean onTouch(View v, MotionEvent event) {
+                //gesture detector to detect swipe.
+                return swipeListener.getGestureDetector().onTouchEvent(event);
+            }
+        });
 
         SharedPreferences sharedPreferences = getSharedPreferences(
                 ConfigPreferences.SETTINGS_SHARED_PREFERENCES_FILE_NAME,
@@ -172,11 +180,12 @@ public class RecordActivity extends CamaradaActivity implements RecordView, OnEf
         );
     }
 
-    @Override
+
+    /*
     public boolean dispatchTouchEvent(MotionEvent ev){
         swipeListener.getGestureDetector().onTouchEvent(ev);
         return super.dispatchTouchEvent(ev);
-    }
+    } */
 
     @OnTouch(R.id.recordButton)
     boolean onTouch(MotionEvent event) {
@@ -523,10 +532,19 @@ public class RecordActivity extends CamaradaActivity implements RecordView, OnEf
             }
         }
 
-        Toast toast = Toast.makeText(this, "Effect " +
-                cameraShaderEffectsAdapter.getEffect(position).getName(), Toast.LENGTH_SHORT);
-        toast.setGravity(Gravity.CENTER, 0, -150);
-        toast.show();
+
+        textFilterSelected.setText(cameraShaderEffectsAdapter.getEffect(position).getName());
+
+        // make TextView visible here
+        textFilterSelected.setVisibility(View.VISIBLE);
+        //use postDelayed to hide TextView
+        textFilterSelected.postDelayed(new Runnable() {
+            public void run() {
+                textFilterSelected.setVisibility(View.INVISIBLE);
+            }
+        }, 2000);
+
+
     }
 
 }
