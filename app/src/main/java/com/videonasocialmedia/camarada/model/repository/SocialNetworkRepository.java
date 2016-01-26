@@ -8,7 +8,7 @@ import android.graphics.drawable.Drawable;
 import android.util.Log;
 
 import com.videonasocialmedia.camarada.CamaradaApplication;
-import com.videonasocialmedia.camarada.model.SocialNetwork;
+import com.videonasocialmedia.camarada.model.entities.SocialNetwork;
 
 import java.util.ArrayList;
 import java.util.List;

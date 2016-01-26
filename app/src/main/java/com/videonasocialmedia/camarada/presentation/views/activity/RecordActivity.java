@@ -19,9 +19,6 @@ import android.widget.Toast;
 import com.mixpanel.android.mpmetrics.InAppNotification;
 import com.videonasocialmedia.avrecorder.view.GLCameraEncoderView;
 import com.videonasocialmedia.camarada.R;
-import com.videonasocialmedia.camarada.model.entities.editor.effects.Effect;
-import com.videonasocialmedia.camarada.presentation.adapter.EffectAdapter;
-import com.videonasocialmedia.camarada.presentation.listener.OnEffectSelectedListener;
 import com.videonasocialmedia.camarada.presentation.listener.OnSwipeListener;
 import com.videonasocialmedia.camarada.presentation.listener.OnSwipeTouchListener;
 import com.videonasocialmedia.camarada.presentation.mvp.presenters.RecordPresenter;
@@ -43,8 +40,8 @@ import butterknife.OnTouch;
  * Created by Veronica Lago Fominaya on 19/01/2016.
  */
 
-public class RecordActivity extends CamaradaActivity implements RecordView, OnEffectSelectedListener,
-        OnSwipeListener, EffectSelectorView {
+public class RecordActivity extends CamaradaActivity implements RecordView, OnSwipeListener,
+        EffectSelectorView {
 
     @Bind(R.id.recordLayout)
     LinearLayout recordLayout;
@@ -70,15 +67,13 @@ public class RecordActivity extends CamaradaActivity implements RecordView, OnEf
     ImageButton filterSepiaButton;
     @Bind(R.id.textFilterSelected)
     TextView textFilterSelected;
-    
+
     private RecordPresenter recordPresenter;
     private boolean buttonBackPressed;
     private boolean recording;
     private AlertDialog progressDialog;
     private boolean mUseImmersiveMode = true;
     private OnSwipeTouchListener swipeListener;
-    private EffectAdapter cameraShaderEffectsAdapter;
-    private enum SWIPE_TYPE { LEFT, RIGHT }
 
 
     //TODO sacar esta variable de aquí (hay que guardarlo en disco: shared prefs o algo así)
@@ -108,7 +103,6 @@ public class RecordActivity extends CamaradaActivity implements RecordView, OnEf
                 Context.MODE_PRIVATE);
         recordPresenter = new RecordPresenter(this, this, this, cameraView, sharedPreferences);
         createProgressDialog();
-        cameraShaderEffectsAdapter = new EffectAdapter(recordPresenter.getShaderEffectList(), this);
     }
 
     private void createProgressDialog() {
@@ -144,7 +138,7 @@ public class RecordActivity extends CamaradaActivity implements RecordView, OnEf
         }
     }
 
-    private void checkNewNotification(){
+    private void checkNewNotification() {
         InAppNotification notification = mixpanel.getPeople().getNotificationIfAvailable();
         if (notification != null) {
             Log.d("INAPP", "in-app notification received");
@@ -191,7 +185,7 @@ public class RecordActivity extends CamaradaActivity implements RecordView, OnEf
                         | View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY
         );
     }
-    
+
     @OnTouch(R.id.recordButton)
     boolean onTouch(MotionEvent event) {
         if (event.getAction() == MotionEvent.ACTION_DOWN) {
@@ -235,7 +229,7 @@ public class RecordActivity extends CamaradaActivity implements RecordView, OnEf
     }
 
     @OnClick(R.id.settingsButton)
-    public void goToSettings(){
+    public void goToSettings() {
         sendUserInteractedTracking();
         Intent intent = new Intent(this, SettingsActivity.class);
         startActivity(intent);
@@ -284,19 +278,16 @@ public class RecordActivity extends CamaradaActivity implements RecordView, OnEf
     @OnClick(R.id.filterBlackAndWhiteButton)
     public void selectBlackAndWhiteFilter() {
         recordPresenter.setBlackAndWitheFilter();
-        setFilerButtonSelected(1);
     }
 
     @OnClick(R.id.filterSepiaButton)
     public void selectSepiaFilter() {
         recordPresenter.setSepiaFilter();
-        setFilerButtonSelected(0);
     }
 
     @OnClick(R.id.filterBlueButton)
     public void selectBlueFilter() {
         recordPresenter.setBlueFilter();
-        setFilerButtonSelected(2);
     }
 
     @Override
@@ -315,6 +306,20 @@ public class RecordActivity extends CamaradaActivity implements RecordView, OnEf
     public void showBlueSelected() {
         resetSelections();
         filterBlueButton.setSelected(true);
+    }
+
+    @Override
+    public void showFilterSelectedText(String text) {
+        textFilterSelected.setText(text);
+
+        // make TextView visible here
+        textFilterSelected.setVisibility(View.VISIBLE);
+        //use postDelayed to hide TextView
+        textFilterSelected.postDelayed(new Runnable() {
+            public void run() {
+                textFilterSelected.setVisibility(View.INVISIBLE);
+            }
+        }, 2000);
     }
 
     private void resetSelections() {
@@ -456,87 +461,13 @@ public class RecordActivity extends CamaradaActivity implements RecordView, OnEf
     }
 
     @Override
-    public void onEffectSelected(Effect effect) {
-        recordPresenter.applyEffect(effect);
-    }
-
-    @Override
-    public void onEffectSelectionCancel(Effect effect) {
-        recordPresenter.removeEffect(effect);
-
-    }
-
-    @Override
     public void onSwipeLeft() {
-        effectChangedSwipe(SWIPE_TYPE.LEFT);
+        recordPresenter.setPrevFilter();
     }
 
     @Override
     public void onSwipeRight() {
-        effectChangedSwipe(SWIPE_TYPE.RIGHT);
-    }
-
-
-    private void effectChangedSwipe(SWIPE_TYPE swipe) {
-
-        int position = cameraShaderEffectsAdapter.getSelectionPosition();
-
-        int sizeEffectList = cameraShaderEffectsAdapter.getElementList().size() - 1;
-
-        switch(swipe) {
-            case LEFT:
-                if (position == 0) {
-                    position = sizeEffectList;
-                } else {
-                    position--;
-                }
-                break;
-            case RIGHT:
-                if(position == sizeEffectList){
-                    position = 0;
-                } else {
-                    position++;
-                }
-                break;
-        }
-
-        Effect effect = cameraShaderEffectsAdapter.getEffect(position);
-
-        onEffectSelected(effect);
-
-        cameraShaderEffectsAdapter.setNextEffectPosition(position);
-
-        setFilerButtonSelected(position);
-    }
-
-    private void setFilerButtonSelected(int position) {
-
-        resetSelections();
-        if(position == 0) {
-            filterBlackAndWhiteButton.setSelected(true);
-        } else {
-            if(position == 1){
-                filterSepiaButton.setSelected(true);
-            } else {
-                if(position == 2) {
-                    filterBlueButton.setSelected(true);
-                }
-            }
-        }
-
-
-        textFilterSelected.setText(cameraShaderEffectsAdapter.getEffect(position).getName());
-
-        // make TextView visible here
-        textFilterSelected.setVisibility(View.VISIBLE);
-        //use postDelayed to hide TextView
-        textFilterSelected.postDelayed(new Runnable() {
-            public void run() {
-                textFilterSelected.setVisibility(View.INVISIBLE);
-            }
-        }, 2000);
-
-
+        recordPresenter.setNextFilter();
     }
 
 }

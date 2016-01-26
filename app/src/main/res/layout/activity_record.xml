@@ -62,15 +62,15 @@
 
 
         <TextView
+            android:id="@+id/textFilterSelected"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center_vertical|center_horizontal"
+            android:background="@null"
             android:textAppearance="?android:attr/textAppearanceMedium"
             android:textColor="@color/textColorButton"
             android:textSize="20dp"
-            tools:text="@string/app_name"
-            android:background="@null"
-            android:id="@+id/textFilterSelected" />
+            tools:text="@string/app_name" />
 
     </com.videonasocialmedia.avrecorder.view.AspectFrameLayout>
 

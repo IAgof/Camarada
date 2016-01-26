@@ -9,4 +9,6 @@ public interface EffectSelectorView {
     void showBlackAndWhiteSelected();
 
     void showBlueSelected();
+
+    void showFilterSelectedText(String text);
 }

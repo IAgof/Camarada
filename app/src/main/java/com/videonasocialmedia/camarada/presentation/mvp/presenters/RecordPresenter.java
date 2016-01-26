@@ -20,8 +20,7 @@ import com.videonasocialmedia.camarada.domain.GetVideosFromTempFolderUseCase;
 import com.videonasocialmedia.camarada.domain.OnExportFinishedListener;
 import com.videonasocialmedia.camarada.domain.RemoveFilesInTempFolderUseCase;
 import com.videonasocialmedia.camarada.domain.effects.GetEffectListUseCase;
-import com.videonasocialmedia.camarada.model.entities.editor.effects.Effect;
-import com.videonasocialmedia.camarada.model.entities.editor.effects.ShaderEffect;
+import com.videonasocialmedia.camarada.model.entities.ShaderEffect;
 import com.videonasocialmedia.camarada.presentation.mvp.views.EffectSelectorView;
 import com.videonasocialmedia.camarada.presentation.mvp.views.RecordView;
 import com.videonasocialmedia.camarada.utils.AnalyticsConstants;
@@ -73,8 +72,8 @@ public class RecordPresenter implements OnExportFinishedListener {
      */
     private GetVideosFromTempFolderUseCase getVideosFromTempFolderUseCase;
     private RemoveFilesInTempFolderUseCase removeFilesInTempFolderUseCase;
-    private int selectedFilter;
-    private Effect selectedShaderEffect;
+    private List<ShaderEffect> effects;
+    private int selectedFilterIndex = 0;
 
     public RecordPresenter(Context context, RecordView recordView, EffectSelectorView effectSelectorView,
                            GLCameraEncoderView cameraPreview, SharedPreferences sharedPreferences) {
@@ -86,6 +85,7 @@ public class RecordPresenter implements OnExportFinishedListener {
         this.sharedPreferences = sharedPreferences;
         editor = sharedPreferences.edit();
         exportUseCase = new ExportUseCase(this);
+        effects = getShaderEffectList();
         getVideosFromTempFolderUseCase = new GetVideosFromTempFolderUseCase();
         removeFilesInTempFolderUseCase = new RemoveFilesInTempFolderUseCase();
         mixpanel = MixpanelAPI.getInstance(context, BuildConfig.MIXPANEL_TOKEN);
@@ -94,7 +94,6 @@ public class RecordPresenter implements OnExportFinishedListener {
 
     private void initRecorder(GLCameraEncoderView cameraPreview,
                               SharedPreferences sharedPreferences) {
-
         config = getConfigFromPreferences(sharedPreferences);
         try {
             recorder = new AVRecorder(config);
@@ -139,7 +138,7 @@ public class RecordPresenter implements OnExportFinishedListener {
     }
 
     public String getResolution() {
-        String resolution = width+"x"+height;
+        String resolution = width + "x" + height;
         editor.putString(ConfigPreferences.RESOLUTION, resolution);
         editor.putInt(ConfigPreferences.QUALITY, videoBitrate);
         editor.commit();
@@ -166,7 +165,11 @@ public class RecordPresenter implements OnExportFinishedListener {
     public void onResume() {
         EventBus.getDefault().register(this);
         recorder.onHostActivityResumed();
-        recorder.applyFilter(selectedFilter);
+        recorder.applyFilter(getSelectedFilterId());
+    }
+
+    private int getSelectedFilterId() {
+        return effects.get(selectedFilterIndex).getResourceId();
     }
 
     public void onPause() {
@@ -214,7 +217,7 @@ public class RecordPresenter implements OnExportFinishedListener {
     }
 
     public void onEventMainThread(CameraEncoderResetEvent e) {
-        recorder.applyFilter(selectedFilter);
+        recorder.applyFilter(getSelectedFilterId());
         startRecord();
     }
 
@@ -239,7 +242,6 @@ public class RecordPresenter implements OnExportFinishedListener {
     public void removeTempVideos() {
         removeFilesInTempFolderUseCase.removeFilesInTempFolder();
     }
-
 
     public void onEventMainThread(MuxerFinishedEvent e) {
         renameOutputVideo(config.getOutputPath());
@@ -335,45 +337,74 @@ public class RecordPresenter implements OnExportFinishedListener {
         recordView.goToShare(path);
     }
 
-    public void applyEffect(Effect effect){
-
-                int shaderId = ((ShaderEffect) effect).getResourceId();
-                recorder.applyFilter(shaderId);
-                selectedShaderEffect = effect;
-
-    }
-
-    public void removeEffect(Effect effect) {
-
-        recorder.applyFilter(Filters.FILTER_NONE);
-        selectedShaderEffect = null;
-    }
-
     public void setSepiaFilter() {
         sendFilterSelectedTracking(AnalyticsConstants.FILTER_NAME_SEPIA,
                 AnalyticsConstants.FILTER_CODE_SEPIA);
-        selectedFilter = Filters.FILTER_SEPIA;
-        recorder.applyFilter(Filters.FILTER_SEPIA);
-        effectSelectorView.showSepiaSelected();
+        setSelectedFilter(Filters.FILTER_SEPIA);
+    }
+
+    private void updateSelectedIndex(int filterID) {
+        ShaderEffect effect = getEffectByFilterId(filterID);
+        selectedFilterIndex = effects.indexOf(effect);
+    }
+
+    private ShaderEffect getEffectByFilterId(int filterID) {
+        for (int index = 0; index < effects.size(); index++) {
+            ShaderEffect current = effects.get(index);
+            if (current.getResourceId() == filterID) {
+                return current;
+            }
+        }
+        return null;
     }
 
     public void setBlackAndWitheFilter() {
         sendFilterSelectedTracking(AnalyticsConstants.FILTER_NAME_MONO,
                 AnalyticsConstants.FILTER_CODE_MONO);
-        selectedFilter = Filters.FILTER_MONO;
-        recorder.applyFilter(Filters.FILTER_MONO);
-        effectSelectorView.showBlackAndWhiteSelected();
+        setSelectedFilter(Filters.FILTER_MONO);
     }
 
     public void setBlueFilter() {
         sendFilterSelectedTracking(AnalyticsConstants.FILTER_NAME_AQUA,
                 AnalyticsConstants.FILTER_CODE_AQUA);
-        selectedFilter = Filters.FILTER_AQUA;
-        recorder.applyFilter(Filters.FILTER_AQUA);
-        effectSelectorView.showBlueSelected();
+        setSelectedFilter(Filters.FILTER_AQUA);
     }
 
-    public List<Effect> getShaderEffectList() {
+    public void setNextFilter() {
+        selectedFilterIndex = (selectedFilterIndex + 1) % effects.size();
+        setSelectedFilter(getSelectedFilterId());
+    }
+
+    public void setPrevFilter() {
+        selectedFilterIndex = selectedFilterIndex - 1;
+        if (selectedFilterIndex < 0)
+            selectedFilterIndex = selectedFilterIndex + effects.size();
+        setSelectedFilter(getSelectedFilterId());
+    }
+
+    private void setSelectedFilter(int filterId) {
+        recorder.applyFilter(filterId);
+        updateSelectedIndex(filterId);
+        showSelectedEffect(filterId);
+    }
+
+    private void showSelectedEffect(int filterId) {
+        switch (filterId) {
+            case Filters.FILTER_SEPIA:
+                effectSelectorView.showSepiaSelected();
+                break;
+            case Filters.FILTER_MONO:
+                effectSelectorView.showBlackAndWhiteSelected();
+                break;
+            case Filters.FILTER_AQUA:
+                effectSelectorView.showBlueSelected();
+                break;
+
+        }
+        effectSelectorView.showFilterSelectedText(effects.get(selectedFilterIndex).getName());
+    }
+
+    private List<ShaderEffect> getShaderEffectList() {
         return GetEffectListUseCase.getShaderEffectsList();
     }
 
@@ -409,7 +440,7 @@ public class RecordPresenter implements OnExportFinishedListener {
         }
     }
 
-    private double getClipDuration() throws IOException{
+    private double getClipDuration() throws IOException {
         return Utils.getFileDuration(Constants.PATH_APP_TEMP + File.separator + fileName);
     }
 

@@ -2,8 +2,8 @@ package com.videonasocialmedia.camarada.model.repository;
 
 import com.videonasocialmedia.avrecorder.Filters;
 import com.videonasocialmedia.camarada.R;
-import com.videonasocialmedia.camarada.model.entities.editor.effects.Effect;
-import com.videonasocialmedia.camarada.model.entities.editor.effects.ShaderEffect;
+import com.videonasocialmedia.camarada.model.entities.Effect;
+import com.videonasocialmedia.camarada.model.entities.ShaderEffect;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -13,9 +13,9 @@ import java.util.List;
  */
 public class EffectProvider {
 
-    public static List<Effect> getShaderEffectList() {
+    public static List<ShaderEffect> getShaderEffectList() {
 
-        List<Effect> camaradaEffects = new ArrayList<>();
+        List<ShaderEffect> camaradaEffects = new ArrayList<>();
 
         camaradaEffects.add(
                 new ShaderEffect("AD1", "B&W", R.mipmap.activity_record_filter_bw_icon_normal,

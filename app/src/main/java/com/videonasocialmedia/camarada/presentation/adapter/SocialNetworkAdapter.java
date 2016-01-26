@@ -8,7 +8,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.videonasocialmedia.camarada.R;
-import com.videonasocialmedia.camarada.model.SocialNetwork;
+import com.videonasocialmedia.camarada.model.entities.SocialNetwork;
 import com.videonasocialmedia.camarada.presentation.listener.OnSocialNetworkClickedListener;
 
 import java.util.ArrayList;

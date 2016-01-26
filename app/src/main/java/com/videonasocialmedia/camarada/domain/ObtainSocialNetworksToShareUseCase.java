@@ -1,6 +1,6 @@
 package com.videonasocialmedia.camarada.domain;
 
-import com.videonasocialmedia.camarada.model.SocialNetwork;
+import com.videonasocialmedia.camarada.model.entities.SocialNetwork;
 import com.videonasocialmedia.camarada.model.repository.SocialNetworkRepository;
 
 import java.util.ArrayList;

@@ -7,7 +7,7 @@ import android.content.SharedPreferences;
 import android.net.Uri;
 
 import com.videonasocialmedia.camarada.domain.ObtainSocialNetworksToShareUseCase;
-import com.videonasocialmedia.camarada.model.SocialNetwork;
+import com.videonasocialmedia.camarada.model.entities.SocialNetwork;
 import com.videonasocialmedia.camarada.presentation.mvp.views.PreviewVideoView;
 import com.videonasocialmedia.camarada.presentation.mvp.views.ShareView;
 import com.videonasocialmedia.camarada.utils.ConfigPreferences;
