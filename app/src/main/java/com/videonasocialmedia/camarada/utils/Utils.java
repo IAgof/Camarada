@@ -136,7 +136,7 @@ public class Utils {
     /**
      * Returns whether the current device is running Android 4.4, KitKat, or newer
      */
-    public static boolean isKitKat() {
+    public static boolean isKitKatOrHigher() {
         return Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT;
     }
 

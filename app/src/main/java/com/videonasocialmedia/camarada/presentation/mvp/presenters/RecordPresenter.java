@@ -19,6 +19,9 @@ import com.videonasocialmedia.camarada.domain.ExportUseCase;
 import com.videonasocialmedia.camarada.domain.GetVideosFromTempFolderUseCase;
 import com.videonasocialmedia.camarada.domain.OnExportFinishedListener;
 import com.videonasocialmedia.camarada.domain.RemoveFilesInTempFolderUseCase;
+import com.videonasocialmedia.camarada.domain.effects.GetEffectListUseCase;
+import com.videonasocialmedia.camarada.model.entities.editor.effects.Effect;
+import com.videonasocialmedia.camarada.model.entities.editor.effects.ShaderEffect;
 import com.videonasocialmedia.camarada.presentation.mvp.views.RecordView;
 import com.videonasocialmedia.camarada.utils.AnalyticsConstants;
 import com.videonasocialmedia.camarada.utils.ConfigPreferences;
@@ -68,6 +71,9 @@ public class RecordPresenter implements OnExportFinishedListener {
      */
     private GetVideosFromTempFolderUseCase getVideosFromTempFolderUseCase;
     private RemoveFilesInTempFolderUseCase removeFilesInTempFolderUseCase;
+    private int selectedFilter;
+
+    private Effect selectedShaderEffect;
 
     public RecordPresenter(Context context, RecordView recordView,
                            GLCameraEncoderView cameraPreview, SharedPreferences sharedPreferences) {
@@ -91,7 +97,7 @@ public class RecordPresenter implements OnExportFinishedListener {
         try {
             recorder = new AVRecorder(config);
             recorder.setPreviewDisplay(cameraPreview);
-            recorder.applyFilter(Filters.FILTER_MONO);
+            setBlackAndWitheFilter();
             List<Drawable> animatedOverlayFrames = getAnimatedOverlay();
             recorder.addAnimatedOverlayFilter(animatedOverlayFrames);
             firstTimeRecording = true;
@@ -103,11 +109,16 @@ public class RecordPresenter implements OnExportFinishedListener {
     @NonNull
     private List<Drawable> getAnimatedOverlay() {
         List<Drawable> animatedOverlayFrames = new ArrayList<>();
-        animatedOverlayFrames.add(context.getResources().getDrawable(R.mipmap.noise_1));
-        animatedOverlayFrames.add(context.getResources().getDrawable(R.mipmap.noise_2));
-        animatedOverlayFrames.add(context.getResources().getDrawable(R.mipmap.noise_3));
-        animatedOverlayFrames.add(context.getResources().getDrawable(R.mipmap.noise_4));
-        animatedOverlayFrames.add(context.getResources().getDrawable(R.mipmap.noise_5));
+        animatedOverlayFrames.add(context.getResources().getDrawable(R.mipmap.silent_film_overlay_a));
+        animatedOverlayFrames.add(context.getResources().getDrawable(R.mipmap.silent_film_overlay_b));
+        animatedOverlayFrames.add(context.getResources().getDrawable(R.mipmap.silent_film_overlay_c));
+        animatedOverlayFrames.add(context.getResources().getDrawable(R.mipmap.silent_film_overlay_d));
+        animatedOverlayFrames.add(context.getResources().getDrawable(R.mipmap.silent_film_overlay_e));
+        animatedOverlayFrames.add(context.getResources().getDrawable(R.mipmap.silent_film_overlay_f));
+        animatedOverlayFrames.add(context.getResources().getDrawable(R.mipmap.silent_film_overlay_g));
+        animatedOverlayFrames.add(context.getResources().getDrawable(R.mipmap.silent_film_overlay_h));
+        animatedOverlayFrames.add(context.getResources().getDrawable(R.mipmap.silent_film_overlay_i));
+        animatedOverlayFrames.add(context.getResources().getDrawable(R.mipmap.silent_film_overlay_j));
         return animatedOverlayFrames;
     }
 
@@ -153,7 +164,7 @@ public class RecordPresenter implements OnExportFinishedListener {
     public void onResume() {
         EventBus.getDefault().register(this);
         recorder.onHostActivityResumed();
-        setBlackAndWitheFilter();
+        recorder.applyFilter(selectedFilter);
     }
 
     public void onPause() {
@@ -200,6 +211,11 @@ public class RecordPresenter implements OnExportFinishedListener {
         recorder.reset(config);
     }
 
+    public void onEventMainThread(CameraEncoderResetEvent e) {
+        recorder.applyFilter(selectedFilter);
+        startRecord();
+    }
+
     private void startRecord() {
         sendUserInteractedTracking(AnalyticsConstants.RECORD, "start");
         recorder.startRecording();
@@ -222,9 +238,6 @@ public class RecordPresenter implements OnExportFinishedListener {
         removeFilesInTempFolderUseCase.removeFilesInTempFolder();
     }
 
-    public void onEventMainThread(CameraEncoderResetEvent e) {
-        startRecord();
-    }
 
     public void onEventMainThread(MuxerFinishedEvent e) {
         renameOutputVideo(config.getOutputPath());
@@ -320,22 +333,43 @@ public class RecordPresenter implements OnExportFinishedListener {
         recordView.goToShare(path);
     }
 
+    public void applyEffect(Effect effect){
+
+                int shaderId = ((ShaderEffect) effect).getResourceId();
+                recorder.applyFilter(shaderId);
+                selectedShaderEffect = effect;
+
+    }
+
+    public void removeEffect(Effect effect) {
+
+        recorder.applyFilter(Filters.FILTER_NONE);
+        selectedShaderEffect = null;
+    }
+
     public void setSepiaFilter() {
         sendFilterSelectedTracking(AnalyticsConstants.FILTER_NAME_SEPIA,
                 AnalyticsConstants.FILTER_CODE_SEPIA);
+        selectedFilter = Filters.FILTER_SEPIA;
         recorder.applyFilter(Filters.FILTER_SEPIA);
     }
 
     public void setBlackAndWitheFilter() {
         sendFilterSelectedTracking(AnalyticsConstants.FILTER_NAME_MONO,
                 AnalyticsConstants.FILTER_CODE_MONO);
+        selectedFilter = Filters.FILTER_MONO;
         recorder.applyFilter(Filters.FILTER_MONO);
     }
 
     public void setBlueFilter() {
         sendFilterSelectedTracking(AnalyticsConstants.FILTER_NAME_AQUA,
                 AnalyticsConstants.FILTER_CODE_AQUA);
+        selectedFilter = Filters.FILTER_AQUA;
         recorder.applyFilter(Filters.FILTER_AQUA);
+    }
+
+    public List<Effect> getShaderEffectList() {
+        return GetEffectListUseCase.getShaderEffectsList();
     }
 
     /**
