@@ -28,14 +28,14 @@ public class AnalyticsConstants {
     public final static String ACTIVITY = "activity";
     public final static String RECORDING = "recording";
     public final static String INTERACTION = "interaction";
-    public final static String INTERACTION_OPEN_SETTINGS = "open settings";
+    public final static String INTERACTION_OPEN_SETTINGS = "settings opened";
     public final static String RESULT = "result";
     public final static String VIDEO_LENGTH = "videoLength";
     public final static String RESOLUTION = "resolution";
     public final static String QUALITY = "quality";
     public final static String NUMBER_OF_CLIPS = "numberOfClips";
     public final static String NAME = "name";
-    public final static String TOTAL_RECORDED_VIDEOS = "totalRecordedVideos";
+    public final static String TOTAL_RECORDED_VIDEOS = "totalVideosRecorded";
     public final static String LAST_VIDEO_RECORDED = "lastVideoRecorded";
     public final static String CODE = "code";
     public final static String FILTER_NAME_SEPIA = "sepia";
@@ -52,7 +52,7 @@ public class AnalyticsConstants {
     public static final String START = "start";
     public static final String STOP = "stop";
     public static final String CHANGE_CAMERA = "change camera";
-    public static final String TOTAL_SHARED_VIDEOS = "totalSharedVideos";
+    public static final String TOTAL_SHARED_VIDEOS = "totalVideosShared";
     public static final String SOCIAL_NETWORK = "socialNetwork";
     public static final String LAST_VIDEO_SHARED = "lastVideoShared";
     public static final String SWIPE = "swipe";

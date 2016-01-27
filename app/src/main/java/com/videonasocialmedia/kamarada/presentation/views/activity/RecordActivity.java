@@ -7,7 +7,6 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Build;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.WindowManager;
@@ -16,12 +15,11 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.mixpanel.android.mpmetrics.InAppNotification;
 import com.videonasocialmedia.avrecorder.Filters;
 import com.videonasocialmedia.avrecorder.view.GLCameraEncoderView;
 import com.videonasocialmedia.kamarada.R;
-import com.videonasocialmedia.kamarada.presentation.listener.OnSwipeListener;
 import com.videonasocialmedia.kamarada.presentation.helper.HorizontalGestureDetectorHelper;
+import com.videonasocialmedia.kamarada.presentation.listener.OnSwipeListener;
 import com.videonasocialmedia.kamarada.presentation.mvp.presenters.RecordPresenter;
 import com.videonasocialmedia.kamarada.presentation.mvp.views.EffectSelectorView;
 import com.videonasocialmedia.kamarada.presentation.mvp.views.RecordView;
@@ -119,7 +117,6 @@ public class RecordActivity extends KamaradaActivity implements RecordView, OnSw
     protected void onStart() {
         super.onStart();
         checkAndRequestPermissions();
-        checkNewNotification();
         recordPresenter.onStart();
     }
 
@@ -137,14 +134,6 @@ public class RecordActivity extends KamaradaActivity implements RecordView, OnSw
                     WindowManager.LayoutParams.FLAG_FULLSCREEN);
         } else if (mUseImmersiveMode) {
             setKitKatWindowFlags();
-        }
-    }
-
-    private void checkNewNotification() {
-        InAppNotification notification = mixpanel.getPeople().getNotificationIfAvailable();
-        if (notification != null) {
-            Log.d("INAPP", "in-app notification received");
-            mixpanel.getPeople().showGivenNotification(notification, this);
         }
     }
 

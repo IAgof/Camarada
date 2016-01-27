@@ -1,6 +1,7 @@
 package com.videonasocialmedia.kamarada.presentation.views.activity;
 
 import android.Manifest;
+import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -18,6 +19,7 @@ import android.view.Window;
 import android.view.WindowManager;
 import android.widget.TextView;
 
+import com.mixpanel.android.mpmetrics.InAppNotification;
 import com.videonasocialmedia.kamarada.BuildConfig;
 import com.videonasocialmedia.kamarada.R;
 import com.videonasocialmedia.kamarada.domain.RemoveFilesInTempFolderUseCase;
@@ -107,7 +109,7 @@ public class InitAppActivity extends KamaradaActivity implements InitAppView, On
                 Context.MODE_PRIVATE);
         preferencesEditor = sharedPreferences.edit();
         PreferenceManager.setDefaultValues(this, R.xml.preferences, false);
-        SplashScreenTask splashScreenTask = new SplashScreenTask();
+        SplashScreenTask splashScreenTask = new SplashScreenTask(this);
         splashScreenTask.execute();
     }
 
@@ -366,6 +368,12 @@ public class InitAppActivity extends KamaradaActivity implements InitAppView, On
      */
     class SplashScreenTask extends AsyncTask<Void, Void, Boolean> {
 
+        private Activity parentActivity;
+
+        public SplashScreenTask(Activity activity) {
+            this.parentActivity = activity;
+        }
+
         @Override
         protected Boolean doInBackground(Void... voids) {
             try {
@@ -398,7 +406,13 @@ public class InitAppActivity extends KamaradaActivity implements InitAppView, On
             if (sharedPreferences.getBoolean(ConfigPreferences.FIRST_TIME, true)) {
                 navigate(IntroAppActivity.class);
             } else {
-                navigate(RecordActivity.class);
+                InAppNotification notification = mixpanel.getPeople().getNotificationIfAvailable();
+                if (notification != null) {
+                    Log.d("INAPP", "in-app notification received");
+                    mixpanel.getPeople().showGivenNotification(notification, parentActivity);
+                } else {
+                    navigate(RecordActivity.class);
+                }
             }
         }
 
