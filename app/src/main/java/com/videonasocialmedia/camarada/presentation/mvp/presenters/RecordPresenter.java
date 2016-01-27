@@ -178,6 +178,10 @@ public class RecordPresenter implements OnExportFinishedListener {
         recorder.onHostActivityPaused();
     }
 
+    public int getFilterSelectedId() {
+        return selectedFilterIndex;
+    }
+
     public void stopRecord() {
         if (recorder.isRecording()) {
             sendUserInteractedTracking(AnalyticsConstants.RECORD, AnalyticsConstants.STOP);
@@ -205,7 +209,6 @@ public class RecordPresenter implements OnExportFinishedListener {
                     //recordView.showError();
                 }
             } else {
-                mixpanel.timeEvent(AnalyticsConstants.VIDEO_RECORDED);
                 startRecord();
             }
         }
@@ -222,6 +225,7 @@ public class RecordPresenter implements OnExportFinishedListener {
     }
 
     private void startRecord() {
+        mixpanel.timeEvent(AnalyticsConstants.VIDEO_RECORDED);
         sendUserInteractedTracking(AnalyticsConstants.RECORD, AnalyticsConstants.START);
         recorder.startRecording();
         recordView.showStopButton();
@@ -338,8 +342,6 @@ public class RecordPresenter implements OnExportFinishedListener {
     }
 
     public void setSepiaFilter() {
-        sendFilterSelectedTracking(AnalyticsConstants.FILTER_NAME_SEPIA,
-                AnalyticsConstants.FILTER_CODE_SEPIA);
         setSelectedFilter(Filters.FILTER_SEPIA);
     }
 
@@ -359,14 +361,10 @@ public class RecordPresenter implements OnExportFinishedListener {
     }
 
     public void setBlackAndWitheFilter() {
-        sendFilterSelectedTracking(AnalyticsConstants.FILTER_NAME_MONO,
-                AnalyticsConstants.FILTER_CODE_MONO);
         setSelectedFilter(Filters.FILTER_MONO);
     }
 
     public void setBlueFilter() {
-        sendFilterSelectedTracking(AnalyticsConstants.FILTER_NAME_AQUA,
-                AnalyticsConstants.FILTER_CODE_AQUA);
         setSelectedFilter(Filters.FILTER_AQUA);
     }
 
@@ -399,7 +397,6 @@ public class RecordPresenter implements OnExportFinishedListener {
             case Filters.FILTER_AQUA:
                 effectSelectorView.showBlueSelected();
                 break;
-
         }
         effectSelectorView.showFilterSelectedText(effects.get(selectedFilterIndex).getName());
     }
@@ -422,19 +419,6 @@ public class RecordPresenter implements OnExportFinishedListener {
             userInteractionsProperties.put(AnalyticsConstants.INTERACTION, interaction);
             userInteractionsProperties.put(AnalyticsConstants.RESULT, result);
             mixpanel.track(AnalyticsConstants.USER_INTERACTED, userInteractionsProperties);
-        } catch (JSONException e) {
-            e.printStackTrace();
-        }
-    }
-
-    private void sendFilterSelectedTracking(String name, String code) {
-        JSONObject userInteractionsProperties = new JSONObject();
-        try {
-            userInteractionsProperties.put(AnalyticsConstants.TYPE, AnalyticsConstants.TYPE_COLOR);
-            userInteractionsProperties.put(AnalyticsConstants.NAME, name);
-            userInteractionsProperties.put(AnalyticsConstants.CODE, code);
-            userInteractionsProperties.put(AnalyticsConstants.RECORDING, recorder.isRecording());
-            mixpanel.track(AnalyticsConstants.FILTER_SELECTED, userInteractionsProperties);
         } catch (JSONException e) {
             e.printStackTrace();
         }

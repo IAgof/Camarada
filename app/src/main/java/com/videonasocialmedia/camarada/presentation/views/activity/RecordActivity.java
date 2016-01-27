@@ -17,6 +17,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.mixpanel.android.mpmetrics.InAppNotification;
+import com.videonasocialmedia.avrecorder.Filters;
 import com.videonasocialmedia.avrecorder.view.GLCameraEncoderView;
 import com.videonasocialmedia.camarada.R;
 import com.videonasocialmedia.camarada.presentation.listener.OnSwipeListener;
@@ -230,19 +231,18 @@ public class RecordActivity extends CamaradaActivity implements RecordView, OnSw
 
     @OnClick(R.id.settingsButton)
     public void goToSettings() {
-        sendUserInteractedTracking();
+        sendUserInteractedTracking(AnalyticsConstants.INTERACTION_OPEN_SETTINGS, null);
         Intent intent = new Intent(this, SettingsActivity.class);
         startActivity(intent);
     }
 
-    private void sendUserInteractedTracking() {
+    private void sendUserInteractedTracking(String interaction, String result) {
         JSONObject userInteractionsProperties = new JSONObject();
         try {
             userInteractionsProperties.put(AnalyticsConstants.ACTIVITY, getClass().getSimpleName());
             userInteractionsProperties.put(AnalyticsConstants.RECORDING, recording);
-            userInteractionsProperties.put(AnalyticsConstants.INTERACTION,
-                    AnalyticsConstants.INTERACTION_OPEN_SETTINGS);
-            userInteractionsProperties.put(AnalyticsConstants.RESULT, null);
+            userInteractionsProperties.put(AnalyticsConstants.INTERACTION, interaction);
+            userInteractionsProperties.put(AnalyticsConstants.RESULT, result);
             mixpanel.track(AnalyticsConstants.USER_INTERACTED, userInteractionsProperties);
         } catch (JSONException e) {
             e.printStackTrace();
@@ -293,19 +293,38 @@ public class RecordActivity extends CamaradaActivity implements RecordView, OnSw
     @Override
     public void showSepiaSelected() {
         resetSelections();
+        sendFilterSelectedTracking(AnalyticsConstants.FILTER_NAME_SEPIA,
+                AnalyticsConstants.FILTER_CODE_SEPIA);
         filterSepiaButton.setSelected(true);
     }
 
     @Override
     public void showBlackAndWhiteSelected() {
         resetSelections();
+        sendFilterSelectedTracking(AnalyticsConstants.FILTER_NAME_MONO,
+                AnalyticsConstants.FILTER_CODE_MONO);
         filterBlackAndWhiteButton.setSelected(true);
     }
 
     @Override
     public void showBlueSelected() {
         resetSelections();
+        sendFilterSelectedTracking(AnalyticsConstants.FILTER_NAME_AQUA,
+                AnalyticsConstants.FILTER_CODE_AQUA);
         filterBlueButton.setSelected(true);
+    }
+
+    private void sendFilterSelectedTracking(String name, String code) {
+        JSONObject userInteractionsProperties = new JSONObject();
+        try {
+            userInteractionsProperties.put(AnalyticsConstants.TYPE, AnalyticsConstants.TYPE_COLOR);
+            userInteractionsProperties.put(AnalyticsConstants.NAME, name);
+            userInteractionsProperties.put(AnalyticsConstants.CODE, code);
+            userInteractionsProperties.put(AnalyticsConstants.RECORDING, recording);
+            mixpanel.track(AnalyticsConstants.FILTER_SELECTED, userInteractionsProperties);
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
     }
 
     @Override
@@ -340,6 +359,25 @@ public class RecordActivity extends CamaradaActivity implements RecordView, OnSw
         recButton.setActivated(true);
         recButton.setAlpha(1f);
         recording = true;
+        trackSelectedFilterOnStartRecording();
+    }
+
+    private void trackSelectedFilterOnStartRecording() {
+        int filterId = recordPresenter.getFilterSelectedId();
+        switch (filterId) {
+            case Filters.FILTER_SEPIA:
+                sendFilterSelectedTracking(AnalyticsConstants.FILTER_NAME_SEPIA,
+                        AnalyticsConstants.FILTER_CODE_SEPIA);
+                break;
+            case Filters.FILTER_MONO:
+                sendFilterSelectedTracking(AnalyticsConstants.FILTER_NAME_MONO,
+                        AnalyticsConstants.FILTER_CODE_MONO);
+                break;
+            case Filters.FILTER_AQUA:
+                sendFilterSelectedTracking(AnalyticsConstants.FILTER_NAME_AQUA,
+                        AnalyticsConstants.FILTER_CODE_AQUA);
+                break;
+        }
     }
 
     @Override
@@ -462,11 +500,13 @@ public class RecordActivity extends CamaradaActivity implements RecordView, OnSw
 
     @Override
     public void onSwipeLeft() {
+        sendUserInteractedTracking(AnalyticsConstants.SWIPE, AnalyticsConstants.LEFT);
         recordPresenter.setPrevFilter();
     }
 
     @Override
     public void onSwipeRight() {
+        sendUserInteractedTracking(AnalyticsConstants.SWIPE, AnalyticsConstants.RIGHT);
         recordPresenter.setNextFilter();
     }
 

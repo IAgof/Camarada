@@ -2,7 +2,6 @@ package com.videonasocialmedia.camarada.model.repository;
 
 import com.videonasocialmedia.avrecorder.Filters;
 import com.videonasocialmedia.camarada.R;
-import com.videonasocialmedia.camarada.model.entities.Effect;
 import com.videonasocialmedia.camarada.model.entities.ShaderEffect;
 
 import java.util.ArrayList;
@@ -18,13 +17,13 @@ public class EffectProvider {
         List<ShaderEffect> camaradaEffects = new ArrayList<>();
 
         camaradaEffects.add(
-                new ShaderEffect("AD1", "B&W", R.mipmap.activity_record_filter_bw_icon_normal,
+                new ShaderEffect("AD4", "B&W", R.mipmap.activity_record_filter_bw_icon_normal,
                         Filters.FILTER_MONO));
         camaradaEffects.add(
-                new ShaderEffect("AD2", "Sepia", R.mipmap.activity_record_filter_sepia_icon_normal,
+                new ShaderEffect("AD8", "Sepia", R.mipmap.activity_record_filter_sepia_icon_normal,
                         Filters.FILTER_SEPIA));
         camaradaEffects.add(
-                new ShaderEffect("AD3", "Blue", R.mipmap.activity_record_filter_blue_icon_normal,
+                new ShaderEffect("AD1", "Blue", R.mipmap.activity_record_filter_blue_icon_normal,
                         Filters.FILTER_AQUA));
 
         return camaradaEffects;
