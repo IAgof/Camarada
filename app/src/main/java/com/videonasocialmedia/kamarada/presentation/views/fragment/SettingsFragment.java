@@ -18,7 +18,7 @@ import com.videonasocialmedia.kamarada.BuildConfig;
 import com.videonasocialmedia.kamarada.R;
 import com.videonasocialmedia.kamarada.presentation.listener.OnKamaradaDialogClickListener;
 import com.videonasocialmedia.kamarada.presentation.mvp.presenters.PreferencesPresenter;
-import com.videonasocialmedia.kamarada.presentation.mvp.presenters.PreferencesView;
+import com.videonasocialmedia.kamarada.presentation.mvp.views.PreferencesView;
 import com.videonasocialmedia.kamarada.presentation.views.dialog.KamaradaDialogFragment;
 import com.videonasocialmedia.kamarada.utils.ConfigPreferences;
 
