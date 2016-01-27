@@ -98,6 +98,7 @@ public class RecordActivity extends CamaradaActivity implements RecordView, OnSw
             }
         });
 
+        shareButton.setClickable(false);
 
         SharedPreferences sharedPreferences = getSharedPreferences(
                 ConfigPreferences.SETTINGS_SHARED_PREFERENCES_FILE_NAME,
@@ -118,6 +119,7 @@ public class RecordActivity extends CamaradaActivity implements RecordView, OnSw
     protected void onStart() {
         super.onStart();
         checkAndRequestPermissions();
+        checkNewNotification();
         recordPresenter.onStart();
     }
 
@@ -127,7 +129,7 @@ public class RecordActivity extends CamaradaActivity implements RecordView, OnSw
         recordPresenter.onResume();
         recording = false;
         hideSystemUi();
-        checkNewNotification();
+
     }
 
     private void hideSystemUi() {
@@ -350,13 +352,13 @@ public class RecordActivity extends CamaradaActivity implements RecordView, OnSw
     @Override
     public void showRecordButton() {
         recButton.setActivated(false);
+        shareButton.setClickable(true);
         recording = false;
     }
 
     @Override
     public void showStopButton() {
         recButton.setActivated(true);
-        shareButton.setClickable(true);
         recording = true;
         trackSelectedFilterOnStartRecording();
     }
