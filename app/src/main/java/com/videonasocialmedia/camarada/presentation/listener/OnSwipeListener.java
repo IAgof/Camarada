@@ -9,7 +9,7 @@ package com.videonasocialmedia.camarada.presentation.listener;
 
 public interface OnSwipeListener {
 
-    public void onSwipeLeft();
+    void onSwipeLeft();
 
-    public void onSwipeRight();
+    void onSwipeRight();
 }

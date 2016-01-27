@@ -44,7 +44,7 @@
             android:layout_height="wrap_content"
             android:layout_gravity="center"
             android:layout_marginBottom="4dp"
-            android:background="#ffb86a"
+        android:background="@color/colorAccent"
             android:padding="6dp"
             app:aspect="four_three">
 

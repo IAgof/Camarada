@@ -3,22 +3,21 @@
     <!-- AppTheme Camarada -->
     <style name="CamaradaTheme" parent="Theme.AppCompat.Light.NoActionBar">
 
-        <!-- Animations -->
+
         <item name="android:windowContentTransitions">true</item>
         <item name="android:windowAllowEnterTransitionOverlap">true</item>
         <item name="android:windowAllowReturnTransitionOverlap">true</item>
         <item name="android:windowSharedElementEnterTransition">@android:transition/move</item>
         <item name="android:windowSharedElementExitTransition">@android:transition/move</item>
 
-        <item name="android:colorPrimary">@color/colorPrimary</item>
-        <item name="android:colorPrimaryDark">@color/colorPrimaryDark</item>
-        <item name="android:colorAccent">@color/colorAccent</item>
+        <item name="colorPrimary">@color/colorPrimary</item>
+        <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
+        <item name="colorAccent">@color/colorAccent</item>
         <item name="android:textColorPrimary">@color/textColorPrimary</item>
         <item name="android:textColorSecondary">@color/textColorSecondary</item>
         <item name="android:textColorPrimaryInverse">@color/colorAccent</item>
-        <item name="android:colorControlNormal">@color/colorControlNormal</item>
+        <item name="android:colorControlNormal">@color/colorSecondary</item>
 
-        <!-- Hide scrollbar in scrollViews -->
         <item name="android:scrollbarThumbHorizontal">@color/colorTransparent</item>
         <item name="android:scrollbarThumbVertical">@color/colorTransparent</item>
 
@@ -32,8 +31,10 @@
         <item name="android:preferenceCategoryStyle">@style/CamaradaCategoryPreference</item>
 
         <item name="android:editTextStyle">@style/CamaradaEditText</item>
+        <item name="android:navigationBarColor">@color/colorPrimaryDark</item>
 
- </style>
+
+    </style>
 
 
     <style name="CamaradaToolbar" parent="Theme.AppCompat">
@@ -84,12 +85,11 @@
     </style>
 
     <style name="CamaradaIntroTutorial" parent="Theme.AppCompat.Light">
-
         <item name="windowNoTitle">true</item>
         <item name="windowActionBar">false</item>
         <item name="android:windowFullscreen">true</item>
         <item name="android:windowContentOverlay">@null</item>
-
     </style>
 
- </resources>
+
+</resources>
