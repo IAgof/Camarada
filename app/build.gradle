@@ -5,7 +5,7 @@ android {
     buildToolsVersion "23.0.2"
 
     defaultConfig {
-        applicationId "com.videonasocialmedia.camarada"
+        applicationId "com.videonasocialmedia.kamarada"
         minSdkVersion 18
         targetSdkVersion 23
         versionCode 1
