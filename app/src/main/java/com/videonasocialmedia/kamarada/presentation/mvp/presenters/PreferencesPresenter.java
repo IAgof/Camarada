@@ -3,6 +3,8 @@ package com.videonasocialmedia.kamarada.presentation.mvp.presenters;
 import android.content.Context;
 import android.content.SharedPreferences;
 
+import com.videonasocialmedia.kamarada.presentation.mvp.views.PreferencesView;
+
 import java.util.ArrayList;
 
 /**
@@ -12,7 +14,7 @@ public class PreferencesPresenter implements SharedPreferences.OnSharedPreferenc
 
     private Context context;
     private SharedPreferences sharedPreferences;
-    private com.videonasocialmedia.kamarada.presentation.mvp.presenters.PreferencesView preferencesView;
+    private PreferencesView preferencesView;
 
     /**
      * Constructor
@@ -21,7 +23,7 @@ public class PreferencesPresenter implements SharedPreferences.OnSharedPreferenc
      * @param context
      * @param sharedPreferences
      */
-    public PreferencesPresenter(com.videonasocialmedia.kamarada.presentation.mvp.presenters.PreferencesView preferencesView, Context context,
+    public PreferencesPresenter(PreferencesView preferencesView, Context context,
                                 SharedPreferences sharedPreferences) {
         this.preferencesView = preferencesView;
         this.context = context;
