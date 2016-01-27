@@ -6,11 +6,13 @@ public class AnalyticsConstants {
      * Events
      */
     public final static String APP_STARTED = "App Started";
-    public final static String USER_INTERACTED = "User Interacted";
-    public final static String TIME_EXPORTING_VIDEO = "Time Exporting Video";
-    public final static String VIDEO_EXPORTED = "Video Exported";
     public final static String VIDEO_RECORDED = "Video Recorded";
+    public final static String VIDEO_EXPORTED = "Video Exported";
+    public static final String VIDEO_SHARED = "Video Shared";
+    public final static String USER_INTERACTED = "User Interacted";
     public final static String FILTER_SELECTED = "Filter Selected";
+    public static final String TIME_IN_ACTIVITY = "Time in Activity";
+    public final static String TIME_EXPORTING_VIDEO = "Time Exporting Video";
 
     /**
      * Values
@@ -50,9 +52,10 @@ public class AnalyticsConstants {
     public static final String START = "start";
     public static final String STOP = "stop";
     public static final String CHANGE_CAMERA = "change camera";
-    public static final String TIME_IN_ACTIVITY = "Time in Activity";
-    public static final String VIDEO_SHARED = "Video Shared";
     public static final String TOTAL_SHARED_VIDEOS = "totalSharedVideos";
     public static final String SOCIAL_NETWORK = "socialNetwork";
     public static final String LAST_VIDEO_SHARED = "lastVideoShared";
+    public static final String SWIPE = "swipe";
+    public static final String LEFT = "left";
+    public static final String RIGHT = "right";
 }

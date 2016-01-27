@@ -203,7 +203,7 @@ public class InitAppActivity extends CamaradaActivity implements InitAppView, On
             userProfileProperties.put(AnalyticsConstants.CREATED,
                     new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ssZ").format(new Date()));
             userProfileProperties.put(AnalyticsConstants.LOCALE,
-                    Locale.getDefault().getDisplayLanguage());
+                    Locale.getDefault().toString());
             userProfileProperties.put(AnalyticsConstants.LANG, Locale.getDefault().getISO3Language());
             mixpanel.getPeople().setOnce(userProfileProperties);
         } catch (JSONException e) {
