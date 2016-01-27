@@ -1,4 +1,4 @@
-package com.videonasocialmedia.Kamarada.presentation.views.fragment;
+package com.videonasocialmedia.kamarada.presentation.views.fragment;
 
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -6,7 +6,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import com.videonasocialmedia.Kamarada.R;
+import com.videonasocialmedia.kamarada.R;
 
 /**
  * Created by Veronica Lago Fominaya on 08/01/2016.

@@ -1,4 +1,4 @@
-package com.videonasocialmedia.Kamarada.domain;
+package com.videonasocialmedia.kamarada.domain;
 
 /**
  * Created by Veronica Lago Fominaya on 18/01/2016.

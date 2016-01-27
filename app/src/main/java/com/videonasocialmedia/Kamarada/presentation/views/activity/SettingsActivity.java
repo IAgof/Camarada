@@ -1,4 +1,4 @@
-package com.videonasocialmedia.Kamarada.presentation.views.activity;
+package com.videonasocialmedia.kamarada.presentation.views.activity;
 
 import android.content.Intent;
 import android.net.Uri;
@@ -7,16 +7,16 @@ import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 
-import com.videonasocialmedia.Kamarada.R;
-import com.videonasocialmedia.Kamarada.presentation.listener.OnCamaradaDialogClickListener;
-import com.videonasocialmedia.Kamarada.presentation.views.dialog.CamaradaDialogActivity;
-import com.videonasocialmedia.Kamarada.presentation.views.fragment.SettingsFragment;
+import com.videonasocialmedia.kamarada.R;
+import com.videonasocialmedia.kamarada.presentation.listener.OnKamaradaDialogClickListener;
+import com.videonasocialmedia.kamarada.presentation.views.dialog.KamaradaDialogActivity;
+import com.videonasocialmedia.kamarada.presentation.views.fragment.SettingsFragment;
 
 
-public class SettingsActivity extends CamaradaActivity implements OnCamaradaDialogClickListener {
+public class SettingsActivity extends KamaradaActivity implements OnKamaradaDialogClickListener {
 
     private final int REQUEST_CODE_DIALOG_VOTE = 1;
-    private CamaradaDialogActivity dialogVote;
+    private KamaradaDialogActivity dialogVote;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -64,7 +64,7 @@ public class SettingsActivity extends CamaradaActivity implements OnCamaradaDial
 
     private void goToVote() {
 
-        dialogVote = new CamaradaDialogActivity().newInstance(
+        dialogVote = new KamaradaDialogActivity().newInstance(
                 getString(R.string.rateUsDialogTitle),
                 getString(R.string.rateUsDialogMessage),
                 getString(R.string.acceptDialogRateUs),

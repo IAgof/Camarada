@@ -5,9 +5,9 @@
  * All rights reserved
  */
 
-package com.videonasocialmedia.Kamarada.presentation.listener;
+package com.videonasocialmedia.kamarada.presentation.listener;
 
-import com.videonasocialmedia.Kamarada.model.entities.Effect;
+import com.videonasocialmedia.kamarada.model.entities.Effect;
 
 /**
  * Created by Veronica Lago Fominaya on 03/11/2015.

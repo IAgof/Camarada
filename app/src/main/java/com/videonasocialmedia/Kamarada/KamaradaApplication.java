@@ -1,4 +1,4 @@
-package com.videonasocialmedia.Kamarada;
+package com.videonasocialmedia.kamarada;
 
 import android.app.Application;
 import android.content.Context;
@@ -11,7 +11,7 @@ import com.google.android.gms.analytics.Tracker;
 import com.karumi.dexter.Dexter;
 
 
-public class KamaradaApplication extends Application{
+public class KamaradaApplication extends Application {
 
     private static Context context;
 

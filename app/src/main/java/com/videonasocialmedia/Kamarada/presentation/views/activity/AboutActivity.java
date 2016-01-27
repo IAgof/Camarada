@@ -1,4 +1,4 @@
-package com.videonasocialmedia.Kamarada.presentation.views.activity;
+package com.videonasocialmedia.kamarada.presentation.views.activity;
 
 import android.os.Bundle;
 import android.support.v7.app.ActionBar;
@@ -8,14 +8,14 @@ import android.widget.TextView;
 
 import com.google.android.gms.analytics.GoogleAnalytics;
 import com.google.android.gms.analytics.HitBuilders;
-import com.videonasocialmedia.Kamarada.BuildConfig;
-import com.videonasocialmedia.Kamarada.R;
+import com.videonasocialmedia.kamarada.BuildConfig;
+import com.videonasocialmedia.kamarada.R;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 
-public class AboutActivity extends CamaradaActivity {
+public class AboutActivity extends KamaradaActivity {
 
     @Bind(R.id.videona_version)
     TextView versionName;

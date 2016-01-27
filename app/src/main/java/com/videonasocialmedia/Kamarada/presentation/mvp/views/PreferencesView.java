@@ -1,4 +1,4 @@
-package com.videonasocialmedia.Kamarada.presentation.mvp.presenters;
+package com.videonasocialmedia.kamarada.presentation.mvp.presenters;
 
 import android.preference.ListPreference;
 

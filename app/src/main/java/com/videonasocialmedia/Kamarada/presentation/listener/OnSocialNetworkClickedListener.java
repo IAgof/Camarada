@@ -1,6 +1,6 @@
-package com.videonasocialmedia.Kamarada.presentation.listener;
+package com.videonasocialmedia.kamarada.presentation.listener;
 
-import com.videonasocialmedia.Kamarada.model.entities.SocialNetwork;
+import com.videonasocialmedia.kamarada.model.entities.SocialNetwork;
 
 /**
  * Created by jca on 19/1/16.

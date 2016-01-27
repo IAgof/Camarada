@@ -1,4 +1,4 @@
-package com.videonasocialmedia.Kamarada.presentation.views.widget;
+package com.videonasocialmedia.kamarada.presentation.views.widget;
 
 /**
  * Created by Veronica Lago Fominaya on 22/01/2016.

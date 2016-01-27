@@ -1,4 +1,4 @@
-package com.videonasocialmedia.Kamarada.presentation.views.activity;
+package com.videonasocialmedia.kamarada.presentation.views.activity;
 
 import android.content.Context;
 import android.annotation.TargetApi;
@@ -19,16 +19,16 @@ import android.widget.ImageButton;
 import android.widget.SeekBar;
 import android.widget.VideoView;
 
-import com.videonasocialmedia.Kamarada.R;
-import com.videonasocialmedia.Kamarada.model.entities.SocialNetwork;
-import com.videonasocialmedia.Kamarada.presentation.adapter.SocialNetworkAdapter;
-import com.videonasocialmedia.Kamarada.presentation.listener.OnSocialNetworkClickedListener;
-import com.videonasocialmedia.Kamarada.presentation.mvp.presenters.SharePresenter;
-import com.videonasocialmedia.Kamarada.presentation.mvp.views.PreviewVideoView;
-import com.videonasocialmedia.Kamarada.presentation.mvp.views.ShareView;
-import com.videonasocialmedia.Kamarada.utils.AnalyticsConstants;
-import com.videonasocialmedia.Kamarada.utils.ConfigPreferences;
-import com.videonasocialmedia.Kamarada.utils.Utils;
+import com.videonasocialmedia.kamarada.R;
+import com.videonasocialmedia.kamarada.model.entities.SocialNetwork;
+import com.videonasocialmedia.kamarada.presentation.adapter.SocialNetworkAdapter;
+import com.videonasocialmedia.kamarada.presentation.listener.OnSocialNetworkClickedListener;
+import com.videonasocialmedia.kamarada.presentation.mvp.presenters.SharePresenter;
+import com.videonasocialmedia.kamarada.presentation.mvp.views.PreviewVideoView;
+import com.videonasocialmedia.kamarada.presentation.mvp.views.ShareView;
+import com.videonasocialmedia.kamarada.utils.AnalyticsConstants;
+import com.videonasocialmedia.kamarada.utils.ConfigPreferences;
+import com.videonasocialmedia.kamarada.utils.Utils;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -45,7 +45,7 @@ import butterknife.OnTouch;
 /**
  * Created by jca on 18/1/16.
  */
-public class ShareActivity extends CamaradaActivity implements ShareView, PreviewVideoView,
+public class ShareActivity extends KamaradaActivity implements ShareView, PreviewVideoView,
         OnSocialNetworkClickedListener, SeekBar.OnSeekBarChangeListener {
 
     public static final String INTENT_EXTRA_VIDEO_PATH = "VIDEO_EDITED";

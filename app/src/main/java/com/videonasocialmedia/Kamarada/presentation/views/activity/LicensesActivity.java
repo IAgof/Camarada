@@ -5,16 +5,16 @@
  * All rights reserved
  */
 
-package com.videonasocialmedia.Kamarada.presentation.views.activity;
+package com.videonasocialmedia.kamarada.presentation.views.activity;
 
 import android.os.Bundle;
 import android.support.v7.app.ActionBar;
 import android.support.v7.widget.Toolbar;
 
-import com.videonasocialmedia.Kamarada.R;
+import com.videonasocialmedia.kamarada.R;
 
 
-public class LicensesActivity extends CamaradaActivity {
+public class LicensesActivity extends KamaradaActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

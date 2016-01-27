@@ -6,13 +6,13 @@
     <bool name="ga_autoActivityTracking">true</bool>
 
     <!-- The screen names that will appear in reports -->
-    <screenName name="com.videonasocialmedia.camarada.presentation.views.activity.RecordActivity">
+    <screenName name="com.videonasocialmedia.kamarada.presentation.views.activity.RecordActivity">
         CamaradaApplication-Android RecordActivity
     </screenName>
-    <screenName name="com.videonasocialmedia.camarada.presentation.views.activity.ShareActivity">
+    <screenName name="com.videonasocialmedia.kamarada.presentation.views.activity.ShareActivity">
         CamaradaApplication-Android ShareActivity
     </screenName>
-    <screenName name="com.videonasocialmedia.camarada.presentation.views.activity.SettingsActivity">
+    <screenName name="com.videonasocialmedia.kamarada.presentation.views.activity.SettingsActivity">
         CamaradaApplication-Android SettingsActivity
     </screenName>
 

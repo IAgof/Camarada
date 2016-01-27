@@ -1,7 +1,7 @@
-package com.videonasocialmedia.Kamarada.domain;
+package com.videonasocialmedia.kamarada.domain;
 
-import com.videonasocialmedia.Kamarada.model.entities.SocialNetwork;
-import com.videonasocialmedia.Kamarada.model.repository.SocialNetworkRepository;
+import com.videonasocialmedia.kamarada.model.entities.SocialNetwork;
+import com.videonasocialmedia.kamarada.model.repository.SocialNetworkRepository;
 
 import java.util.ArrayList;
 import java.util.List;

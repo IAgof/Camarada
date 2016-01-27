@@ -1,4 +1,4 @@
-package com.videonasocialmedia.Kamarada.presentation.views.activity;
+package com.videonasocialmedia.kamarada.presentation.views.activity;
 
 import android.content.Context;
 import android.content.Intent;
@@ -9,10 +9,10 @@ import android.support.v4.view.ViewPager;
 import android.view.View;
 
 import com.github.paolorotolo.appintro.AppIntro;
-import com.videonasocialmedia.Kamarada.presentation.views.fragment.IntroApp0Fragment;
-import com.videonasocialmedia.Kamarada.presentation.views.fragment.IntroApp1Fragment;
-import com.videonasocialmedia.Kamarada.presentation.views.fragment.IntroApp2Fragment;
-import com.videonasocialmedia.Kamarada.utils.ConfigPreferences;
+import com.videonasocialmedia.kamarada.presentation.views.fragment.IntroApp0Fragment;
+import com.videonasocialmedia.kamarada.presentation.views.fragment.IntroApp1Fragment;
+import com.videonasocialmedia.kamarada.presentation.views.fragment.IntroApp2Fragment;
+import com.videonasocialmedia.kamarada.utils.ConfigPreferences;
 
 public class IntroAppActivity extends AppIntro {
 

@@ -1,10 +1,10 @@
-package com.videonasocialmedia.Kamarada.domain;
+package com.videonasocialmedia.kamarada.domain;
 
 import com.googlecode.mp4parser.authoring.Movie;
-import com.videonasocialmedia.Kamarada.R;
-import com.videonasocialmedia.Kamarada.domain.muxer.Muxer;
-import com.videonasocialmedia.Kamarada.utils.Constants;
-import com.videonasocialmedia.Kamarada.utils.Utils;
+import com.videonasocialmedia.kamarada.R;
+import com.videonasocialmedia.kamarada.domain.muxer.Muxer;
+import com.videonasocialmedia.kamarada.utils.Constants;
+import com.videonasocialmedia.kamarada.utils.Utils;
 
 import java.io.File;
 import java.io.IOException;

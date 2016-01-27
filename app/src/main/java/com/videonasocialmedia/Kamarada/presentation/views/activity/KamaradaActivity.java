@@ -24,8 +24,8 @@ import com.karumi.dexter.listener.multi.MultiplePermissionsListener;
 import com.mixpanel.android.mpmetrics.MixpanelAPI;
 import com.videonasocialmedia.kamarada.BuildConfig;
 import com.videonasocialmedia.kamarada.KamaradaApplication;
-import com.videonasocialmedia.kamarada.presentation.listener.OnCamaradaDialogClickListener;
-import com.videonasocialmedia.kamarada.presentation.views.dialog.CamaradaDialogActivity;
+import com.videonasocialmedia.kamarada.presentation.listener.OnKamaradaDialogClickListener;
+import com.videonasocialmedia.kamarada.presentation.views.dialog.KamaradaDialogActivity;
 import com.videonasocialmedia.kamarada.utils.AnalyticsConstants;
 import com.videonasocialmedia.kamarada.utils.PermissionConstants;
 
@@ -137,7 +137,7 @@ public class KamaradaActivity extends AppCompatActivity {
     }
 
     class CustomPermissionListener extends EmptyMultiplePermissionsListener
-            implements OnCamaradaDialogClickListener {
+            implements OnKamaradaDialogClickListener {
 
         private final Context context;
         private final String title;
@@ -146,7 +146,7 @@ public class KamaradaActivity extends AppCompatActivity {
         private final Drawable icon;
         private final int REQUEST_CODE_DIALOG_PERMISSION = 1;
         private AlertDialog dialog;
-        private CamaradaDialogActivity dialogPermission;
+        private KamaradaDialogActivity dialogPermission;
 
         private CustomPermissionListener(Context context, String title,
                                          String message, String positiveButtonText, Drawable icon) {
@@ -180,7 +180,7 @@ public class KamaradaActivity extends AppCompatActivity {
         private void createPermissionDialog() {
 
 
-            dialogPermission = new CamaradaDialogActivity().newInstance(
+            dialogPermission = new KamaradaDialogActivity().newInstance(
                     title,
                     message,
                     positiveButtonText,

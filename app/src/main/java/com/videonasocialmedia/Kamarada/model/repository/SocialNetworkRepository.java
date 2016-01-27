@@ -1,4 +1,4 @@
-package com.videonasocialmedia.Kamarada.model.repository;
+package com.videonasocialmedia.kamarada.model.repository;
 
 import android.content.Context;
 import android.content.Intent;
@@ -7,8 +7,8 @@ import android.content.pm.ResolveInfo;
 import android.graphics.drawable.Drawable;
 import android.util.Log;
 
-import com.videonasocialmedia.Kamarada.CamaradaApplication;
-import com.videonasocialmedia.Kamarada.model.entities.SocialNetwork;
+import com.videonasocialmedia.kamarada.KamaradaApplication;
+import com.videonasocialmedia.kamarada.model.entities.SocialNetwork;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -25,7 +25,7 @@ public class SocialNetworkRepository {
 
     private List<SocialNetwork> getSocialAppsInstalled() {
         List<SocialNetwork> socialNetworkApps = new ArrayList<>();
-        Context context = CamaradaApplication.getAppContext();
+        Context context = KamaradaApplication.getAppContext();
         Intent shareIntent = new Intent(android.content.Intent.ACTION_SEND);
         shareIntent.setType("video/*");
         PackageManager pm = context.getPackageManager();

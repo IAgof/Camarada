@@ -1,4 +1,4 @@
-package com.videonasocialmedia.Kamarada.presentation.views.activity;
+package com.videonasocialmedia.kamarada.presentation.views.activity;
 
 import android.Manifest;
 import android.content.Context;
@@ -18,16 +18,16 @@ import android.view.Window;
 import android.view.WindowManager;
 import android.widget.TextView;
 
-import com.videonasocialmedia.Kamarada.BuildConfig;
-import com.videonasocialmedia.Kamarada.R;
-import com.videonasocialmedia.Kamarada.domain.RemoveFilesInTempFolderUseCase;
-import com.videonasocialmedia.Kamarada.presentation.listener.OnInitAppEventListener;
-import com.videonasocialmedia.Kamarada.presentation.mvp.views.InitAppView;
-import com.videonasocialmedia.Kamarada.utils.AnalyticsConstants;
-import com.videonasocialmedia.Kamarada.utils.AppStart;
-import com.videonasocialmedia.Kamarada.utils.ConfigPreferences;
-import com.videonasocialmedia.Kamarada.utils.Constants;
-import com.videonasocialmedia.Kamarada.utils.Utils;
+import com.videonasocialmedia.kamarada.BuildConfig;
+import com.videonasocialmedia.kamarada.R;
+import com.videonasocialmedia.kamarada.domain.RemoveFilesInTempFolderUseCase;
+import com.videonasocialmedia.kamarada.presentation.listener.OnInitAppEventListener;
+import com.videonasocialmedia.kamarada.presentation.mvp.views.InitAppView;
+import com.videonasocialmedia.kamarada.utils.AnalyticsConstants;
+import com.videonasocialmedia.kamarada.utils.AppStart;
+import com.videonasocialmedia.kamarada.utils.ConfigPreferences;
+import com.videonasocialmedia.kamarada.utils.Constants;
+import com.videonasocialmedia.kamarada.utils.Utils;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -53,7 +53,7 @@ import butterknife.ButterKnife;
  * Show a dummy splash screen and initialize all data needed to start
  */
 
-public class InitAppActivity extends CamaradaActivity implements InitAppView, OnInitAppEventListener {
+public class InitAppActivity extends KamaradaActivity implements InitAppView, OnInitAppEventListener {
 
 
     /**

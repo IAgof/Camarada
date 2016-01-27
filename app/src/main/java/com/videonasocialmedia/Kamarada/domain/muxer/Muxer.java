@@ -1,4 +1,4 @@
-package com.videonasocialmedia.Kamarada.domain.muxer;
+package com.videonasocialmedia.kamarada.domain.muxer;
 
 import android.util.Log;
 

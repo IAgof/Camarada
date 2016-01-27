@@ -11,7 +11,7 @@ import android.widget.Button;
 import android.widget.TextView;
 
 import com.videonasocialmedia.kamarada.R;
-import com.videonasocialmedia.kamarada.presentation.listener.OnCamaradaDialogClickListener;
+import com.videonasocialmedia.kamarada.presentation.listener.OnKamaradaDialogClickListener;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
@@ -19,7 +19,7 @@ import butterknife.OnClick;
 
 public class KamaradaDialogFragment extends DialogFragment {
 
-    OnCamaradaDialogClickListener clickListener;
+    OnKamaradaDialogClickListener clickListener;
     @Bind(R.id.acceptDialog)
     Button acceptDialog;
     @Bind(R.id.cancelDialog)
@@ -31,7 +31,7 @@ public class KamaradaDialogFragment extends DialogFragment {
     private int idDialog;
 
 
-    public KamaradaDialogFragment(){
+    public KamaradaDialogFragment() {
         // Empty constructor required for DialogFragment
     }
 
@@ -52,7 +52,7 @@ public class KamaradaDialogFragment extends DialogFragment {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        clickListener = (OnCamaradaDialogClickListener) getTargetFragment();
+        clickListener = (OnKamaradaDialogClickListener) getTargetFragment();
     }
 
 
@@ -82,7 +82,7 @@ public class KamaradaDialogFragment extends DialogFragment {
         super.onAttach(activity);
 
         try {
-            clickListener = (OnCamaradaDialogClickListener) activity;
+            clickListener = (OnKamaradaDialogClickListener) activity;
         } catch (ClassCastException e) {
             throw new ClassCastException(activity.toString() + " must implement " +
                     "OnVideonaDialogButtonsListener");

@@ -1,4 +1,4 @@
-package com.videonasocialmedia.Kamarada.presentation.views.activity;
+package com.videonasocialmedia.kamarada.presentation.views.activity;
 
 import android.annotation.TargetApi;
 import android.app.AlertDialog;
@@ -19,15 +19,15 @@ import android.widget.Toast;
 import com.mixpanel.android.mpmetrics.InAppNotification;
 import com.videonasocialmedia.avrecorder.Filters;
 import com.videonasocialmedia.avrecorder.view.GLCameraEncoderView;
-import com.videonasocialmedia.Kamarada.R;
-import com.videonasocialmedia.Kamarada.presentation.listener.OnSwipeListener;
-import com.videonasocialmedia.Kamarada.presentation.helper.HorizontalGestureDetectorHelper;
-import com.videonasocialmedia.Kamarada.presentation.mvp.presenters.RecordPresenter;
-import com.videonasocialmedia.Kamarada.presentation.mvp.views.EffectSelectorView;
-import com.videonasocialmedia.Kamarada.presentation.mvp.views.RecordView;
-import com.videonasocialmedia.Kamarada.utils.AnalyticsConstants;
-import com.videonasocialmedia.Kamarada.utils.ConfigPreferences;
-import com.videonasocialmedia.Kamarada.utils.Utils;
+import com.videonasocialmedia.kamarada.R;
+import com.videonasocialmedia.kamarada.presentation.listener.OnSwipeListener;
+import com.videonasocialmedia.kamarada.presentation.helper.HorizontalGestureDetectorHelper;
+import com.videonasocialmedia.kamarada.presentation.mvp.presenters.RecordPresenter;
+import com.videonasocialmedia.kamarada.presentation.mvp.views.EffectSelectorView;
+import com.videonasocialmedia.kamarada.presentation.mvp.views.RecordView;
+import com.videonasocialmedia.kamarada.utils.AnalyticsConstants;
+import com.videonasocialmedia.kamarada.utils.ConfigPreferences;
+import com.videonasocialmedia.kamarada.utils.Utils;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -41,7 +41,7 @@ import butterknife.OnTouch;
  * Created by Veronica Lago Fominaya on 19/01/2016.
  */
 
-public class RecordActivity extends CamaradaActivity implements RecordView, OnSwipeListener,
+public class RecordActivity extends KamaradaActivity implements RecordView, OnSwipeListener,
         EffectSelectorView {
 
     @Bind(R.id.recordLayout)

@@ -1,4 +1,4 @@
-package com.videonasocialmedia.Kamarada.utils;
+package com.videonasocialmedia.kamarada.utils;
 
 public class ConfigPreferences {
     public final static String FIRST_TIME = "first_time";

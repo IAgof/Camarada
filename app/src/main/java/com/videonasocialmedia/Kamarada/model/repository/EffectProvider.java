@@ -1,8 +1,8 @@
-package com.videonasocialmedia.Kamarada.model.repository;
+package com.videonasocialmedia.kamarada.model.repository;
 
 import com.videonasocialmedia.avrecorder.Filters;
-import com.videonasocialmedia.Kamarada.R;
-import com.videonasocialmedia.Kamarada.model.entities.ShaderEffect;
+import com.videonasocialmedia.kamarada.R;
+import com.videonasocialmedia.kamarada.model.entities.ShaderEffect;
 
 import java.util.ArrayList;
 import java.util.List;

@@ -1,6 +1,6 @@
-package com.videonasocialmedia.Kamarada.domain.muxer;
+package com.videonasocialmedia.kamarada.domain.muxer;
 
-import com.videonasocialmedia.Kamarada.utils.Utils;
+import com.videonasocialmedia.kamarada.utils.Utils;
 import com.googlecode.mp4parser.authoring.Movie;
 import com.googlecode.mp4parser.authoring.Track;
 import com.googlecode.mp4parser.authoring.container.mp4.MovieCreator;

@@ -1,4 +1,4 @@
-package com.videonasocialmedia.Kamarada.presentation.adapter;
+package com.videonasocialmedia.kamarada.presentation.adapter;
 
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -7,9 +7,9 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.videonasocialmedia.Kamarada.R;
-import com.videonasocialmedia.Kamarada.model.entities.SocialNetwork;
-import com.videonasocialmedia.Kamarada.presentation.listener.OnSocialNetworkClickedListener;
+import com.videonasocialmedia.kamarada.R;
+import com.videonasocialmedia.kamarada.model.entities.SocialNetwork;
+import com.videonasocialmedia.kamarada.presentation.listener.OnSocialNetworkClickedListener;
 
 import java.util.ArrayList;
 import java.util.List;

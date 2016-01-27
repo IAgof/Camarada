@@ -5,7 +5,7 @@
  * All rights reserved
  */
 
-package com.videonasocialmedia.Kamarada.presentation.helper;
+package com.videonasocialmedia.kamarada.presentation.helper;
 
 import android.content.Context;
 import android.util.Log;
@@ -13,7 +13,7 @@ import android.view.GestureDetector;
 import android.view.MotionEvent;
 import android.view.View;
 
-import com.videonasocialmedia.Kamarada.presentation.listener.OnSwipeListener;
+import com.videonasocialmedia.kamarada.presentation.listener.OnSwipeListener;
 
 public class HorizontalGestureDetectorHelper implements View.OnTouchListener {
 

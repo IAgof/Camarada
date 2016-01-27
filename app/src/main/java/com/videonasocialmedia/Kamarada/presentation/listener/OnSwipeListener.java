@@ -5,7 +5,7 @@
  * All rights reserved
  */
 
-package com.videonasocialmedia.Kamarada.presentation.listener;
+package com.videonasocialmedia.kamarada.presentation.listener;
 
 public interface OnSwipeListener {
 

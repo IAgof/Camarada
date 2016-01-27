@@ -1,4 +1,4 @@
-package com.videonasocialmedia.Kamarada.model.entities;
+package com.videonasocialmedia.kamarada.model.entities;
 
 /**
  * Created by Veronica Lago Fominaya on 25/11/2015.

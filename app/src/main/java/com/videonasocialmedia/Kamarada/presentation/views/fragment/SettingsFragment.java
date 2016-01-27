@@ -1,4 +1,4 @@
-package com.videonasocialmedia.Kamarada.presentation.views.fragment;
+package com.videonasocialmedia.kamarada.presentation.views.fragment;
 
 import android.content.Context;
 import android.content.Intent;
@@ -14,18 +14,18 @@ import android.view.ViewGroup;
 import android.widget.ListView;
 import android.widget.TextView;
 
-import com.videonasocialmedia.Kamarada.BuildConfig;
-import com.videonasocialmedia.Kamarada.R;
-import com.videonasocialmedia.Kamarada.presentation.listener.OnCamaradaDialogClickListener;
-import com.videonasocialmedia.Kamarada.presentation.mvp.presenters.PreferencesPresenter;
-import com.videonasocialmedia.Kamarada.presentation.mvp.presenters.PreferencesView;
-import com.videonasocialmedia.Kamarada.presentation.views.dialog.CamaradaDialogFragment;
-import com.videonasocialmedia.Kamarada.utils.ConfigPreferences;
+import com.videonasocialmedia.kamarada.BuildConfig;
+import com.videonasocialmedia.kamarada.R;
+import com.videonasocialmedia.kamarada.presentation.listener.OnKamaradaDialogClickListener;
+import com.videonasocialmedia.kamarada.presentation.mvp.presenters.PreferencesPresenter;
+import com.videonasocialmedia.kamarada.presentation.mvp.presenters.PreferencesView;
+import com.videonasocialmedia.kamarada.presentation.views.dialog.KamaradaDialogFragment;
+import com.videonasocialmedia.kamarada.utils.ConfigPreferences;
 
 import java.util.ArrayList;
 
 public class SettingsFragment extends PreferenceFragment implements SharedPreferences.OnSharedPreferenceChangeListener,
-        PreferencesView, OnCamaradaDialogClickListener {
+        PreferencesView, OnKamaradaDialogClickListener {
 
 
     private final int REQUEST_CODE_DIALOG_EXIT = 1;
@@ -35,8 +35,8 @@ public class SettingsFragment extends PreferenceFragment implements SharedPrefer
     protected SharedPreferences sharedPreferences;
     protected SharedPreferences.Editor editor;
     /* Dialogs*/
-    private CamaradaDialogFragment dialogExitApp;
-    private CamaradaDialogFragment dialogDownloadVideona;
+    private KamaradaDialogFragment dialogExitApp;
+    private KamaradaDialogFragment dialogDownloadVideona;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -90,7 +90,7 @@ public class SettingsFragment extends PreferenceFragment implements SharedPrefer
 
     private void createJoinVideonaDialog() {
 
-        dialogDownloadVideona = new CamaradaDialogFragment().newInstance(
+        dialogDownloadVideona = new KamaradaDialogFragment().newInstance(
                 getString(R.string.downloadVideonaDialogTitle),
                 getString(R.string.downloadVideonaDialogMessage),
                 getString(R.string.downloadVideonaDialogAccept),
@@ -104,7 +104,7 @@ public class SettingsFragment extends PreferenceFragment implements SharedPrefer
 
     private void createExitAppDialog() {
 
-        dialogExitApp = new CamaradaDialogFragment().newInstance(
+        dialogExitApp = new KamaradaDialogFragment().newInstance(
                 getString(R.string.exitAppTitle),
                 getString(R.string.exitAppMessage),
                 getString(R.string.exitAppAccept),

@@ -5,7 +5,7 @@
  * All rights reserved
  */
 
-package com.videonasocialmedia.Kamarada.utils;
+package com.videonasocialmedia.kamarada.utils;
 
 import android.content.Context;
 import android.content.SharedPreferences;
@@ -16,39 +16,15 @@ import android.util.Log;
 public class AppStart {
 
     /**
-     * Distinguishes different kinds of app starts: <li>
-     * <ul>
-     * First start ever ({@link #FIRST_TIME})
-     * </ul>
-     * <ul>
-     * First start in this version ({@link #FIRST_TIME_VERSION})
-     * </ul>
-     * <ul>
-     * Normal app start ({@link #NORMAL})
-     * </ul>
-     *
-     * @author williscool
-     * inspired by
-     * @author schnatterer
-     *
-     * source: http://stackoverflow.com/questions/4636141/determine-if-android-app-is-the-first-time-used
-     */
-    public enum AppStartState {
-        FIRST_TIME, FIRST_TIME_VERSION, NORMAL;
-    }
-
-    /**
      * The app version code (not the version name!) that was used on the last
      * start of the app.
      */
     private static final String LAST_APP_VERSION = "1";
-
     /**
      * Caches the result of {@link #checkAppStart(Context context, SharedPreferences sharedPreferences)}. To allow idempotent method
      * calls.
      */
     private static AppStartState appStartState = null;
-
     /**
      *  LOG_TAG
      */
@@ -95,6 +71,28 @@ public class AppStart {
         } else {
             return AppStartState.NORMAL;
         }
+    }
+
+    /**
+     * Distinguishes different kinds of app starts: <li>
+     * <ul>
+     * First start ever ({@link #FIRST_TIME})
+     * </ul>
+     * <ul>
+     * First start in this version ({@link #FIRST_TIME_VERSION})
+     * </ul>
+     * <ul>
+     * Normal app start ({@link #NORMAL})
+     * </ul>
+     *
+     * @author williscool
+     *         inspired by
+     * @author schnatterer
+     *         <p/>
+     *         source: http://stackoverflow.com/questions/4636141/determine-if-android-app-is-the-first-time-used
+     */
+    public enum AppStartState {
+        FIRST_TIME, FIRST_TIME_VERSION, NORMAL;
     }
 
 }

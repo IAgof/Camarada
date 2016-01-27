@@ -1,4 +1,4 @@
-package com.videonasocialmedia.Kamarada.presentation.mvp.views;
+package com.videonasocialmedia.kamarada.presentation.mvp.views;
 
 /**
  * Created by jca on 19/1/16.

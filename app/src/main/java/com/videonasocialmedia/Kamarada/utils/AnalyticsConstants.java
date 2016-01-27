@@ -1,4 +1,4 @@
-package com.videonasocialmedia.Kamarada.utils;
+package com.videonasocialmedia.kamarada.utils;
 
 public class AnalyticsConstants {
 

@@ -1,6 +1,6 @@
-package com.videonasocialmedia.Kamarada.presentation.mvp.views;
+package com.videonasocialmedia.kamarada.presentation.mvp.views;
 
-import com.videonasocialmedia.Kamarada.model.entities.SocialNetwork;
+import com.videonasocialmedia.kamarada.model.entities.SocialNetwork;
 
 import java.util.List;
 

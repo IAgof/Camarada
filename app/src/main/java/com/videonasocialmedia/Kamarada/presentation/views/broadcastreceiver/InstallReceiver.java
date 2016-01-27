@@ -5,7 +5,7 @@
  * All rights reserved
  */
 
-package com.videonasocialmedia.Kamarada.presentation.views.broadcastreceiver;
+package com.videonasocialmedia.kamarada.presentation.views.broadcastreceiver;
 
 import android.content.BroadcastReceiver;
 import android.content.Context;

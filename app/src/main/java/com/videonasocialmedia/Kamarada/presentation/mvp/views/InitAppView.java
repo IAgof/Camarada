@@ -5,7 +5,7 @@
  * All rights reserved
  */
 
-package com.videonasocialmedia.Kamarada.presentation.mvp.views;
+package com.videonasocialmedia.kamarada.presentation.mvp.views;
 
 public interface InitAppView {
 

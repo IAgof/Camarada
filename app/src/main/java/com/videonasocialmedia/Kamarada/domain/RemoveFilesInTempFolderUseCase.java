@@ -1,7 +1,7 @@
-package com.videonasocialmedia.Kamarada.domain;
+package com.videonasocialmedia.kamarada.domain;
 
-import com.videonasocialmedia.Kamarada.utils.Constants;
-import com.videonasocialmedia.Kamarada.utils.Utils;
+import com.videonasocialmedia.kamarada.utils.Constants;
+import com.videonasocialmedia.kamarada.utils.Utils;
 
 import java.io.File;
 

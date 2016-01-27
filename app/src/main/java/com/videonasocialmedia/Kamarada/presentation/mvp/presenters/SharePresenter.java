@@ -1,4 +1,4 @@
-package com.videonasocialmedia.Kamarada.presentation.mvp.presenters;
+package com.videonasocialmedia.kamarada.presentation.mvp.presenters;
 
 import android.content.ComponentName;
 import android.content.Context;
@@ -6,12 +6,12 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.net.Uri;
 
-import com.videonasocialmedia.Kamarada.domain.ObtainSocialNetworksToShareUseCase;
-import com.videonasocialmedia.Kamarada.model.entities.SocialNetwork;
-import com.videonasocialmedia.Kamarada.presentation.mvp.views.PreviewVideoView;
-import com.videonasocialmedia.Kamarada.presentation.mvp.views.ShareView;
-import com.videonasocialmedia.Kamarada.utils.ConfigPreferences;
-import com.videonasocialmedia.Kamarada.utils.Utils;
+import com.videonasocialmedia.kamarada.domain.ObtainSocialNetworksToShareUseCase;
+import com.videonasocialmedia.kamarada.model.entities.SocialNetwork;
+import com.videonasocialmedia.kamarada.presentation.mvp.views.PreviewVideoView;
+import com.videonasocialmedia.kamarada.presentation.mvp.views.ShareView;
+import com.videonasocialmedia.kamarada.utils.ConfigPreferences;
+import com.videonasocialmedia.kamarada.utils.Utils;
 
 import java.util.List;
 

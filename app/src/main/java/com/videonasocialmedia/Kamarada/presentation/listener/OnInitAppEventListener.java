@@ -5,7 +5,7 @@
  * All rights reserved
  */
 
-package com.videonasocialmedia.Kamarada.presentation.listener;
+package com.videonasocialmedia.kamarada.presentation.listener;
 
 /**
  * This interface is used to control the init config of the app on shared preferences.
