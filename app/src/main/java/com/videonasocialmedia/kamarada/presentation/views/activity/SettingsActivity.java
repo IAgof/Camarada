@@ -85,7 +85,7 @@ public class SettingsActivity extends KamaradaActivity implements OnKamaradaDial
     @Override
     public void onClickAcceptDialogListener(int id) {
         if (id == REQUEST_CODE_DIALOG_VOTE) {
-            navigateTo("market://details?id=com.videonasocialmedia.videona");
+            navigateTo("market://details?id=com.videonasocialmedia.kamarada");
         }
     }
 
