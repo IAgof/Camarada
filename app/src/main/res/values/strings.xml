@@ -1,6 +1,6 @@
 <resources>
 
-    <string name="app_name">Camarada</string>
+    <string name="app_name">Kamarada</string>
     <!-- Intro app -->
     <string name="permissionsDeniedMessage">Kamarada needs some permissions to use the camera or
         record audio.\nWithout them Kamarada can\'t continue and will be closed.</string>

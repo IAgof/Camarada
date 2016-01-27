@@ -21,7 +21,7 @@ import com.videonasocialmedia.avrecorder.Filters;
 import com.videonasocialmedia.avrecorder.view.GLCameraEncoderView;
 import com.videonasocialmedia.camarada.R;
 import com.videonasocialmedia.camarada.presentation.listener.OnSwipeListener;
-import com.videonasocialmedia.camarada.presentation.listener.OnSwipeTouchListener;
+import com.videonasocialmedia.camarada.presentation.helper.HorizontalGestureDetectorHelper;
 import com.videonasocialmedia.camarada.presentation.mvp.presenters.RecordPresenter;
 import com.videonasocialmedia.camarada.presentation.mvp.views.EffectSelectorView;
 import com.videonasocialmedia.camarada.presentation.mvp.views.RecordView;
@@ -74,7 +74,7 @@ public class RecordActivity extends CamaradaActivity implements RecordView, OnSw
     private boolean recording;
     private AlertDialog progressDialog;
     private boolean mUseImmersiveMode = true;
-    private OnSwipeTouchListener swipeListener;
+    private HorizontalGestureDetectorHelper gestureDetecorHelper;
 
 
     //TODO sacar esta variable de aquí (hay que guardarlo en disco: shared prefs o algo así)
@@ -87,17 +87,17 @@ public class RecordActivity extends CamaradaActivity implements RecordView, OnSw
         ButterKnife.bind(this);
 
         changeSkin(R.mipmap.activity_record_background_leather);
+
         cameraView.setKeepScreenOn(true);
-
-        swipeListener = new OnSwipeTouchListener(this, this);
-
+        gestureDetecorHelper = new HorizontalGestureDetectorHelper(this, this);
         cameraView.setOnTouchListener(new View.OnTouchListener() {
             @Override
             public boolean onTouch(View v, MotionEvent event) {
                 //gesture detector to detect swipe.
-                return swipeListener.getGestureDetector().onTouchEvent(event);
+                return gestureDetecorHelper.getGestureDetector().onTouchEvent(event);
             }
         });
+
 
         SharedPreferences sharedPreferences = getSharedPreferences(
                 ConfigPreferences.SETTINGS_SHARED_PREFERENCES_FILE_NAME,
@@ -350,14 +350,13 @@ public class RecordActivity extends CamaradaActivity implements RecordView, OnSw
     @Override
     public void showRecordButton() {
         recButton.setActivated(false);
-        recButton.setAlpha(1f);
         recording = false;
     }
 
     @Override
     public void showStopButton() {
         recButton.setActivated(true);
-        recButton.setAlpha(1f);
+        shareButton.setClickable(true);
         recording = true;
         trackSelectedFilterOnStartRecording();
     }

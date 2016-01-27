@@ -5,7 +5,7 @@
  * All rights reserved
  */
 
-package com.videonasocialmedia.camarada.presentation.listener;
+package com.videonasocialmedia.camarada.presentation.helper;
 
 import android.content.Context;
 import android.util.Log;
@@ -13,12 +13,14 @@ import android.view.GestureDetector;
 import android.view.MotionEvent;
 import android.view.View;
 
-public class OnSwipeTouchListener implements View.OnTouchListener, OnSwipeListener {
+import com.videonasocialmedia.camarada.presentation.listener.OnSwipeListener;
+
+public class HorizontalGestureDetectorHelper implements View.OnTouchListener {
 
     private final GestureDetector gestureDetector;
     private OnSwipeListener swipeListener;
 
-    public OnSwipeTouchListener(Context ctx, OnSwipeListener swipeListener){
+    public HorizontalGestureDetectorHelper(Context ctx, OnSwipeListener swipeListener) {
 
         this.swipeListener = swipeListener;
         gestureDetector = new GestureDetector(ctx, new GestureListener());
@@ -31,6 +33,24 @@ public class OnSwipeTouchListener implements View.OnTouchListener, OnSwipeListen
     @Override
     public boolean onTouch(View v, MotionEvent event) {
         return false;
+    }
+
+    public void onSwipeRight() {
+        Log.d("SwipeListener", "Right");
+        swipeListener.onSwipeRight();
+    }
+
+    public void onSwipeLeft() {
+        Log.d("SwipeListener", "Left");
+        swipeListener.onSwipeLeft();
+    }
+
+    public void onSwipeTop() {
+        Log.d("SwipeListener", "Top");
+    }
+
+    public void onSwipeBottom() {
+        Log.d("SwipeListener", "Bottom");
     }
 
     private final class GestureListener extends GestureDetector.SimpleOnGestureListener {
@@ -59,8 +79,7 @@ public class OnSwipeTouchListener implements View.OnTouchListener, OnSwipeListen
                         }
                     }
                     result = true;
-                }
-                else if (Math.abs(diffY) > SWIPE_THRESHOLD && Math.abs(velocityY) > SWIPE_VELOCITY_THRESHOLD) {
+                } else if (Math.abs(diffY) > SWIPE_THRESHOLD && Math.abs(velocityY) > SWIPE_VELOCITY_THRESHOLD) {
                     if (diffY > 0) {
                         onSwipeBottom();
                     } else {
@@ -75,23 +94,5 @@ public class OnSwipeTouchListener implements View.OnTouchListener, OnSwipeListen
             return result;
         }
 
-    }
-
-    public void onSwipeRight() {
-        Log.d("SwipeListener", "Right");
-        swipeListener.onSwipeRight();
-    }
-
-    public void onSwipeLeft() {
-        Log.d("SwipeListener", "Left");
-        swipeListener.onSwipeLeft();
-    }
-
-    public void onSwipeTop() {
-        Log.d("SwipeListener", "Top");
-    }
-
-    public void onSwipeBottom() {
-        Log.d("SwipeListener", "Bottom");
     }
 }
