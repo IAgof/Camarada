@@ -1,4 +1,4 @@
-package com.videonasocialmedia.kamarada;
+package com.videonasocialmedia.Camarada;
 
 import org.junit.Test;
 
