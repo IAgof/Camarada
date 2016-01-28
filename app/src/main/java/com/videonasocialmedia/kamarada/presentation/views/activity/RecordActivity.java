@@ -344,16 +344,26 @@ public class RecordActivity extends KamaradaActivity implements RecordView, OnSw
     public void showRecordButton() {
         recButton.setActivated(false);
         shareButton.setClickable(true);
-        settingsButton.setClickable(true);
+        enableSettingsButton();
         recording = false;
+    }
+
+    private void enableSettingsButton() {
+        settingsButton.setClickable(true);
+        settingsButton.setAlpha(1f);
     }
 
     @Override
     public void showStopButton() {
         recButton.setActivated(true);
-        settingsButton.setClickable(false);
+        disableSettingsButton();
         recording = true;
         trackSelectedFilterOnStartRecording();
+    }
+
+    private void disableSettingsButton() {
+        settingsButton.setClickable(false);
+        settingsButton.setAlpha(0.25f);
     }
 
     private void trackSelectedFilterOnStartRecording() {
