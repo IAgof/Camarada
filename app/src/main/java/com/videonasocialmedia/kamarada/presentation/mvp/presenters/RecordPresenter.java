@@ -63,6 +63,7 @@ public class RecordPresenter implements OnExportFinishedListener {
     private int videoBitrate;
     private MixpanelAPI mixpanel;
     private String fileName;
+    private String resolution;
     /**
      * Export project use case
      */
@@ -128,6 +129,7 @@ public class RecordPresenter implements OnExportFinishedListener {
         String destinationFolderPath = Constants.PATH_APP_TEMP;
         width = 640;
         height = 480;
+        setResolution();
         videoBitrate = 5000000;
         int audioChannels = 1;
         int audioFrequency = 48000;
@@ -137,21 +139,14 @@ public class RecordPresenter implements OnExportFinishedListener {
                 audioChannels, audioFrequency, audioBitrate);
     }
 
-    public String getResolution() {
-        String resolution = width + "x" + height;
+    private void setResolution() {
+        resolution = width + "x" + height;
         preferencesEditor.putString(ConfigPreferences.RESOLUTION, resolution);
         preferencesEditor.putInt(ConfigPreferences.QUALITY, videoBitrate);
         preferencesEditor.commit();
-        JSONObject userProfileProperties = new JSONObject();
-        try {
-            userProfileProperties.put(AnalyticsConstants.RESOLUTION, sharedPreferences.getString(
-                    ConfigPreferences.RESOLUTION, resolution));
-            userProfileProperties.put(AnalyticsConstants.QUALITY,
-                    sharedPreferences.getInt(ConfigPreferences.QUALITY, videoBitrate));
-            mixpanel.getPeople().set(userProfileProperties);
-        } catch (JSONException e) {
-            e.printStackTrace();
-        }
+    }
+
+    public String getResolution() {
         return resolution;
     }
 
@@ -275,6 +270,20 @@ public class RecordPresenter implements OnExportFinishedListener {
                     totalVideosRecorded);
             mixpanel.track(AnalyticsConstants.VIDEO_RECORDED, videoRecordedProperties);
         } catch (JSONException | IOException e) {
+            e.printStackTrace();
+        }
+        updateUserProfileProperties();
+    }
+
+    private void updateUserProfileProperties() {
+        JSONObject userProfileProperties = new JSONObject();
+        try {
+            userProfileProperties.put(AnalyticsConstants.RESOLUTION, sharedPreferences.getString(
+                    ConfigPreferences.RESOLUTION, getResolution()));
+            userProfileProperties.put(AnalyticsConstants.QUALITY,
+                    sharedPreferences.getInt(ConfigPreferences.QUALITY, videoBitrate));
+            mixpanel.getPeople().set(userProfileProperties);
+        } catch (JSONException e) {
             e.printStackTrace();
         }
         mixpanel.getPeople().increment(AnalyticsConstants.TOTAL_RECORDED_VIDEOS, 1);
