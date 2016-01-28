@@ -55,7 +55,7 @@ public class RecordPresenter implements OnExportFinishedListener {
     private SessionConfig config;
     private AVRecorder recorder;
     private SharedPreferences sharedPreferences;
-    private SharedPreferences.Editor editor;
+    private SharedPreferences.Editor preferencesEditor;
     private Context context;
     private GLCameraEncoderView cameraPreview;
     private int width;
@@ -83,7 +83,7 @@ public class RecordPresenter implements OnExportFinishedListener {
         this.context = context;
         this.cameraPreview = cameraPreview;
         this.sharedPreferences = sharedPreferences;
-        editor = sharedPreferences.edit();
+        preferencesEditor = sharedPreferences.edit();
         exportUseCase = new ExportUseCase(this);
         effects = getShaderEffectList();
         getVideosFromTempFolderUseCase = new GetVideosFromTempFolderUseCase();
@@ -126,9 +126,9 @@ public class RecordPresenter implements OnExportFinishedListener {
     private SessionConfig getConfigFromPreferences(SharedPreferences sharedPreferences) {
         // TODO comprobar la máxima resolución que puede coger y usarla aquí
         String destinationFolderPath = Constants.PATH_APP_TEMP;
-        int width = 640;
-        int height = 480;
-        int videoBitrate = 5000000;
+        width = 640;
+        height = 480;
+        videoBitrate = 5000000;
         int audioChannels = 1;
         int audioFrequency = 48000;
         int audioBitrate = 192 * 1000;
@@ -139,9 +139,9 @@ public class RecordPresenter implements OnExportFinishedListener {
 
     public String getResolution() {
         String resolution = width + "x" + height;
-        editor.putString(ConfigPreferences.RESOLUTION, resolution);
-        editor.putInt(ConfigPreferences.QUALITY, videoBitrate);
-        editor.commit();
+        preferencesEditor.putString(ConfigPreferences.RESOLUTION, resolution);
+        preferencesEditor.putInt(ConfigPreferences.QUALITY, videoBitrate);
+        preferencesEditor.commit();
         JSONObject userProfileProperties = new JSONObject();
         try {
             userProfileProperties.put(AnalyticsConstants.RESOLUTION, sharedPreferences.getString(
@@ -259,9 +259,9 @@ public class RecordPresenter implements OnExportFinishedListener {
         originalFile.renameTo(destinationFile);
         int numTotalVideosRecorded = sharedPreferences
                 .getInt(ConfigPreferences.TOTAL_VIDEOS_RECORDED, 0);
-        editor.putInt(ConfigPreferences.TOTAL_VIDEOS_RECORDED,
+        preferencesEditor.putInt(ConfigPreferences.TOTAL_VIDEOS_RECORDED,
                 ++numTotalVideosRecorded);
-        editor.commit();
+        preferencesEditor.commit();
         sendVideoRecordedTracking();
     }
 
@@ -433,15 +433,15 @@ public class RecordPresenter implements OnExportFinishedListener {
         double duration = 0.0;
         if (videoList.size() > 0)
             duration = Utils.getFileDuration(videoList);
-        editor.putLong(ConfigPreferences.VIDEO_DURATION, (long) duration);
-        editor.commit();
+        preferencesEditor.putLong(ConfigPreferences.VIDEO_DURATION, (long) duration);
+        preferencesEditor.commit();
         return duration;
     }
 
     public int getNumberOfClipsRecorded() {
         int numberOfClipsRecorded = getVideosFromTempFolderUseCase.getVideosFromTempFolder().size();
-        editor.putInt(ConfigPreferences.NUMBER_OF_CLIPS, numberOfClipsRecorded);
-        editor.commit();
+        preferencesEditor.putInt(ConfigPreferences.NUMBER_OF_CLIPS, numberOfClipsRecorded);
+        preferencesEditor.commit();
         return numberOfClipsRecorded;
     }
 

@@ -170,11 +170,13 @@ public class InitAppActivity extends KamaradaActivity implements InitAppView, On
             case NORMAL:
                 Log.d(LOG_TAG, " AppStart State NORMAL");
                 initState = "returning";
+                sendFirstTimeProperties(false);
                 initSettings();
                 break;
             case FIRST_TIME_VERSION:
                 Log.d(LOG_TAG, " AppStart State FIRST_TIME_VERSION");
                 initState = "upgrade";
+                sendFirstTimeProperties(false);
                 // example: show what's new
                 // could be appear a mix panel popup with improvements.
 
@@ -186,6 +188,7 @@ public class InitAppActivity extends KamaradaActivity implements InitAppView, On
             case FIRST_TIME:
                 Log.d(LOG_TAG, " AppStart State FIRST_TIME");
                 initState = "firstTime";
+                sendFirstTimeProperties(true);
                 // example: show a tutorial
                 setupCameraSettings();
                 createUserProfile();
@@ -193,6 +196,16 @@ public class InitAppActivity extends KamaradaActivity implements InitAppView, On
                 break;
             default:
                 break;
+        }
+    }
+
+    private void sendFirstTimeProperties(boolean state) {
+        JSONObject firstTimeSuperProperties = new JSONObject();
+        try {
+            firstTimeSuperProperties.put(AnalyticsConstants.FIRST_TIME, state);
+            mixpanel.registerSuperProperties(firstTimeSuperProperties);
+        } catch (JSONException e) {
+            e.printStackTrace();
         }
     }
 
