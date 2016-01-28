@@ -1,9 +1,9 @@
 <resources>
 
 
-    <!-- AppTheme Camarada -->
+    <!-- AppTheme Kamarada -->
 
-    <style name="CamaradaTheme" parent="Theme.AppCompat.Light.NoActionBar">
+    <style name="KamaradaTheme" parent="Theme.AppCompat.Light.NoActionBar">
         <item name="colorPrimary">@color/colorPrimary</item>
         <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
         <item name="colorAccent">@color/colorAccent</item>
@@ -20,15 +20,15 @@
         <item name="windowActionBar">true</item>
         <item name="android:windowFullscreen">false</item>
 
-        <item name="android:alertDialogTheme">@style/CamaradaAlertDialog</item>
-        <item name="toolbarStyle">@style/CamaradaToolbar</item>
+        <item name="android:alertDialogTheme">@style/KamaradaAlertDialog</item>
+        <item name="toolbarStyle">@style/KamaradaToolbar</item>
 
-        <item name="android:preferenceCategoryStyle">@style/CamaradaCategoryPreference</item>
+        <item name="android:preferenceCategoryStyle">@style/KamaradaCategoryPreference</item>
 
     </style>
 
 
-    <style name="CamaradaToolbar" parent="Theme.AppCompat">
+    <style name="KamaradaToolbar" parent="Theme.AppCompat">
         <item name="android:maxHeight">@dimen/abc_action_bar_default_height_material</item>
         <item name="android:background">@color/colorPrimary</item>
         <item name="android:textColorPrimary">@color/textColorTitleToolbar</item>
@@ -38,7 +38,7 @@
 
     </style>
 
-    <style name="CamaradaAlertDialog" parent="Theme.AppCompat.Light.Dialog.Alert">
+    <style name="KamaradaAlertDialog" parent="Theme.AppCompat.Light.Dialog.Alert">
         <item name="colorPrimary">@color/colorPrimary</item>
         <item name="textColorAlertDialogListItem">@color/textColorPrimary</item>
         <item name="colorAccent">@color/colorPrimary</item>
@@ -46,7 +46,7 @@
         <item name="android:windowBackground">@android:color/transparent</item>
     </style>
 
-    <style name="CamaradaDialog" parent="Theme.AppCompat.Light.Dialog">
+    <style name="KamaradaDialog" parent="Theme.AppCompat.Light.Dialog">
         <item name="colorPrimary">@color/colorPrimary</item>
         <item name="textColorAlertDialogListItem">@color/textColorPrimary</item>
         <item name="colorAccent">@color/colorPrimary</item>
@@ -55,14 +55,14 @@
     </style>
 
 
-    <style name="CamaradaCategoryPreference" parent="Theme.AppCompat.Light">
+    <style name="KamaradaCategoryPreference" parent="Theme.AppCompat.Light">
         <item name ="android:textAllCaps">true</item>
         <item name="android:layout">@layout/settings_category_preference</item>
         <item name="android:shouldDisableView">false</item>
         <item name="android:selectable">false</item>
     </style>
 
-    <style name="CamaradaIntroTutorial" parent="Theme.AppCompat.Light">
+    <style name="KamaradaIntroTutorial" parent="Theme.AppCompat.Light">
 
         <item name="windowNoTitle">true</item>
         <item name="windowActionBar">false</item>

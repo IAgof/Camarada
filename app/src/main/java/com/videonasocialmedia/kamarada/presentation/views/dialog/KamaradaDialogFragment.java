@@ -60,7 +60,7 @@ public class KamaradaDialogFragment extends DialogFragment {
     public Dialog onCreateDialog(Bundle savedInstanceState) {
 
 
-        AlertDialog.Builder builder = new AlertDialog.Builder(getActivity(), R.style.CamaradaDialog);
+        AlertDialog.Builder builder = new AlertDialog.Builder(getActivity(), R.style.KamaradaDialog);
         LayoutInflater inflater = getActivity().getLayoutInflater();
         View v = inflater.inflate(R.layout.dialog_videona, null);
         builder.setView(v);
