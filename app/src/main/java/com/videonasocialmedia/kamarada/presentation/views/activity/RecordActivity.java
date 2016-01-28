@@ -66,6 +66,8 @@ public class RecordActivity extends KamaradaActivity implements RecordView, OnSw
     ImageButton filterSepiaButton;
     @Bind(R.id.textFilterSelected)
     TextView textFilterSelected;
+    @Bind(R.id.settingsButton)
+    ImageButton settingsButton;
 
     private RecordPresenter recordPresenter;
     private boolean buttonBackPressed;
@@ -77,6 +79,7 @@ public class RecordActivity extends KamaradaActivity implements RecordView, OnSw
 
     //TODO sacar esta variable de aquí (hay que guardarlo en disco: shared prefs o algo así)
     private int backgroundResourceId;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -121,6 +124,18 @@ public class RecordActivity extends KamaradaActivity implements RecordView, OnSw
     }
 
     @Override
+    public void onPause() {
+        super.onPause();
+        recordPresenter.onPause();
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        recordPresenter.onDestroy();
+    }
+
+    @Override
     protected void onResume() {
         super.onResume();
         recordPresenter.onResume();
@@ -137,34 +152,6 @@ public class RecordActivity extends KamaradaActivity implements RecordView, OnSw
         }
     }
 
-    @Override
-    public void onPause() {
-        super.onPause();
-        recordPresenter.onPause();
-    }
-
-    @Override
-    protected void onStop() {
-        super.onStop();
-        recordPresenter.onStop();
-        finish();
-    }
-
-    @Override
-    protected void onDestroy() {
-        super.onDestroy();
-        recordPresenter.onDestroy();
-    }
-
-    @TargetApi(Build.VERSION_CODES.KITKAT)
-    @Override
-    public void onWindowFocusChanged(boolean hasFocus) {
-        super.onWindowFocusChanged(hasFocus);
-        if (Utils.isKitKatOrHigher() && hasFocus && mUseImmersiveMode) {
-            setKitKatWindowFlags();
-        }
-    }
-
     @TargetApi(Build.VERSION_CODES.KITKAT)
     private void setKitKatWindowFlags() {
         getWindow().getDecorView().setSystemUiVisibility(
@@ -175,6 +162,22 @@ public class RecordActivity extends KamaradaActivity implements RecordView, OnSw
                         | View.SYSTEM_UI_FLAG_FULLSCREEN
                         | View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY
         );
+    }
+
+    @Override
+    protected void onStop() {
+        super.onStop();
+        recordPresenter.onStop();
+        finish();
+    }
+
+    @TargetApi(Build.VERSION_CODES.KITKAT)
+    @Override
+    public void onWindowFocusChanged(boolean hasFocus) {
+        super.onWindowFocusChanged(hasFocus);
+        if (Utils.isKitKatOrHigher() && hasFocus && mUseImmersiveMode) {
+            setKitKatWindowFlags();
+        }
     }
 
     @OnTouch(R.id.recordButton)
@@ -219,26 +222,6 @@ public class RecordActivity extends KamaradaActivity implements RecordView, OnSw
         }
     }
 
-    @OnClick(R.id.settingsButton)
-    public void goToSettings() {
-        sendUserInteractedTracking(AnalyticsConstants.INTERACTION_OPEN_SETTINGS, null);
-        Intent intent = new Intent(this, SettingsActivity.class);
-        startActivity(intent);
-    }
-
-    private void sendUserInteractedTracking(String interaction, String result) {
-        JSONObject userInteractionsProperties = new JSONObject();
-        try {
-            userInteractionsProperties.put(AnalyticsConstants.ACTIVITY, getClass().getSimpleName());
-            userInteractionsProperties.put(AnalyticsConstants.RECORDING, recording);
-            userInteractionsProperties.put(AnalyticsConstants.INTERACTION, interaction);
-            userInteractionsProperties.put(AnalyticsConstants.RESULT, result);
-            mixpanel.track(AnalyticsConstants.USER_INTERACTED, userInteractionsProperties);
-        } catch (JSONException e) {
-            e.printStackTrace();
-        }
-    }
-
     private void sendMetadataTracking() {
         mixpanel.timeEvent(AnalyticsConstants.TIME_EXPORTING_VIDEO);
         JSONObject videoExportedProperties = new JSONObject();
@@ -263,6 +246,26 @@ public class RecordActivity extends KamaradaActivity implements RecordView, OnSw
             }
         };
         t.start();
+    }
+
+    @OnClick(R.id.settingsButton)
+    public void goToSettings() {
+        sendUserInteractedTracking(AnalyticsConstants.INTERACTION_OPEN_SETTINGS, null);
+        Intent intent = new Intent(this, SettingsActivity.class);
+        startActivity(intent);
+    }
+
+    private void sendUserInteractedTracking(String interaction, String result) {
+        JSONObject userInteractionsProperties = new JSONObject();
+        try {
+            userInteractionsProperties.put(AnalyticsConstants.ACTIVITY, getClass().getSimpleName());
+            userInteractionsProperties.put(AnalyticsConstants.RECORDING, recording);
+            userInteractionsProperties.put(AnalyticsConstants.INTERACTION, interaction);
+            userInteractionsProperties.put(AnalyticsConstants.RESULT, result);
+            mixpanel.track(AnalyticsConstants.USER_INTERACTED, userInteractionsProperties);
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
     }
 
     @OnClick(R.id.filterBlackAndWhiteButton)
@@ -304,19 +307,6 @@ public class RecordActivity extends KamaradaActivity implements RecordView, OnSw
         filterBlueButton.setSelected(true);
     }
 
-    private void sendFilterSelectedTracking(String name, String code) {
-        JSONObject userInteractionsProperties = new JSONObject();
-        try {
-            userInteractionsProperties.put(AnalyticsConstants.TYPE, AnalyticsConstants.TYPE_COLOR);
-            userInteractionsProperties.put(AnalyticsConstants.NAME, name);
-            userInteractionsProperties.put(AnalyticsConstants.CODE, code);
-            userInteractionsProperties.put(AnalyticsConstants.RECORDING, recording);
-            mixpanel.track(AnalyticsConstants.FILTER_SELECTED, userInteractionsProperties);
-        } catch (JSONException e) {
-            e.printStackTrace();
-        }
-    }
-
     @Override
     public void showFilterSelectedText(String text) {
         textFilterSelected.setText(text);
@@ -337,16 +327,31 @@ public class RecordActivity extends KamaradaActivity implements RecordView, OnSw
         filterSepiaButton.setSelected(false);
     }
 
+    private void sendFilterSelectedTracking(String name, String code) {
+        JSONObject userInteractionsProperties = new JSONObject();
+        try {
+            userInteractionsProperties.put(AnalyticsConstants.TYPE, AnalyticsConstants.TYPE_COLOR);
+            userInteractionsProperties.put(AnalyticsConstants.NAME, name);
+            userInteractionsProperties.put(AnalyticsConstants.CODE, code);
+            userInteractionsProperties.put(AnalyticsConstants.RECORDING, recording);
+            mixpanel.track(AnalyticsConstants.FILTER_SELECTED, userInteractionsProperties);
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+    }
+
     @Override
     public void showRecordButton() {
         recButton.setActivated(false);
         shareButton.setClickable(true);
+        settingsButton.setClickable(true);
         recording = false;
     }
 
     @Override
     public void showStopButton() {
         recButton.setActivated(true);
+        settingsButton.setClickable(false);
         recording = true;
         trackSelectedFilterOnStartRecording();
     }
@@ -421,23 +426,6 @@ public class RecordActivity extends KamaradaActivity implements RecordView, OnSw
     }
 
     @Override
-    public void onBackPressed() {
-        if (buttonBackPressed) {
-            buttonBackPressed = false;
-            Intent intent = new Intent(Intent.ACTION_MAIN);
-            intent.addCategory(Intent.CATEGORY_HOME);
-            intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);//***Change Here***
-            startActivity(intent);
-            finish();
-            System.exit(0);
-        } else {
-            buttonBackPressed = true;
-            Toast.makeText(getApplicationContext(), getString(R.string.toast_exit),
-                    Toast.LENGTH_SHORT).show();
-        }
-    }
-
-    @Override
     public void showProgressDialog() {
         progressDialog.show();
     }
@@ -485,6 +473,23 @@ public class RecordActivity extends KamaradaActivity implements RecordView, OnSw
     public void showSkinLeatherButton() {
         skinWoodButton.setVisibility(View.GONE);
         skinLeatherButton.setVisibility(View.VISIBLE);
+    }
+
+    @Override
+    public void onBackPressed() {
+        if (buttonBackPressed) {
+            buttonBackPressed = false;
+            Intent intent = new Intent(Intent.ACTION_MAIN);
+            intent.addCategory(Intent.CATEGORY_HOME);
+            intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);//***Change Here***
+            startActivity(intent);
+            finish();
+            System.exit(0);
+        } else {
+            buttonBackPressed = true;
+            Toast.makeText(getApplicationContext(), getString(R.string.toast_exit),
+                    Toast.LENGTH_SHORT).show();
+        }
     }
 
     @Override
