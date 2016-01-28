@@ -58,4 +58,5 @@ public class AnalyticsConstants {
     public static final String SWIPE = "swipe";
     public static final String LEFT = "left";
     public static final String RIGHT = "right";
+    public static final String FIRST_TIME = "firstTime";
 }
