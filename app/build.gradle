@@ -8,7 +8,7 @@ android {
         applicationId "com.videonasocialmedia.kamarada"
         minSdkVersion 18
         targetSdkVersion 23
-        versionCode 1
+        versionCode 3
         versionName "1.0"
     }
 

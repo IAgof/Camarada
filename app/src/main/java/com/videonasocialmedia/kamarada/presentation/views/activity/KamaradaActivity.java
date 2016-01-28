@@ -54,6 +54,9 @@ public class KamaradaActivity extends AppCompatActivity {
         configPermissions();
         KamaradaApplication app = (KamaradaApplication) getApplication();
         tracker = app.getTracker();
+
+        // Habilitar las funciones de display.
+        tracker.enableAdvertisingIdCollection(true);
     }
 
     private void configPermissions() {
