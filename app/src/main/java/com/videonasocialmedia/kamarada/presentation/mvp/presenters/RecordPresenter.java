@@ -295,11 +295,13 @@ public class RecordPresenter implements OnExportFinishedListener {
         //TODO controlar el estado del flash
         int camera = recorder.requestOtherCamera();
         if (camera == 0) {
-            sendUserInteractedTracking(AnalyticsConstants.CHANGE_CAMERA, "back");
+            sendUserInteractedTracking(AnalyticsConstants.CHANGE_CAMERA,
+                    AnalyticsConstants.CAMERA_BACK);
             recordView.showBackCameraSelected();
         } else {
             if (camera == 1) {
-                sendUserInteractedTracking(AnalyticsConstants.CHANGE_CAMERA, "front");
+                sendUserInteractedTracking(AnalyticsConstants.CHANGE_CAMERA,
+                        AnalyticsConstants.CAMERA_FRONT);
                 recordView.showFrontCameraSelected();
             }
         }

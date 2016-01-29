@@ -52,6 +52,8 @@ public class AnalyticsConstants {
     public static final String START = "start";
     public static final String STOP = "stop";
     public static final String CHANGE_CAMERA = "change camera";
+    public static final String CAMERA_BACK = "back";
+    public static final String CAMERA_FRONT = "front";
     public static final String TOTAL_SHARED_VIDEOS = "totalVideosShared";
     public static final String SOCIAL_NETWORK = "socialNetwork";
     public static final String LAST_VIDEO_SHARED = "lastVideoShared";
