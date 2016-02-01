@@ -26,7 +26,7 @@
     <string name="title_contact_section">Contact</string>
 
     <!-- Rate Kamarada -->
-    <string name="rateUsDialogTitle">¿Do you want to rate us?</string>
+    <string name="rateUsDialogTitle">Do you want to rate us?</string>
     <string name="rateUsDialogMessage">If you like Kamarada give us an excellent rate. If you have any
         suggestion or doubt, write us</string>
     <string name="acceptDialogRateUs">Love it</string>
@@ -81,41 +81,7 @@
         What are you waiting to use it?\n\n
         Lights, camera, ... action!\n\n
     </string>
-
-    <!--
-    <string name="aboutUsContent">
-
-
-        Kamarada es la nueva app de vídeo que te brinda la posibilidad de convertirte en director de
-        este género cinematográfico de una forma entretenida y dinámica, sin complicaciones. Diviértete
-        capturando imágenes con esta app que te permite darle a tus secuencias ese toque sepia característico
-        de estas películas, ponerles una música de la época y, cómo no, compartir tus geniales creaciones
-        con tus contactos a través de tu red social favorita.
-
-        Kamarada es una cámara ‘vintage’ de cine mudo. Su estilo Steampunk y sus funcionalidades  darán
-        rienda suelta al cineasta que llevas dentro y te ayudarán a crear y compartir un montón de
-        piezas de este fabuloso género cinematográfico. Tus creaciones no tendrán nada que envidiar
-        a la de los mismísimos Charles Chaplin, Buster Keaton o Stan Laurel y Oliver Hardy,
-        conocidos mundialmente como “El Gordo y el Flaco”.
-
-        ¿A qué esperas para probarla?
-        Luces, cámara… ¡Acción!
-
-        Kamarada is the new video app that bring you the opportunity to be a director of silent movies.
-        With Kamarada, record videos in an easy and friendly way, without complexity. Enjoy yourself recording videos with and
-        old film and music background style. Share your videos with your contacts, use your favorites
-        social networks.
-
-        Kamarada is a camera 'vintage' silent movie. Its Steampunk style and functionality will let
-        yourself go the filmmaker that you are and it will help you to create and share a lot of short
-        movies of these cinematographic genre. Your creations will not have nothing to envy to the
-        worldwide known Charles Chaplin, Buster Keaton or Stan Laurel and Oliver Hardy.
-
-        What do you expect to use it?
-        Lights, camera, ... action!
-
-
-    </string> -->
+    
 
     <string name="videona_web">http://www.videona.com</string>
     <string name="contactUsTitle"><u>Contact us</u></string>
