@@ -164,13 +164,6 @@ public class RecordActivity extends KamaradaActivity implements RecordView, OnSw
         );
     }
 
-    @Override
-    protected void onStop() {
-        super.onStop();
-        recordPresenter.onStop();
-        finish();
-    }
-
     @TargetApi(Build.VERSION_CODES.KITKAT)
     @Override
     public void onWindowFocusChanged(boolean hasFocus) {
@@ -179,6 +172,14 @@ public class RecordActivity extends KamaradaActivity implements RecordView, OnSw
             setKitKatWindowFlags();
         }
     }
+
+    @Override
+    protected void onStop() {
+        super.onStop();
+        recordPresenter.onStop();
+        finish();
+    }
+
 
     @OnTouch(R.id.recordButton)
     boolean onTouch(MotionEvent event) {
@@ -214,38 +215,13 @@ public class RecordActivity extends KamaradaActivity implements RecordView, OnSw
     }
 
     @OnClick(R.id.shareButton)
-    public void exportAndShare() {
-        if (!recording) {
-            showProgressDialog();
-            sendMetadataTracking();
-            startExportThread();
-        }
+    public void share() {
+        goToShare(recordPresenter.getRecordedVideoPath());
     }
 
-    private void sendMetadataTracking() {
-        mixpanel.timeEvent(AnalyticsConstants.TIME_EXPORTING_VIDEO);
-        JSONObject videoExportedProperties = new JSONObject();
-        try {
-            videoExportedProperties.put(AnalyticsConstants.VIDEO_LENGTH,
-                    recordPresenter.getVideoLength());
-            videoExportedProperties.put(AnalyticsConstants.RESOLUTION,
-                    recordPresenter.getResolution());
-            videoExportedProperties.put(AnalyticsConstants.NUMBER_OF_CLIPS,
-                    recordPresenter.getNumberOfClipsRecorded());
-            mixpanel.track(AnalyticsConstants.VIDEO_EXPORTED, videoExportedProperties);
-        } catch (JSONException e) {
-            e.printStackTrace();
-        }
-    }
 
     private void startExportThread() {
-        final Thread t = new Thread() {
-            @Override
-            public void run() {
-                recordPresenter.startExport();
-            }
-        };
-        t.start();
+
     }
 
     @OnClick(R.id.settingsButton)
@@ -415,7 +391,6 @@ public class RecordActivity extends KamaradaActivity implements RecordView, OnSw
 
     @Override
     public void showError(String errorMessage) {
-        mixpanel.track(AnalyticsConstants.TIME_EXPORTING_VIDEO);
         Toast.makeText(this, errorMessage, Toast.LENGTH_SHORT).show();
     }
 
@@ -426,8 +401,6 @@ public class RecordActivity extends KamaradaActivity implements RecordView, OnSw
 
     @Override
     public void goToShare(String videoToSharePath) {
-        mixpanel.track(AnalyticsConstants.TIME_EXPORTING_VIDEO);
-        recordPresenter.removeTempVideos();
         Intent intent = new Intent(this, ShareActivity.class);
         intent.putExtra(ShareActivity.INTENT_EXTRA_VIDEO_PATH, videoToSharePath);
         //TODO once the resource id is saved on shared preference the extra will be necessary
