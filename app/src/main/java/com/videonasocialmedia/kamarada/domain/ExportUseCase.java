@@ -30,8 +30,8 @@ public class ExportUseCase {
                 new SimpleDateFormat("yyyyMMdd_HHmmss").format(new Date()) + ".mp4";
         Movie mergedVideoWithoutAudio = appendVideos(videoPaths);
         if (mergedVideoWithoutAudio != null) {
-            Movie result = addAudio(mergedVideoWithoutAudio, getAudioPath(),
-                    getMovieDuration(videoPaths));
+            double movieDuration = getMovieDuration(mergedVideoWithoutAudio);
+            Movie result = addAudio(mergedVideoWithoutAudio, getAudioPath(), movieDuration);
             if (result != null) {
                 try {
                     Utils.createFile(result, pathVideoExported);
@@ -53,13 +53,11 @@ public class ExportUseCase {
         return result;
     }
 
-    private String getAudioPath() {
-        return Utils.getMusicFileById(R.raw.audio).getAbsolutePath();
-    }
-
-    private double getMovieDuration(List<String> videoPaths) {
-        return Utils.getFileDuration(videoPaths);
-//        return muxer.getFileDuration(videoPaths);
+    private double getMovieDuration(Movie mergedVideoWithoutAudio) {
+        double movieDuration = mergedVideoWithoutAudio.getTracks().get(0).getDuration();
+        double timeScale = mergedVideoWithoutAudio.getTimescale();
+        movieDuration = movieDuration / timeScale * 1000;
+        return movieDuration;
     }
 
     private Movie addAudio(Movie movie, String audioPath, double durationMovie) {
@@ -70,6 +68,15 @@ public class ExportUseCase {
             onExportFinishedListener.onExportError(String.valueOf(e));
         }
         return result;
+    }
+
+    private String getAudioPath() {
+        return Utils.getMusicFileById(R.raw.audio).getAbsolutePath();
+    }
+
+    private double getMovieDuration(List<String> videoPaths) {
+        return Utils.getFileDuration(videoPaths);
+//        return muxer.getFileDuration(videoPaths);
     }
 
 }
