@@ -58,12 +58,8 @@ public class RecordPresenter implements OnExportFinishedListener {
     private SharedPreferences.Editor preferencesEditor;
     private Context context;
     private GLCameraEncoderView cameraPreview;
-    private int width;
-    private int height;
-    private int videoBitrate;
     private MixpanelAPI mixpanel;
     private String fileName;
-    private String resolution;
     /**
      * Export project use case
      */
@@ -75,6 +71,9 @@ public class RecordPresenter implements OnExportFinishedListener {
     private RemoveFilesInTempFolderUseCase removeFilesInTempFolderUseCase;
     private List<ShaderEffect> effects;
     private int selectedFilterIndex = 0;
+    private String lastVideoPath;
+    private String resolution;
+    private int videoBitrate;
 
     public RecordPresenter(Context context, RecordView recordView, EffectSelectorView effectSelectorView,
                            GLCameraEncoderView cameraPreview, SharedPreferences sharedPreferences) {
@@ -93,6 +92,10 @@ public class RecordPresenter implements OnExportFinishedListener {
         initRecorder(cameraPreview, sharedPreferences);
     }
 
+    private List<ShaderEffect> getShaderEffectList() {
+        return GetEffectListUseCase.getShaderEffectsList();
+    }
+
     private void initRecorder(GLCameraEncoderView cameraPreview,
                               SharedPreferences sharedPreferences) {
         config = getConfigFromPreferences(sharedPreferences);
@@ -106,6 +109,29 @@ public class RecordPresenter implements OnExportFinishedListener {
         } catch (IOException ioe) {
             Log.e("ERROR", "ERROR", ioe);
         }
+    }
+
+    private SessionConfig getConfigFromPreferences(SharedPreferences sharedPreferences) {
+        // TODO comprobar la máxima resolución que puede coger y usarla aquí
+        String destinationFolderPath = Constants.PATH_APP_TEMP;
+        int width = 640;
+        int height = 480;
+        videoBitrate = 5000000;
+        int audioChannels = 1;
+        int audioFrequency = 48000;
+        int audioBitrate = 192 * 1000;
+
+        resolution = width + "x" + height;
+
+        SessionConfig result = new SessionConfig(destinationFolderPath, width, height, videoBitrate,
+                audioChannels, audioFrequency, audioBitrate);
+
+        saveResolutionToDisk();
+        return result;
+    }
+
+    public void setSepiaFilter() {
+        setSelectedFilter(Filters.FILTER_SEPIA);
     }
 
     @NonNull
@@ -124,30 +150,50 @@ public class RecordPresenter implements OnExportFinishedListener {
         return animatedOverlayFrames;
     }
 
-    private SessionConfig getConfigFromPreferences(SharedPreferences sharedPreferences) {
-        // TODO comprobar la máxima resolución que puede coger y usarla aquí
-        String destinationFolderPath = Constants.PATH_APP_TEMP;
-        width = 640;
-        height = 480;
-        setResolution();
-        videoBitrate = 5000000;
-        int audioChannels = 1;
-        int audioFrequency = 48000;
-        int audioBitrate = 192 * 1000;
-
-        return new SessionConfig(destinationFolderPath, width, height, videoBitrate,
-                audioChannels, audioFrequency, audioBitrate);
-    }
-
-    private void setResolution() {
-        resolution = width + "x" + height;
-        preferencesEditor.putString(ConfigPreferences.RESOLUTION, resolution);
+    private void saveResolutionToDisk() {
+        preferencesEditor.putString(ConfigPreferences.RESOLUTION, getResolution());
         preferencesEditor.putInt(ConfigPreferences.QUALITY, videoBitrate);
         preferencesEditor.commit();
     }
 
-    public String getResolution() {
+    private void setSelectedFilter(int filterId) {
+        recorder.applyFilter(filterId);
+        updateSelectedIndex(filterId);
+        showSelectedEffect(filterId);
+    }
+
+    private String getResolution() {
         return resolution;
+    }
+
+    private void updateSelectedIndex(int filterID) {
+        ShaderEffect effect = getEffectByFilterId(filterID);
+        selectedFilterIndex = effects.indexOf(effect);
+    }
+
+    private void showSelectedEffect(int filterId) {
+        switch (filterId) {
+            case Filters.FILTER_SEPIA:
+                effectSelectorView.showSepiaSelected();
+                break;
+            case Filters.FILTER_MONO:
+                effectSelectorView.showBlackAndWhiteSelected();
+                break;
+            case Filters.FILTER_AQUA:
+                effectSelectorView.showBlueSelected();
+                break;
+        }
+        effectSelectorView.showFilterSelectedText(effects.get(selectedFilterIndex).getName());
+    }
+
+    private ShaderEffect getEffectByFilterId(int filterID) {
+        for (int index = 0; index < effects.size(); index++) {
+            ShaderEffect current = effects.get(index);
+            if (current.getResourceId() == filterID) {
+                return current;
+            }
+        }
+        return null;
     }
 
     public void onStart() {
@@ -173,10 +219,6 @@ public class RecordPresenter implements OnExportFinishedListener {
         recorder.onHostActivityPaused();
     }
 
-    public int getFilterSelectedId() {
-        return selectedFilterIndex;
-    }
-
     public void stopRecord() {
         if (recorder.isRecording()) {
             sendUserInteractedTracking(AnalyticsConstants.RECORD, AnalyticsConstants.STOP);
@@ -184,7 +226,161 @@ public class RecordPresenter implements OnExportFinishedListener {
             recordView.showRecordButton();
             recordView.enableShareButton();
         }
-        //TODO show a gif to indicate the process is running til the video is added to the project
+    }
+
+    /**
+     * Sends button clicks to Mixpanel Analytics
+     *
+     * @param interaction
+     * @param result
+     */
+    private void sendUserInteractedTracking(String interaction, String result) {
+        JSONObject userInteractionsProperties = new JSONObject();
+        try {
+            userInteractionsProperties.put(AnalyticsConstants.ACTIVITY, context.getClass().getSimpleName());
+            userInteractionsProperties.put(AnalyticsConstants.RECORDING, recorder.isRecording());
+            userInteractionsProperties.put(AnalyticsConstants.INTERACTION, interaction);
+            userInteractionsProperties.put(AnalyticsConstants.RESULT, result);
+            mixpanel.track(AnalyticsConstants.USER_INTERACTED, userInteractionsProperties);
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public int getFilterSelectedId() {
+        return selectedFilterIndex;
+    }
+
+    public void onEventMainThread(MuxerFinishedEvent e) {
+        fileName = renameOutputVideo(config.getOutputPath());
+        updateTotalVideosRecorded();
+        sendVideoRecordedTracking();
+        startExport();
+    }
+
+    private String renameOutputVideo(String originalPath) {
+        File originalFile = new File(originalPath);
+        String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss").format(new Date());
+        String outputPath = "VID_" + timeStamp + ".mp4";
+        File destinationFile = new File(Constants.PATH_APP_TEMP, outputPath);
+        originalFile.renameTo(destinationFile);
+        return outputPath;
+    }
+
+    private void updateTotalVideosRecorded() {
+        int numTotalVideosRecorded = sharedPreferences
+                .getInt(ConfigPreferences.TOTAL_VIDEOS_RECORDED, 0);
+        preferencesEditor.putInt(ConfigPreferences.TOTAL_VIDEOS_RECORDED,
+                ++numTotalVideosRecorded);
+        preferencesEditor.commit();
+    }
+
+    private void sendVideoRecordedTracking() {
+        JSONObject videoRecordedProperties = new JSONObject();
+        int totalVideosRecorded = sharedPreferences.getInt(ConfigPreferences.TOTAL_VIDEOS_RECORDED, 0);
+        try {
+            videoRecordedProperties.put(AnalyticsConstants.VIDEO_LENGTH, getClipDuration());
+            videoRecordedProperties.put(AnalyticsConstants.RESOLUTION, getResolution());
+            videoRecordedProperties.put(AnalyticsConstants.TOTAL_RECORDED_VIDEOS,
+                    totalVideosRecorded);
+            mixpanel.track(AnalyticsConstants.VIDEO_RECORDED, videoRecordedProperties);
+        } catch (JSONException | IOException e) {
+            e.printStackTrace();
+        }
+        updateUserProfileProperties();
+    }
+
+    public void startExport() {
+        recordView.showProgressDialog();
+        final Thread t = new Thread() {
+            @Override
+            public void run() {
+                doStartExport();
+            }
+        };
+        t.start();
+    }
+
+    private double getClipDuration() throws IOException {
+        return Utils.getFileDuration(Constants.PATH_APP_TEMP + File.separator + fileName);
+    }
+
+    private void updateUserProfileProperties() {
+        JSONObject userProfileProperties = new JSONObject();
+        try {
+            userProfileProperties.put(AnalyticsConstants.RESOLUTION, sharedPreferences.getString(
+                    ConfigPreferences.RESOLUTION, getResolution()));
+            userProfileProperties.put(AnalyticsConstants.QUALITY,
+                    sharedPreferences.getInt(ConfigPreferences.QUALITY, config.getVideoBitrate()));
+            mixpanel.getPeople().set(userProfileProperties);
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+        mixpanel.getPeople().increment(AnalyticsConstants.TOTAL_RECORDED_VIDEOS, 1);
+        mixpanel.getPeople().set(AnalyticsConstants.LAST_VIDEO_RECORDED,
+                new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ssZ").format(new Date()));
+    }
+
+    private void doStartExport() {
+        List<String> videoList = getVideosFromTempFolderUseCase.getVideosFromTempFolder();
+        if (videoList.size() > 0) {
+            exportUseCase.export(videoList);
+        } else {
+            recordView.hideProgressDialog();
+        }
+    }
+
+    @Override
+    public void onExportError(String error) {
+        mixpanel.track(AnalyticsConstants.TIME_EXPORTING_VIDEO);
+        recordView.hideProgressDialog();
+        recordView.showError(R.string.errorExportingVideo);
+    }
+
+    @Override
+    public void onExportSuccess(String path) {
+        mixpanel.track(AnalyticsConstants.TIME_EXPORTING_VIDEO);
+        lastVideoPath = path;
+        removeTempVideos();
+        recordView.hideProgressDialog();
+        sendExportedVideoMetadataTracking();
+    }
+
+    public void removeTempVideos() {
+        removeFilesInTempFolderUseCase.removeFilesInTempFolder();
+    }
+
+    private void sendExportedVideoMetadataTracking() {
+        mixpanel.timeEvent(AnalyticsConstants.TIME_EXPORTING_VIDEO);
+        JSONObject videoExportedProperties = new JSONObject();
+        try {
+            videoExportedProperties.put(AnalyticsConstants.VIDEO_LENGTH,
+                    this.getVideoLength());
+            videoExportedProperties.put(AnalyticsConstants.RESOLUTION,
+                    this.getResolution());
+            videoExportedProperties.put(AnalyticsConstants.NUMBER_OF_CLIPS,
+                    this.getNumberOfClipsRecorded());
+            mixpanel.track(AnalyticsConstants.VIDEO_EXPORTED, videoExportedProperties);
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public double getVideoLength() {
+        List<String> videoList = getVideosFromTempFolderUseCase.getVideosFromTempFolder();
+        double duration = 0.0;
+        if (videoList.size() > 0)
+            duration = Utils.getFileDuration(videoList);
+        preferencesEditor.putLong(ConfigPreferences.VIDEO_DURATION, (long) duration);
+        preferencesEditor.commit();
+        return duration;
+    }
+
+    public int getNumberOfClipsRecorded() {
+        int numberOfClipsRecorded = getVideosFromTempFolderUseCase.getVideosFromTempFolder().size();
+        preferencesEditor.putInt(ConfigPreferences.NUMBER_OF_CLIPS, numberOfClipsRecorded);
+        preferencesEditor.commit();
+        return numberOfClipsRecorded;
     }
 
     public void onStop() {
@@ -214,11 +410,6 @@ public class RecordPresenter implements OnExportFinishedListener {
         recorder.reset(config);
     }
 
-    public void onEventMainThread(CameraEncoderResetEvent e) {
-        recorder.applyFilter(getSelectedFilterId());
-        startRecord();
-    }
-
     private void startRecord() {
         mixpanel.timeEvent(AnalyticsConstants.VIDEO_RECORDED);
         sendUserInteractedTracking(AnalyticsConstants.RECORD, AnalyticsConstants.START);
@@ -228,67 +419,9 @@ public class RecordPresenter implements OnExportFinishedListener {
         firstTimeRecording = false;
     }
 
-    public void startExport() {
-        List<String> videoList = getVideosFromTempFolderUseCase.getVideosFromTempFolder();
-        if (videoList.size() > 0) {
-            exportUseCase.export(videoList);
-        } else {
-            recordView.hideProgressDialog();
-            recordView.showMessage(R.string.add_videos_to_project);
-        }
-    }
-
-    public void removeTempVideos() {
-        removeFilesInTempFolderUseCase.removeFilesInTempFolder();
-    }
-
-    public void onEventMainThread(MuxerFinishedEvent e) {
-        renameOutputVideo(config.getOutputPath());
-    }
-
-    private void renameOutputVideo(String path) {
-        File originalFile = new File(path);
-        String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss").format(new Date());
-        fileName = "VID_" + timeStamp + ".mp4";
-        File destinationFile = new File(Constants.PATH_APP_TEMP, fileName);
-        originalFile.renameTo(destinationFile);
-        int numTotalVideosRecorded = sharedPreferences
-                .getInt(ConfigPreferences.TOTAL_VIDEOS_RECORDED, 0);
-        preferencesEditor.putInt(ConfigPreferences.TOTAL_VIDEOS_RECORDED,
-                ++numTotalVideosRecorded);
-        preferencesEditor.commit();
-        sendVideoRecordedTracking();
-    }
-
-    private void sendVideoRecordedTracking() {
-        JSONObject videoRecordedProperties = new JSONObject();
-        int totalVideosRecorded = sharedPreferences.getInt(ConfigPreferences.TOTAL_VIDEOS_RECORDED, 0);
-        try {
-            videoRecordedProperties.put(AnalyticsConstants.VIDEO_LENGTH, getClipDuration());
-            videoRecordedProperties.put(AnalyticsConstants.RESOLUTION, getResolution());
-            videoRecordedProperties.put(AnalyticsConstants.TOTAL_RECORDED_VIDEOS,
-                    totalVideosRecorded);
-            mixpanel.track(AnalyticsConstants.VIDEO_RECORDED, videoRecordedProperties);
-        } catch (JSONException | IOException e) {
-            e.printStackTrace();
-        }
-        updateUserProfileProperties();
-    }
-
-    private void updateUserProfileProperties() {
-        JSONObject userProfileProperties = new JSONObject();
-        try {
-            userProfileProperties.put(AnalyticsConstants.RESOLUTION, sharedPreferences.getString(
-                    ConfigPreferences.RESOLUTION, getResolution()));
-            userProfileProperties.put(AnalyticsConstants.QUALITY,
-                    sharedPreferences.getInt(ConfigPreferences.QUALITY, videoBitrate));
-            mixpanel.getPeople().set(userProfileProperties);
-        } catch (JSONException e) {
-            e.printStackTrace();
-        }
-        mixpanel.getPeople().increment(AnalyticsConstants.TOTAL_RECORDED_VIDEOS, 1);
-        mixpanel.getPeople().set(AnalyticsConstants.LAST_VIDEO_RECORDED,
-                new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ssZ").format(new Date()));
+    public void onEventMainThread(CameraEncoderResetEvent e) {
+        recorder.applyFilter(getSelectedFilterId());
+        startRecord();
     }
 
     public void changeCamera() {
@@ -338,37 +471,6 @@ public class RecordPresenter implements OnExportFinishedListener {
         recordView.showSkinWoodButton();
     }
 
-    @Override
-    public void onExportError(String error) {
-        recordView.hideProgressDialog();
-        recordView.showError(R.string.errorExportingVideo);
-    }
-
-    @Override
-    public void onExportSuccess(String path) {
-        recordView.hideProgressDialog();
-        recordView.goToShare(path);
-    }
-
-    public void setSepiaFilter() {
-        setSelectedFilter(Filters.FILTER_SEPIA);
-    }
-
-    private void updateSelectedIndex(int filterID) {
-        ShaderEffect effect = getEffectByFilterId(filterID);
-        selectedFilterIndex = effects.indexOf(effect);
-    }
-
-    private ShaderEffect getEffectByFilterId(int filterID) {
-        for (int index = 0; index < effects.size(); index++) {
-            ShaderEffect current = effects.get(index);
-            if (current.getResourceId() == filterID) {
-                return current;
-            }
-        }
-        return null;
-    }
-
     public void setBlackAndWitheFilter() {
         setSelectedFilter(Filters.FILTER_MONO);
     }
@@ -378,7 +480,7 @@ public class RecordPresenter implements OnExportFinishedListener {
     }
 
     public void setNextFilter() {
-        selectedFilterIndex = (selectedFilterIndex + 1) % effects.size();
+        selectedFilterIndex = ( selectedFilterIndex + 1 ) % effects.size();
         setSelectedFilter(getSelectedFilterId());
     }
 
@@ -389,69 +491,7 @@ public class RecordPresenter implements OnExportFinishedListener {
         setSelectedFilter(getSelectedFilterId());
     }
 
-    private void setSelectedFilter(int filterId) {
-        recorder.applyFilter(filterId);
-        updateSelectedIndex(filterId);
-        showSelectedEffect(filterId);
+    public String getRecordedVideoPath() {
+        return lastVideoPath;
     }
-
-    private void showSelectedEffect(int filterId) {
-        switch (filterId) {
-            case Filters.FILTER_SEPIA:
-                effectSelectorView.showSepiaSelected();
-                break;
-            case Filters.FILTER_MONO:
-                effectSelectorView.showBlackAndWhiteSelected();
-                break;
-            case Filters.FILTER_AQUA:
-                effectSelectorView.showBlueSelected();
-                break;
-        }
-        effectSelectorView.showFilterSelectedText(effects.get(selectedFilterIndex).getName());
-    }
-
-    private List<ShaderEffect> getShaderEffectList() {
-        return GetEffectListUseCase.getShaderEffectsList();
-    }
-
-    /**
-     * Sends button clicks to Mixpanel Analytics
-     *
-     * @param interaction
-     * @param result
-     */
-    private void sendUserInteractedTracking(String interaction, String result) {
-        JSONObject userInteractionsProperties = new JSONObject();
-        try {
-            userInteractionsProperties.put(AnalyticsConstants.ACTIVITY, context.getClass().getSimpleName());
-            userInteractionsProperties.put(AnalyticsConstants.RECORDING, recorder.isRecording());
-            userInteractionsProperties.put(AnalyticsConstants.INTERACTION, interaction);
-            userInteractionsProperties.put(AnalyticsConstants.RESULT, result);
-            mixpanel.track(AnalyticsConstants.USER_INTERACTED, userInteractionsProperties);
-        } catch (JSONException e) {
-            e.printStackTrace();
-        }
-    }
-
-    private double getClipDuration() throws IOException {
-        return Utils.getFileDuration(Constants.PATH_APP_TEMP + File.separator + fileName);
-    }
-
-    public double getVideoLength() {
-        List<String> videoList = getVideosFromTempFolderUseCase.getVideosFromTempFolder();
-        double duration = 0.0;
-        if (videoList.size() > 0)
-            duration = Utils.getFileDuration(videoList);
-        preferencesEditor.putLong(ConfigPreferences.VIDEO_DURATION, (long) duration);
-        preferencesEditor.commit();
-        return duration;
-    }
-
-    public int getNumberOfClipsRecorded() {
-        int numberOfClipsRecorded = getVideosFromTempFolderUseCase.getVideosFromTempFolder().size();
-        preferencesEditor.putInt(ConfigPreferences.NUMBER_OF_CLIPS, numberOfClipsRecorded);
-        preferencesEditor.commit();
-        return numberOfClipsRecorded;
-    }
-
 }
