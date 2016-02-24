@@ -74,6 +74,7 @@ public class RecordPresenter implements OnExportFinishedListener {
     private String lastVideoPath;
     private String resolution;
     private int videoBitrate;
+    private int numRecordedVideos = 0;
 
     public RecordPresenter(Context context, RecordView recordView, EffectSelectorView effectSelectorView,
                            GLCameraEncoderView cameraPreview, SharedPreferences sharedPreferences) {
@@ -253,8 +254,9 @@ public class RecordPresenter implements OnExportFinishedListener {
 
     public void onEventMainThread(MuxerFinishedEvent e) {
         fileName = renameOutputVideo(config.getOutputPath());
-        updateTotalVideosRecorded();
         recordView.stopProgressBar();
+        recordView.showRecordedVideoThumbIndicator(getLastVideoPath(), ++numRecordedVideos);
+        updateTotalVideosRecorded();
         sendVideoRecordedTracking();
         startExport();
     }
@@ -266,6 +268,10 @@ public class RecordPresenter implements OnExportFinishedListener {
         File destinationFile = new File(Constants.PATH_APP_TEMP, outputPath);
         originalFile.renameTo(destinationFile);
         return outputPath;
+    }
+
+    private String getLastVideoPath() {
+        return Constants.PATH_APP_TEMP + File.separator + fileName;
     }
 
     private void updateTotalVideosRecorded() {

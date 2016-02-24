@@ -15,9 +15,11 @@ import android.view.WindowManager;
 import android.widget.ImageButton;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.bumptech.glide.Glide;
 import com.videonasocialmedia.avrecorder.Filters;
 import com.videonasocialmedia.avrecorder.view.GLCameraEncoderView;
 import com.videonasocialmedia.kamarada.R;
@@ -26,6 +28,7 @@ import com.videonasocialmedia.kamarada.presentation.listener.OnSwipeListener;
 import com.videonasocialmedia.kamarada.presentation.mvp.presenters.RecordPresenter;
 import com.videonasocialmedia.kamarada.presentation.mvp.views.EffectSelectorView;
 import com.videonasocialmedia.kamarada.presentation.mvp.views.RecordView;
+import com.videonasocialmedia.kamarada.presentation.views.widget.CircleImageView;
 import com.videonasocialmedia.kamarada.utils.AnalyticsConstants;
 import com.videonasocialmedia.kamarada.utils.ConfigPreferences;
 import com.videonasocialmedia.kamarada.utils.Utils;
@@ -73,6 +76,12 @@ public class RecordActivity extends KamaradaActivity implements RecordView, OnSw
     ImageButton settingsButton;
     @Bind(R.id.progressBar)
     ProgressBar progressBar;
+    @Bind(R.id.videoThumbIndicator)
+    RelativeLayout videoThumbIndicator;
+    @Bind(R.id.videoThumb)
+    CircleImageView videoThumb;
+    @Bind(R.id.videoNumber)
+    TextView videoNumber;
 
     private RecordPresenter recordPresenter;
     private boolean buttonBackPressed;
@@ -81,8 +90,6 @@ public class RecordActivity extends KamaradaActivity implements RecordView, OnSw
     private boolean mUseImmersiveMode = true;
     private HorizontalGestureDetectorHelper gestureDetecorHelper;
     private int progressTime = 0;
-    private int startTime = 0;
-
 
     //TODO sacar esta variable de aquí (hay que guardarlo en disco: shared prefs o algo así)
     private int backgroundResourceId;
@@ -99,7 +106,6 @@ public class RecordActivity extends KamaradaActivity implements RecordView, OnSw
             timerHandler.postDelayed(this, delay);
         }
     };
-
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -143,17 +149,7 @@ public class RecordActivity extends KamaradaActivity implements RecordView, OnSw
             progressBar.getBackground().setColorFilter(getResources().getColor(R.color.colorAccent),
                     PorterDuff.Mode.SRC_ATOP);
         progressBar.setScaleY(3f);
-        progressBar.setMax(10000);
-    }
-
-    @Override
-    public void startProgressBar() {
-        timerHandler.postDelayed(timerRunnable, 0);
-    }
-
-    @Override
-    public void stopProgressBar() {
-        timerHandler.removeCallbacks(timerRunnable);
+        progressBar.setMax(30000);
     }
 
     @Override
@@ -381,6 +377,28 @@ public class RecordActivity extends KamaradaActivity implements RecordView, OnSw
     private void disableSettingsButton() {
         settingsButton.setClickable(false);
         settingsButton.setAlpha(0.25f);
+    }
+
+    @Override
+    public void startProgressBar() {
+        timerHandler.postDelayed(timerRunnable, 0);
+    }
+
+    @Override
+    public void stopProgressBar() {
+        timerHandler.removeCallbacks(timerRunnable);
+    }
+
+    @Override
+    public void showRecordedVideoThumbIndicator(String pathLastRecordedVideo, int numberOfVideos) {
+        videoThumbIndicator.setVisibility(View.VISIBLE);
+        Glide.with(this).load(pathLastRecordedVideo).into(videoThumb);
+        videoNumber.setText(String.valueOf(numberOfVideos));
+    }
+
+    @Override
+    public void hideRecordedVideoThumbIndicator() {
+        videoThumbIndicator.setVisibility(View.GONE);
     }
 
     private void trackSelectedFilterOnStartRecording() {

@@ -13,15 +13,53 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_gravity="center"
+        android:layout_marginTop="12dp"
         android:layout_marginBottom="8dp">
+
+        <RelativeLayout
+            android:id="@+id/videoThumbIndicator"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="16dp"
+            android:layout_centerVertical="true"
+            android:layout_alignParentStart="true"
+            android:visibility="gone"
+            tools:visibility="visible">
+
+            <com.videonasocialmedia.kamarada.presentation.views.widget.CircleImageView
+                android:id="@+id/videoThumb"
+                android:layout_width="53dp"
+                android:layout_height="53dp"
+                android:background="@null"
+                android:scaleType="fitCenter"
+                app:border_width="5dp"
+                app:border_color="@color/colorAccent"
+                tools:src="@mipmap/common_icon_settings_normal" />
+
+            <TextView
+                android:id="@+id/videoNumber"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignStart="@+id/videoThumb"
+                android:layout_alignEnd="@+id/videoThumb"
+                android:layout_alignTop="@+id/videoThumb"
+                android:layout_alignBottom="@+id/videoThumb"
+                android:scaleType="fitCenter"
+                android:textAppearance="?android:attr/textAppearanceMedium"
+                android:textColor="@color/colorAccent"
+                android:gravity="center"
+                android:textSize="27sp"
+                tools:text="0" />
+
+        </RelativeLayout>
 
         <ImageButton
             android:id="@+id/settingsButton"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_alignParentRight="true"
+            android:layout_alignParentEnd="true"
             android:layout_centerVertical="true"
-            android:layout_marginRight="8dp"
+            android:layout_marginEnd="16dp"
             android:background="@null"
             android:src="@mipmap/common_icon_settings_normal" />
 

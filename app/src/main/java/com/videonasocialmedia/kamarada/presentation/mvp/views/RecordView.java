@@ -43,4 +43,8 @@ public interface RecordView {
 
     void stopProgressBar();
 
+    void showRecordedVideoThumbIndicator(String pathLastRecordedVideo, int numberOfRecordedVideos);
+
+    void hideRecordedVideoThumbIndicator();
+
 }
