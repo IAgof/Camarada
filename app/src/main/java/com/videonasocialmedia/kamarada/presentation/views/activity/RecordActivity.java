@@ -5,13 +5,16 @@ import android.app.AlertDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.graphics.PorterDuff;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.Handler;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.WindowManager;
 import android.widget.ImageButton;
 import android.widget.LinearLayout;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -68,6 +71,8 @@ public class RecordActivity extends KamaradaActivity implements RecordView, OnSw
     TextView textFilterSelected;
     @Bind(R.id.settingsButton)
     ImageButton settingsButton;
+    @Bind(R.id.progressBar)
+    ProgressBar progressBar;
 
     private RecordPresenter recordPresenter;
     private boolean buttonBackPressed;
@@ -75,10 +80,25 @@ public class RecordActivity extends KamaradaActivity implements RecordView, OnSw
     private AlertDialog progressDialog;
     private boolean mUseImmersiveMode = true;
     private HorizontalGestureDetectorHelper gestureDetecorHelper;
+    private int progressTime = 0;
+    private int startTime = 0;
 
 
     //TODO sacar esta variable de aquí (hay que guardarlo en disco: shared prefs o algo así)
     private int backgroundResourceId;
+
+    Handler timerHandler = new Handler();
+    Runnable timerRunnable = new Runnable() {
+        long delay = 100;
+        @Override
+        public void run() {
+            progressTime  += delay;
+            if(progressTime >= progressBar.getMax())
+                progressBar.setMax(progressBar.getMax()*4);
+            progressBar.setProgress(Math.round(progressTime));
+            timerHandler.postDelayed(this, delay);
+        }
+    };
 
 
     @Override
@@ -106,6 +126,7 @@ public class RecordActivity extends KamaradaActivity implements RecordView, OnSw
                 Context.MODE_PRIVATE);
         recordPresenter = new RecordPresenter(this, this, this, cameraView, sharedPreferences);
         createProgressDialog();
+        initProgressBar();
     }
 
     private void createProgressDialog() {
@@ -114,6 +135,25 @@ public class RecordActivity extends KamaradaActivity implements RecordView, OnSw
         progressDialog = builder.setCancelable(false)
                 .setView(dialogView)
                 .create();
+    }
+
+    private void initProgressBar() {
+        int currentapiVersion = android.os.Build.VERSION.SDK_INT;
+        if (currentapiVersion < android.os.Build.VERSION_CODES.LOLLIPOP)
+            progressBar.getBackground().setColorFilter(getResources().getColor(R.color.colorAccent),
+                    PorterDuff.Mode.SRC_ATOP);
+        progressBar.setScaleY(3f);
+        progressBar.setMax(10000);
+    }
+
+    @Override
+    public void startProgressBar() {
+        timerHandler.postDelayed(timerRunnable, 0);
+    }
+
+    @Override
+    public void stopProgressBar() {
+        timerHandler.removeCallbacks(timerRunnable);
     }
 
     @Override
@@ -127,6 +167,7 @@ public class RecordActivity extends KamaradaActivity implements RecordView, OnSw
     public void onPause() {
         super.onPause();
         recordPresenter.onPause();
+        timerHandler.removeCallbacks(timerRunnable);
     }
 
     @Override

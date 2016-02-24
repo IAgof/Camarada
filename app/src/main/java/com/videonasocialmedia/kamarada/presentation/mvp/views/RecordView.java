@@ -39,4 +39,8 @@ public interface RecordView {
 
     void showSkinLeatherButton();
 
+    void startProgressBar();
+
+    void stopProgressBar();
+
 }

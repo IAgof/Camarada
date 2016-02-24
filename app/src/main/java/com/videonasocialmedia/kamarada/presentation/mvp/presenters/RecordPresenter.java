@@ -254,6 +254,7 @@ public class RecordPresenter implements OnExportFinishedListener {
     public void onEventMainThread(MuxerFinishedEvent e) {
         fileName = renameOutputVideo(config.getOutputPath());
         updateTotalVideosRecorded();
+        recordView.stopProgressBar();
         sendVideoRecordedTracking();
         startExport();
     }
@@ -401,6 +402,7 @@ public class RecordPresenter implements OnExportFinishedListener {
                 }
             } else {
                 startRecord();
+
             }
         }
     }
@@ -416,6 +418,7 @@ public class RecordPresenter implements OnExportFinishedListener {
         recorder.startRecording();
         recordView.showStopButton();
         recordView.disableShareButton();
+        recordView.startProgressBar();
         firstTimeRecording = false;
     }
 
