@@ -94,8 +94,8 @@ public class RecordActivity extends KamaradaActivity implements RecordView, OnSw
     //TODO sacar esta variable de aquí (hay que guardarlo en disco: shared prefs o algo así)
     private int backgroundResourceId;
 
-    Handler timerHandler = new Handler();
-    Runnable timerRunnable = new Runnable() {
+    private Handler timerHandler = new Handler();
+    private Runnable timerRunnable = new Runnable() {
         long delay = 100;
         @Override
         public void run() {
@@ -217,7 +217,6 @@ public class RecordActivity extends KamaradaActivity implements RecordView, OnSw
         finish();
     }
 
-
     @OnTouch(R.id.recordButton)
     boolean onTouch(MotionEvent event) {
         if (event.getAction() == MotionEvent.ACTION_DOWN) {
@@ -252,13 +251,10 @@ public class RecordActivity extends KamaradaActivity implements RecordView, OnSw
     }
 
     @OnClick(R.id.shareButton)
-    public void share() {
-        goToShare(recordPresenter.getRecordedVideoPath());
-    }
-
-
-    private void startExportThread() {
-
+    public void exportAndShare() {
+        if (!recording) {
+            recordPresenter.startExport();
+        }
     }
 
     @OnClick(R.id.settingsButton)
@@ -320,20 +316,6 @@ public class RecordActivity extends KamaradaActivity implements RecordView, OnSw
         filterBlueButton.setSelected(true);
     }
 
-    @Override
-    public void showFilterSelectedText(String text) {
-        textFilterSelected.setText(text);
-
-        // make TextView visible here
-        textFilterSelected.setVisibility(View.VISIBLE);
-        //use postDelayed to hide TextView
-        textFilterSelected.postDelayed(new Runnable() {
-            public void run() {
-                textFilterSelected.setVisibility(View.INVISIBLE);
-            }
-        }, 2000);
-    }
-
     private void resetSelections() {
         filterBlackAndWhiteButton.setSelected(false);
         filterBlueButton.setSelected(false);
@@ -351,6 +333,17 @@ public class RecordActivity extends KamaradaActivity implements RecordView, OnSw
         } catch (JSONException e) {
             e.printStackTrace();
         }
+    }
+
+    @Override
+    public void showFilterSelectedText(String text) {
+        textFilterSelected.setText(text);
+        textFilterSelected.setVisibility(View.VISIBLE);
+        textFilterSelected.postDelayed(new Runnable() {
+            public void run() {
+                textFilterSelected.setVisibility(View.INVISIBLE);
+            }
+        }, 2000);
     }
 
     @Override
@@ -379,6 +372,24 @@ public class RecordActivity extends KamaradaActivity implements RecordView, OnSw
         settingsButton.setAlpha(0.25f);
     }
 
+    private void trackSelectedFilterOnStartRecording() {
+        int filterId = recordPresenter.getFilterSelectedId();
+        switch (filterId) {
+            case Filters.FILTER_SEPIA:
+                sendFilterSelectedTracking(AnalyticsConstants.FILTER_NAME_SEPIA,
+                        AnalyticsConstants.FILTER_CODE_SEPIA);
+                break;
+            case Filters.FILTER_MONO:
+                sendFilterSelectedTracking(AnalyticsConstants.FILTER_NAME_MONO,
+                        AnalyticsConstants.FILTER_CODE_MONO);
+                break;
+            case Filters.FILTER_AQUA:
+                sendFilterSelectedTracking(AnalyticsConstants.FILTER_NAME_AQUA,
+                        AnalyticsConstants.FILTER_CODE_AQUA);
+                break;
+        }
+    }
+
     @Override
     public void startProgressBar() {
         timerHandler.postDelayed(timerRunnable, 0);
@@ -401,24 +412,6 @@ public class RecordActivity extends KamaradaActivity implements RecordView, OnSw
         videoThumbIndicator.setVisibility(View.GONE);
     }
 
-    private void trackSelectedFilterOnStartRecording() {
-        int filterId = recordPresenter.getFilterSelectedId();
-        switch (filterId) {
-            case Filters.FILTER_SEPIA:
-                sendFilterSelectedTracking(AnalyticsConstants.FILTER_NAME_SEPIA,
-                        AnalyticsConstants.FILTER_CODE_SEPIA);
-                break;
-            case Filters.FILTER_MONO:
-                sendFilterSelectedTracking(AnalyticsConstants.FILTER_NAME_MONO,
-                        AnalyticsConstants.FILTER_CODE_MONO);
-                break;
-            case Filters.FILTER_AQUA:
-                sendFilterSelectedTracking(AnalyticsConstants.FILTER_NAME_AQUA,
-                        AnalyticsConstants.FILTER_CODE_AQUA);
-                break;
-        }
-    }
-
     @Override
     public void showFlashOn(boolean on) {
         flashButton.setActivated(on);
@@ -426,16 +419,11 @@ public class RecordActivity extends KamaradaActivity implements RecordView, OnSw
 
     @Override
     public void showFlashSupported(boolean supported) {
-        if (supported) {
+        flashButton.setEnabled(supported);
+        if (supported)
             flashButton.setImageAlpha(255);
-            flashButton.setActivated(false);
-            flashButton.setActivated(false);
-            flashButton.setEnabled(true);
-        } else {
+        else
             flashButton.setImageAlpha(65);
-            flashButton.setActivated(false);
-            flashButton.setEnabled(false);
-        }
     }
 
     @Override
@@ -521,17 +509,21 @@ public class RecordActivity extends KamaradaActivity implements RecordView, OnSw
     public void onBackPressed() {
         if (buttonBackPressed) {
             buttonBackPressed = false;
-            Intent intent = new Intent(Intent.ACTION_MAIN);
-            intent.addCategory(Intent.CATEGORY_HOME);
-            intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);//***Change Here***
-            startActivity(intent);
-            finish();
-            System.exit(0);
+            exitApp();
         } else {
             buttonBackPressed = true;
             Toast.makeText(getApplicationContext(), getString(R.string.toast_exit),
                     Toast.LENGTH_SHORT).show();
         }
+    }
+
+    private void exitApp() {
+        Intent intent = new Intent(Intent.ACTION_MAIN);
+        intent.addCategory(Intent.CATEGORY_HOME);
+        intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);//***Change Here***
+        startActivity(intent);
+        finish();
+        System.exit(0);
     }
 
     @Override

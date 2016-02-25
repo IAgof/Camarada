@@ -21,6 +21,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="16dp"
+            android:gravity="center"
             android:layout_centerVertical="true"
             android:layout_alignParentStart="true"
             android:visibility="gone"
@@ -32,6 +33,8 @@
                 android:layout_height="53dp"
                 android:background="@null"
                 android:scaleType="fitCenter"
+                android:layout_centerHorizontal="true"
+                android:layout_centerVertical="true"
                 app:border_width="5dp"
                 app:border_color="@color/colorAccent"
                 tools:src="@mipmap/common_icon_settings_normal" />
@@ -40,15 +43,17 @@
                 android:id="@+id/videoNumber"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_alignStart="@+id/videoThumb"
-                android:layout_alignEnd="@+id/videoThumb"
-                android:layout_alignTop="@+id/videoThumb"
-                android:layout_alignBottom="@+id/videoThumb"
+                android:layout_centerHorizontal="true"
+                android:layout_centerVertical="true"
                 android:scaleType="fitCenter"
                 android:textAppearance="?android:attr/textAppearanceMedium"
                 android:textColor="@color/colorAccent"
                 android:gravity="center"
                 android:textSize="27sp"
+                android:shadowColor="@color/textShadow"
+                android:shadowDx="2"
+                android:shadowDy="2"
+                android:shadowRadius="2"
                 tools:text="0" />
 
         </RelativeLayout>
