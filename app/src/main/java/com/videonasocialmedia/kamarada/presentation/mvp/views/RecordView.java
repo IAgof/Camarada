@@ -39,4 +39,12 @@ public interface RecordView {
 
     void showSkinLeatherButton();
 
+    void startProgressBar();
+
+    void stopProgressBar();
+
+    void showRecordedVideoThumbIndicator(String pathLastRecordedVideo, int numberOfRecordedVideos);
+
+    void hideRecordedVideoThumbIndicator();
+
 }

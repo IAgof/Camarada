@@ -13,15 +13,58 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_gravity="center"
+        android:layout_marginTop="12dp"
         android:layout_marginBottom="8dp">
+
+        <RelativeLayout
+            android:id="@+id/videoThumbIndicator"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="16dp"
+            android:gravity="center"
+            android:layout_centerVertical="true"
+            android:layout_alignParentStart="true"
+            android:visibility="gone"
+            tools:visibility="visible">
+
+            <com.videonasocialmedia.kamarada.presentation.views.widget.CircleImageView
+                android:id="@+id/videoThumb"
+                android:layout_width="53dp"
+                android:layout_height="53dp"
+                android:background="@null"
+                android:scaleType="fitCenter"
+                android:layout_centerHorizontal="true"
+                android:layout_centerVertical="true"
+                app:border_width="5dp"
+                app:border_color="@color/colorAccent"
+                tools:src="@mipmap/common_icon_settings_normal" />
+
+            <TextView
+                android:id="@+id/videoNumber"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerHorizontal="true"
+                android:layout_centerVertical="true"
+                android:scaleType="fitCenter"
+                android:textAppearance="?android:attr/textAppearanceMedium"
+                android:textColor="@color/colorAccent"
+                android:gravity="center"
+                android:textSize="27sp"
+                android:shadowColor="@color/textShadow"
+                android:shadowDx="2"
+                android:shadowDy="2"
+                android:shadowRadius="2"
+                tools:text="0" />
+
+        </RelativeLayout>
 
         <ImageButton
             android:id="@+id/settingsButton"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_alignParentRight="true"
+            android:layout_alignParentEnd="true"
             android:layout_centerVertical="true"
-            android:layout_marginRight="8dp"
+            android:layout_marginEnd="16dp"
             android:background="@null"
             android:src="@mipmap/common_icon_settings_normal" />
 
@@ -44,16 +87,15 @@
             android:layout_height="wrap_content"
             android:layout_gravity="center"
             android:layout_marginBottom="4dp"
-        android:background="@color/colorAccent"
+            android:background="@color/colorAccent"
             android:padding="6dp"
             app:aspect="four_three">
 
             <View
-            android:id="@+id/manualPreview"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:clickable="true"
-            />
+                android:id="@+id/manualPreview"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:clickable="true" />
 
             <com.videonasocialmedia.avrecorder.view.GLCameraEncoderView
                 android:id="@+id/cameraPreview"
@@ -74,8 +116,32 @@
 
     </com.videonasocialmedia.avrecorder.view.AspectFrameLayout>
 
+    <RelativeLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:gravity="center">
 
+        <ProgressBar
+            android:id="@+id/progressBar"
+            style="?android:attr/progressBarStyleHorizontal"
+            android:layout_alignStart="@+id/progressBarImage"
+            android:layout_alignEnd="@+id/progressBarImage"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:progress="0"
+            tools:progress="70"
+            android:layout_marginStart="11dp"
+            android:layout_marginEnd="15dp"
+            android:backgroundTint="@color/colorAccent"/>
 
+        <ImageView
+            android:id="@+id/progressBarImage"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@mipmap/activity_record_progress_bar"/>
+
+    </RelativeLayout>
 
     <RelativeLayout
         android:layout_width="match_parent"

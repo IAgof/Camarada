@@ -5,16 +5,21 @@ import android.app.AlertDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.graphics.PorterDuff;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.Handler;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.WindowManager;
 import android.widget.ImageButton;
 import android.widget.LinearLayout;
+import android.widget.ProgressBar;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.bumptech.glide.Glide;
 import com.videonasocialmedia.avrecorder.Filters;
 import com.videonasocialmedia.avrecorder.view.GLCameraEncoderView;
 import com.videonasocialmedia.kamarada.R;
@@ -23,6 +28,7 @@ import com.videonasocialmedia.kamarada.presentation.listener.OnSwipeListener;
 import com.videonasocialmedia.kamarada.presentation.mvp.presenters.RecordPresenter;
 import com.videonasocialmedia.kamarada.presentation.mvp.views.EffectSelectorView;
 import com.videonasocialmedia.kamarada.presentation.mvp.views.RecordView;
+import com.videonasocialmedia.kamarada.presentation.views.widget.CircleImageView;
 import com.videonasocialmedia.kamarada.utils.AnalyticsConstants;
 import com.videonasocialmedia.kamarada.utils.ConfigPreferences;
 import com.videonasocialmedia.kamarada.utils.Utils;
@@ -68,6 +74,14 @@ public class RecordActivity extends KamaradaActivity implements RecordView, OnSw
     TextView textFilterSelected;
     @Bind(R.id.settingsButton)
     ImageButton settingsButton;
+    @Bind(R.id.progressBar)
+    ProgressBar progressBar;
+    @Bind(R.id.videoThumbIndicator)
+    RelativeLayout videoThumbIndicator;
+    @Bind(R.id.videoThumb)
+    CircleImageView videoThumb;
+    @Bind(R.id.videoNumber)
+    TextView videoNumber;
 
     private RecordPresenter recordPresenter;
     private boolean buttonBackPressed;
@@ -75,11 +89,23 @@ public class RecordActivity extends KamaradaActivity implements RecordView, OnSw
     private AlertDialog progressDialog;
     private boolean mUseImmersiveMode = true;
     private HorizontalGestureDetectorHelper gestureDetecorHelper;
-
+    private int progressTime = 0;
 
     //TODO sacar esta variable de aquí (hay que guardarlo en disco: shared prefs o algo así)
     private int backgroundResourceId;
 
+    private Handler timerHandler = new Handler();
+    private Runnable timerRunnable = new Runnable() {
+        long delay = 100;
+        @Override
+        public void run() {
+            progressTime  += delay;
+            if(progressTime >= progressBar.getMax())
+                progressBar.setMax(progressBar.getMax()*4);
+            progressBar.setProgress(Math.round(progressTime));
+            timerHandler.postDelayed(this, delay);
+        }
+    };
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -106,6 +132,7 @@ public class RecordActivity extends KamaradaActivity implements RecordView, OnSw
                 Context.MODE_PRIVATE);
         recordPresenter = new RecordPresenter(this, this, this, cameraView, sharedPreferences);
         createProgressDialog();
+        initProgressBar();
     }
 
     private void createProgressDialog() {
@@ -114,6 +141,15 @@ public class RecordActivity extends KamaradaActivity implements RecordView, OnSw
         progressDialog = builder.setCancelable(false)
                 .setView(dialogView)
                 .create();
+    }
+
+    private void initProgressBar() {
+        int currentapiVersion = android.os.Build.VERSION.SDK_INT;
+        if (currentapiVersion < android.os.Build.VERSION_CODES.LOLLIPOP)
+            progressBar.getBackground().setColorFilter(getResources().getColor(R.color.colorAccent),
+                    PorterDuff.Mode.SRC_ATOP);
+        progressBar.setScaleY(3f);
+        progressBar.setMax(30000);
     }
 
     @Override
@@ -127,6 +163,7 @@ public class RecordActivity extends KamaradaActivity implements RecordView, OnSw
     public void onPause() {
         super.onPause();
         recordPresenter.onPause();
+        timerHandler.removeCallbacks(timerRunnable);
     }
 
     @Override
@@ -180,7 +217,6 @@ public class RecordActivity extends KamaradaActivity implements RecordView, OnSw
         finish();
     }
 
-
     @OnTouch(R.id.recordButton)
     boolean onTouch(MotionEvent event) {
         if (event.getAction() == MotionEvent.ACTION_DOWN) {
@@ -215,13 +251,10 @@ public class RecordActivity extends KamaradaActivity implements RecordView, OnSw
     }
 
     @OnClick(R.id.shareButton)
-    public void share() {
-        goToShare(recordPresenter.getRecordedVideoPath());
-    }
-
-
-    private void startExportThread() {
-
+    public void exportAndShare() {
+        if (!recording) {
+            recordPresenter.startExport();
+        }
     }
 
     @OnClick(R.id.settingsButton)
@@ -283,20 +316,6 @@ public class RecordActivity extends KamaradaActivity implements RecordView, OnSw
         filterBlueButton.setSelected(true);
     }
 
-    @Override
-    public void showFilterSelectedText(String text) {
-        textFilterSelected.setText(text);
-
-        // make TextView visible here
-        textFilterSelected.setVisibility(View.VISIBLE);
-        //use postDelayed to hide TextView
-        textFilterSelected.postDelayed(new Runnable() {
-            public void run() {
-                textFilterSelected.setVisibility(View.INVISIBLE);
-            }
-        }, 2000);
-    }
-
     private void resetSelections() {
         filterBlackAndWhiteButton.setSelected(false);
         filterBlueButton.setSelected(false);
@@ -314,6 +333,17 @@ public class RecordActivity extends KamaradaActivity implements RecordView, OnSw
         } catch (JSONException e) {
             e.printStackTrace();
         }
+    }
+
+    @Override
+    public void showFilterSelectedText(String text) {
+        textFilterSelected.setText(text);
+        textFilterSelected.setVisibility(View.VISIBLE);
+        textFilterSelected.postDelayed(new Runnable() {
+            public void run() {
+                textFilterSelected.setVisibility(View.INVISIBLE);
+            }
+        }, 2000);
     }
 
     @Override
@@ -361,22 +391,39 @@ public class RecordActivity extends KamaradaActivity implements RecordView, OnSw
     }
 
     @Override
+    public void startProgressBar() {
+        timerHandler.postDelayed(timerRunnable, 0);
+    }
+
+    @Override
+    public void stopProgressBar() {
+        timerHandler.removeCallbacks(timerRunnable);
+    }
+
+    @Override
+    public void showRecordedVideoThumbIndicator(String pathLastRecordedVideo, int numberOfVideos) {
+        videoThumbIndicator.setVisibility(View.VISIBLE);
+        Glide.with(this).load(pathLastRecordedVideo).into(videoThumb);
+        videoNumber.setText(String.valueOf(numberOfVideos));
+    }
+
+    @Override
+    public void hideRecordedVideoThumbIndicator() {
+        videoThumbIndicator.setVisibility(View.GONE);
+    }
+
+    @Override
     public void showFlashOn(boolean on) {
         flashButton.setActivated(on);
     }
 
     @Override
     public void showFlashSupported(boolean supported) {
-        if (supported) {
+        flashButton.setEnabled(supported);
+        if (supported)
             flashButton.setImageAlpha(255);
-            flashButton.setActivated(false);
-            flashButton.setActivated(false);
-            flashButton.setEnabled(true);
-        } else {
+        else
             flashButton.setImageAlpha(65);
-            flashButton.setActivated(false);
-            flashButton.setEnabled(false);
-        }
     }
 
     @Override
@@ -462,17 +509,21 @@ public class RecordActivity extends KamaradaActivity implements RecordView, OnSw
     public void onBackPressed() {
         if (buttonBackPressed) {
             buttonBackPressed = false;
-            Intent intent = new Intent(Intent.ACTION_MAIN);
-            intent.addCategory(Intent.CATEGORY_HOME);
-            intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);//***Change Here***
-            startActivity(intent);
-            finish();
-            System.exit(0);
+            exitApp();
         } else {
             buttonBackPressed = true;
             Toast.makeText(getApplicationContext(), getString(R.string.toast_exit),
                     Toast.LENGTH_SHORT).show();
         }
+    }
+
+    private void exitApp() {
+        Intent intent = new Intent(Intent.ACTION_MAIN);
+        intent.addCategory(Intent.CATEGORY_HOME);
+        intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);//***Change Here***
+        startActivity(intent);
+        finish();
+        System.exit(0);
     }
 
     @Override

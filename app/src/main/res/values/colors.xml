@@ -14,31 +14,7 @@
     <color name="textColorButton">#FFFFFF</color>
     <color name="textColorTitle">#9a352d</color>
     <color name="colorControlActivated">#808080</color>
-
+    <color name="textShadow">#7F000000</color>
     <color name="textColorVersionSplashScreen">#fff</color>
 
-    <!--
-              <color name="colorGreyTransparent">#7F000000</color>
-              <color name="colorBlack">#000000</color>
-
-              <color name="colorSpinnerCenter">#00b8f3</color>
-              <color name="colorSpinnerEnd">#0091ea</color>
-
-
-              <color name="textColorVersionSplashScreen">#FFFFFF</color>
-              <color name="textColorFiltersRecord">#FFFFFF</color>
-              <color name="textColorNumVideos">#FFFFFF</color>
-              <color name="textColorChronometer">#FFFFFF</color>
-
-              <color name="colorButton">#0091ea</color>
-              <color name="colorButtonAccent">#fe304b</color>
-
-
-
-
-
-
-              <color name="editTextBottomLine">#808080</color>
-
-          -->
 </resources>

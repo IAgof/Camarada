@@ -71,9 +71,9 @@ public class RecordPresenter implements OnExportFinishedListener {
     private RemoveFilesInTempFolderUseCase removeFilesInTempFolderUseCase;
     private List<ShaderEffect> effects;
     private int selectedFilterIndex = 0;
-    private String lastVideoPath;
     private String resolution;
     private int videoBitrate;
+    private int numRecordedVideos = 0;
 
     public RecordPresenter(Context context, RecordView recordView, EffectSelectorView effectSelectorView,
                            GLCameraEncoderView cameraPreview, SharedPreferences sharedPreferences) {
@@ -120,34 +120,12 @@ public class RecordPresenter implements OnExportFinishedListener {
         int audioChannels = 1;
         int audioFrequency = 48000;
         int audioBitrate = 192 * 1000;
-
         resolution = width + "x" + height;
 
         SessionConfig result = new SessionConfig(destinationFolderPath, width, height, videoBitrate,
                 audioChannels, audioFrequency, audioBitrate);
-
         saveResolutionToDisk();
         return result;
-    }
-
-    public void setSepiaFilter() {
-        setSelectedFilter(Filters.FILTER_SEPIA);
-    }
-
-    @NonNull
-    private List<Drawable> getAnimatedOverlay() {
-        List<Drawable> animatedOverlayFrames = new ArrayList<>();
-        animatedOverlayFrames.add(context.getResources().getDrawable(R.mipmap.silent_film_overlay_a));
-        animatedOverlayFrames.add(context.getResources().getDrawable(R.mipmap.silent_film_overlay_b));
-        animatedOverlayFrames.add(context.getResources().getDrawable(R.mipmap.silent_film_overlay_c));
-        animatedOverlayFrames.add(context.getResources().getDrawable(R.mipmap.silent_film_overlay_d));
-        animatedOverlayFrames.add(context.getResources().getDrawable(R.mipmap.silent_film_overlay_e));
-        animatedOverlayFrames.add(context.getResources().getDrawable(R.mipmap.silent_film_overlay_f));
-        animatedOverlayFrames.add(context.getResources().getDrawable(R.mipmap.silent_film_overlay_g));
-        animatedOverlayFrames.add(context.getResources().getDrawable(R.mipmap.silent_film_overlay_h));
-        animatedOverlayFrames.add(context.getResources().getDrawable(R.mipmap.silent_film_overlay_i));
-        animatedOverlayFrames.add(context.getResources().getDrawable(R.mipmap.silent_film_overlay_j));
-        return animatedOverlayFrames;
     }
 
     private void saveResolutionToDisk() {
@@ -156,14 +134,18 @@ public class RecordPresenter implements OnExportFinishedListener {
         preferencesEditor.commit();
     }
 
+    private String getResolution() {
+        return resolution;
+    }
+
+    public void setSepiaFilter() {
+        setSelectedFilter(Filters.FILTER_SEPIA);
+    }
+
     private void setSelectedFilter(int filterId) {
         recorder.applyFilter(filterId);
         updateSelectedIndex(filterId);
         showSelectedEffect(filterId);
-    }
-
-    private String getResolution() {
-        return resolution;
     }
 
     private void updateSelectedIndex(int filterID) {
@@ -194,6 +176,22 @@ public class RecordPresenter implements OnExportFinishedListener {
             }
         }
         return null;
+    }
+
+    @NonNull
+    private List<Drawable> getAnimatedOverlay() {
+        List<Drawable> animatedOverlayFrames = new ArrayList<>();
+        animatedOverlayFrames.add(context.getResources().getDrawable(R.mipmap.silent_film_overlay_a));
+        animatedOverlayFrames.add(context.getResources().getDrawable(R.mipmap.silent_film_overlay_b));
+        animatedOverlayFrames.add(context.getResources().getDrawable(R.mipmap.silent_film_overlay_c));
+        animatedOverlayFrames.add(context.getResources().getDrawable(R.mipmap.silent_film_overlay_d));
+        animatedOverlayFrames.add(context.getResources().getDrawable(R.mipmap.silent_film_overlay_e));
+        animatedOverlayFrames.add(context.getResources().getDrawable(R.mipmap.silent_film_overlay_f));
+        animatedOverlayFrames.add(context.getResources().getDrawable(R.mipmap.silent_film_overlay_g));
+        animatedOverlayFrames.add(context.getResources().getDrawable(R.mipmap.silent_film_overlay_h));
+        animatedOverlayFrames.add(context.getResources().getDrawable(R.mipmap.silent_film_overlay_i));
+        animatedOverlayFrames.add(context.getResources().getDrawable(R.mipmap.silent_film_overlay_j));
+        return animatedOverlayFrames;
     }
 
     public void onStart() {
@@ -229,7 +227,7 @@ public class RecordPresenter implements OnExportFinishedListener {
     }
 
     /**
-     * Sends button clicks to Mixpanel Analytics
+     * Sends user interactions to Mixpanel Analytics
      *
      * @param interaction
      * @param result
@@ -247,15 +245,24 @@ public class RecordPresenter implements OnExportFinishedListener {
         }
     }
 
+    public void onStop() {
+        recorder.release();
+    }
+
+    public void onDestroy() {
+        //recorder.release();
+    }
+
     public int getFilterSelectedId() {
         return selectedFilterIndex;
     }
 
     public void onEventMainThread(MuxerFinishedEvent e) {
         fileName = renameOutputVideo(config.getOutputPath());
+        recordView.stopProgressBar();
+        recordView.showRecordedVideoThumbIndicator(getLastClipPath(), ++numRecordedVideos);
         updateTotalVideosRecorded();
         sendVideoRecordedTracking();
-        startExport();
     }
 
     private String renameOutputVideo(String originalPath) {
@@ -265,6 +272,10 @@ public class RecordPresenter implements OnExportFinishedListener {
         File destinationFile = new File(Constants.PATH_APP_TEMP, outputPath);
         originalFile.renameTo(destinationFile);
         return outputPath;
+    }
+
+    private String getLastClipPath() {
+        return Constants.PATH_APP_TEMP + File.separator + fileName;
     }
 
     private void updateTotalVideosRecorded() {
@@ -290,19 +301,8 @@ public class RecordPresenter implements OnExportFinishedListener {
         updateUserProfileProperties();
     }
 
-    public void startExport() {
-        recordView.showProgressDialog();
-        final Thread t = new Thread() {
-            @Override
-            public void run() {
-                doStartExport();
-            }
-        };
-        t.start();
-    }
-
     private double getClipDuration() throws IOException {
-        return Utils.getFileDuration(Constants.PATH_APP_TEMP + File.separator + fileName);
+        return Utils.getFileDuration(getLastClipPath());
     }
 
     private void updateUserProfileProperties() {
@@ -321,6 +321,18 @@ public class RecordPresenter implements OnExportFinishedListener {
                 new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ssZ").format(new Date()));
     }
 
+    public void startExport() {
+        recordView.showProgressDialog();
+        mixpanel.timeEvent(AnalyticsConstants.VIDEO_EXPORTED);
+        final Thread t = new Thread() {
+            @Override
+            public void run() {
+                doStartExport();
+            }
+        };
+        t.start();
+    }
+
     private void doStartExport() {
         List<String> videoList = getVideosFromTempFolderUseCase.getVideosFromTempFolder();
         if (videoList.size() > 0) {
@@ -332,26 +344,24 @@ public class RecordPresenter implements OnExportFinishedListener {
 
     @Override
     public void onExportError(String error) {
-        mixpanel.track(AnalyticsConstants.TIME_EXPORTING_VIDEO);
+        mixpanel.track(AnalyticsConstants.VIDEO_EXPORTED);
         recordView.hideProgressDialog();
         recordView.showError(R.string.errorExportingVideo);
     }
 
     @Override
     public void onExportSuccess(String path) {
-        mixpanel.track(AnalyticsConstants.TIME_EXPORTING_VIDEO);
-        lastVideoPath = path;
         removeTempVideos();
         recordView.hideProgressDialog();
         sendExportedVideoMetadataTracking();
+        recordView.goToShare(path);
     }
 
-    public void removeTempVideos() {
+    private void removeTempVideos() {
         removeFilesInTempFolderUseCase.removeFilesInTempFolder();
     }
 
     private void sendExportedVideoMetadataTracking() {
-        mixpanel.timeEvent(AnalyticsConstants.TIME_EXPORTING_VIDEO);
         JSONObject videoExportedProperties = new JSONObject();
         try {
             videoExportedProperties.put(AnalyticsConstants.VIDEO_LENGTH,
@@ -366,7 +376,7 @@ public class RecordPresenter implements OnExportFinishedListener {
         }
     }
 
-    public double getVideoLength() {
+    private double getVideoLength() {
         List<String> videoList = getVideosFromTempFolderUseCase.getVideosFromTempFolder();
         double duration = 0.0;
         if (videoList.size() > 0)
@@ -376,19 +386,11 @@ public class RecordPresenter implements OnExportFinishedListener {
         return duration;
     }
 
-    public int getNumberOfClipsRecorded() {
+    private int getNumberOfClipsRecorded() {
         int numberOfClipsRecorded = getVideosFromTempFolderUseCase.getVideosFromTempFolder().size();
         preferencesEditor.putInt(ConfigPreferences.NUMBER_OF_CLIPS, numberOfClipsRecorded);
         preferencesEditor.commit();
         return numberOfClipsRecorded;
-    }
-
-    public void onStop() {
-        recorder.release();
-    }
-
-    public void onDestroy() {
-        //recorder.release();
     }
 
     public void requestRecord() {
@@ -401,6 +403,7 @@ public class RecordPresenter implements OnExportFinishedListener {
                 }
             } else {
                 startRecord();
+
             }
         }
     }
@@ -416,6 +419,7 @@ public class RecordPresenter implements OnExportFinishedListener {
         recorder.startRecording();
         recordView.showStopButton();
         recordView.disableShareButton();
+        recordView.startProgressBar();
         firstTimeRecording = false;
     }
 
@@ -441,7 +445,6 @@ public class RecordPresenter implements OnExportFinishedListener {
 
     public void checkFlashSupport() {
         int flashSupport = recorder.checkSupportFlash(); // 0 true, 1 false, 2 ignoring, not prepared
-
         if (flashSupport == 0)
             recordView.showFlashSupported(true);
         else if (flashSupport == 1)
@@ -491,7 +494,4 @@ public class RecordPresenter implements OnExportFinishedListener {
         setSelectedFilter(getSelectedFilterId());
     }
 
-    public String getRecordedVideoPath() {
-        return lastVideoPath;
-    }
 }
