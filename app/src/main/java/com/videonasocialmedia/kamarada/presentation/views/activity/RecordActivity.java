@@ -101,7 +101,7 @@ public class RecordActivity extends KamaradaActivity implements RecordView, OnSw
         public void run() {
             progressTime  += delay;
             if(progressTime >= progressBar.getMax())
-                progressBar.setMax(progressBar.getMax()*4);
+                progressBar.setMax(progressBar.getMax()*4/3);
             progressBar.setProgress(Math.round(progressTime));
             timerHandler.postDelayed(this, delay);
         }
@@ -178,6 +178,7 @@ public class RecordActivity extends KamaradaActivity implements RecordView, OnSw
         recordPresenter.onResume();
         recording = false;
         hideSystemUi();
+        recordPresenter.checkAvailableVideos();
     }
 
     private void hideSystemUi() {

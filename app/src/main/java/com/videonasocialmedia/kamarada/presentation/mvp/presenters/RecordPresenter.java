@@ -369,7 +369,7 @@ public class RecordPresenter implements OnExportFinishedListener {
             videoExportedProperties.put(AnalyticsConstants.RESOLUTION,
                     this.getResolution());
             videoExportedProperties.put(AnalyticsConstants.NUMBER_OF_CLIPS,
-                    this.getNumberOfClipsRecorded());
+                    this.getNumberOfRecordedClips());
             mixpanel.track(AnalyticsConstants.VIDEO_EXPORTED, videoExportedProperties);
         } catch (JSONException e) {
             e.printStackTrace();
@@ -386,7 +386,7 @@ public class RecordPresenter implements OnExportFinishedListener {
         return duration;
     }
 
-    private int getNumberOfClipsRecorded() {
+    private int getNumberOfRecordedClips() {
         int numberOfClipsRecorded = getVideosFromTempFolderUseCase.getVideosFromTempFolder().size();
         preferencesEditor.putInt(ConfigPreferences.NUMBER_OF_CLIPS, numberOfClipsRecorded);
         preferencesEditor.commit();
@@ -492,6 +492,16 @@ public class RecordPresenter implements OnExportFinishedListener {
         if (selectedFilterIndex < 0)
             selectedFilterIndex = selectedFilterIndex + effects.size();
         setSelectedFilter(getSelectedFilterId());
+    }
+
+    public void checkAvailableVideos() {
+        int actualNumberOfRecordedClips = getNumberOfRecordedClips();
+        if(actualNumberOfRecordedClips > 1) {
+            List<String> videoList = getVideosFromTempFolderUseCase.getVideosFromTempFolder();
+            String latestClipPath = videoList.get(videoList.size()-1);
+            numRecordedVideos = --actualNumberOfRecordedClips;
+            recordView.showRecordedVideoThumbIndicator(latestClipPath, numRecordedVideos);
+        }
     }
 
 }
