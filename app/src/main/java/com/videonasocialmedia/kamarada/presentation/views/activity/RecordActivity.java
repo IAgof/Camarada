@@ -160,6 +160,15 @@ public class RecordActivity extends KamaradaActivity implements RecordView, OnSw
     }
 
     @Override
+    protected void onResume() {
+        super.onResume();
+        recordPresenter.onResume();
+        recording = false;
+        hideSystemUi();
+        recordPresenter.checkAvailableVideos();
+    }
+
+    @Override
     public void onPause() {
         super.onPause();
         recordPresenter.onPause();
@@ -170,15 +179,6 @@ public class RecordActivity extends KamaradaActivity implements RecordView, OnSw
     protected void onDestroy() {
         super.onDestroy();
         recordPresenter.onDestroy();
-    }
-
-    @Override
-    protected void onResume() {
-        super.onResume();
-        recordPresenter.onResume();
-        recording = false;
-        hideSystemUi();
-        recordPresenter.checkAvailableVideos();
     }
 
     private void hideSystemUi() {

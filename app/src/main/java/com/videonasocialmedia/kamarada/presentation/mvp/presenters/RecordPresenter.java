@@ -496,11 +496,12 @@ public class RecordPresenter implements OnExportFinishedListener {
 
     public void checkAvailableVideos() {
         int actualNumberOfRecordedClips = getNumberOfRecordedClips();
-        if(actualNumberOfRecordedClips > 1) {
+        if(actualNumberOfRecordedClips > 0) {
             List<String> videoList = getVideosFromTempFolderUseCase.getVideosFromTempFolder();
             String latestClipPath = videoList.get(videoList.size()-1);
-            numRecordedVideos = --actualNumberOfRecordedClips;
+            numRecordedVideos = actualNumberOfRecordedClips;
             recordView.showRecordedVideoThumbIndicator(latestClipPath, numRecordedVideos);
+            recordView.enableShareButton();
         }
     }
 

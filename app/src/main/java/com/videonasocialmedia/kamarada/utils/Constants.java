@@ -18,5 +18,8 @@ public class Constants {
     final public static String VIDEO_MUSIC_FILE = VIDEO_MUSIC_FOLDER + File.separator + "audio.m4a";
     final public static String AUDIO_MUSIC_FILE_EXTENSION = ".m4a";
 
+    // TODO defined in recorder module, but necessary because recorder creates this file when init it
+    final public static String TEMP_VIDEO_PATH = PATH_APP_TEMP + File.separator + "VID_temp.mp4";
+
     final public static String FOLDER_VIDEONA_PRIVATE_MODEL = "data_camarada";
 }

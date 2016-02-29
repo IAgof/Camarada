@@ -21,7 +21,7 @@ public class GetVideosFromTempFolderUseCase {
             File[] files = directory.listFiles();
             if (files != null) { //some JVMs return null for empty dirs
                 for (File f : files) {
-                    if (!f.isDirectory()) {
+                    if (!f.isDirectory() && !(f.getAbsolutePath()).equals(Constants.TEMP_VIDEO_PATH)) {
                         paths.add(f.getAbsolutePath());
                     }
                 }
