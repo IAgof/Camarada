@@ -12,7 +12,6 @@ public class AnalyticsConstants {
     public final static String USER_INTERACTED = "User Interacted";
     public final static String FILTER_SELECTED = "Filter Selected";
     public static final String TIME_IN_ACTIVITY = "Time in Activity";
-    public final static String TIME_EXPORTING_VIDEO = "Time Exporting Video";
 
     /**
      * Values
@@ -35,7 +34,7 @@ public class AnalyticsConstants {
     public final static String QUALITY = "quality";
     public final static String NUMBER_OF_CLIPS = "numberOfClips";
     public final static String NAME = "name";
-    public final static String TOTAL_RECORDED_VIDEOS = "totalVideosRecorded";
+    public final static String TOTAL_VIDEOS_RECORDED = "totalVideosRecorded";
     public final static String LAST_VIDEO_RECORDED = "lastVideoRecorded";
     public final static String CODE = "code";
     public final static String FILTER_NAME_SEPIA = "sepia";
@@ -52,11 +51,14 @@ public class AnalyticsConstants {
     public static final String START = "start";
     public static final String STOP = "stop";
     public static final String CHANGE_CAMERA = "change camera";
-    public static final String TOTAL_SHARED_VIDEOS = "totalVideosShared";
+    public static final String TOTAL_VIDEOS_SHARED = "totalVideosShared";
     public static final String SOCIAL_NETWORK = "socialNetwork";
     public static final String LAST_VIDEO_SHARED = "lastVideoShared";
     public static final String SWIPE = "swipe";
     public static final String LEFT = "left";
     public static final String RIGHT = "right";
     public static final String FIRST_TIME = "firstTime";
+    public static final String APP_USE_COUNT = "appUseCount";
+    public static final String APP = "app";
+    public static final String DOUBLE_HOUR_AND_MINUTES = "doubleHourAndMinutes";
 }

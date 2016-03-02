@@ -24,6 +24,7 @@ import java.io.InputStream;
 import java.io.RandomAccessFile;
 import java.nio.channels.FileChannel;
 import java.util.Arrays;
+import java.util.Calendar;
 import java.util.List;
 
 /**
@@ -209,6 +210,12 @@ public class Utils {
             }
         }
         return duration;
+    }
+
+    public static double getDoubleHourAndMinutes() {
+        int hour = Calendar.getInstance().get(Calendar.HOUR_OF_DAY);
+        int minutes = Calendar.getInstance().get(Calendar.MINUTE);
+        return hour + (double)(minutes)/60;
     }
 
 }
