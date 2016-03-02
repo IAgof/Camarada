@@ -146,7 +146,7 @@ public class RecordActivity extends KamaradaActivity implements RecordView, OnSw
     private void initProgressBar() {
         int currentapiVersion = android.os.Build.VERSION.SDK_INT;
         if (currentapiVersion < android.os.Build.VERSION_CODES.LOLLIPOP)
-            progressBar.getBackground().setColorFilter(getResources().getColor(R.color.colorAccent),
+            progressBar.getProgressDrawable().setColorFilter(getResources().getColor(R.color.colorAccent),
                     PorterDuff.Mode.SRC_ATOP);
         progressBar.setScaleY(3f);
         progressBar.setMax(30000);
