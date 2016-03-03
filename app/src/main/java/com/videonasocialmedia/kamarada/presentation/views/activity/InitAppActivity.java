@@ -152,6 +152,7 @@ public class InitAppActivity extends KamaradaActivity implements InitAppView, On
         try {
             initAppProperties.put(AnalyticsConstants.TYPE, AnalyticsConstants.TYPE_ORGANIC);
             initAppProperties.put(AnalyticsConstants.INIT_STATE, initState);
+            initAppProperties.put(AnalyticsConstants.DOUBLE_HOUR_AND_MINUTES, Utils.getDoubleHourAndMinutes());
             mixpanel.track(AnalyticsConstants.APP_STARTED, initAppProperties);
         } catch (JSONException e) {
             e.printStackTrace();
@@ -162,6 +163,7 @@ public class InitAppActivity extends KamaradaActivity implements InitAppView, On
         androidId = Settings.Secure.getString(getContentResolver(), Settings.Secure.ANDROID_ID);
         setupPathsApp(this);
         setupStartApp();
+        trackUserProfileGeneralTraits();
     }
 
     private void setupStartApp() {
@@ -170,28 +172,29 @@ public class InitAppActivity extends KamaradaActivity implements InitAppView, On
             case NORMAL:
                 Log.d(LOG_TAG, " AppStart State NORMAL");
                 initState = "returning";
-                sendFirstTimeProperties(false);
+                trackAppStartupProperties(false);
                 initSettings();
                 break;
             case FIRST_TIME_VERSION:
                 Log.d(LOG_TAG, " AppStart State FIRST_TIME_VERSION");
                 initState = "upgrade";
-                sendFirstTimeProperties(false);
                 // example: show what's new
                 // could be appear a mix panel popup with improvements.
 
                 // Repeat this method for security, if user delete app data miss this configs.
                 setupCameraSettings();
-                createUserProfile();
+                trackUserProfile();
+                trackAppStartupProperties(false);
                 initSettings();
                 break;
             case FIRST_TIME:
                 Log.d(LOG_TAG, " AppStart State FIRST_TIME");
                 initState = "firstTime";
-                sendFirstTimeProperties(true);
                 // example: show a tutorial
                 setupCameraSettings();
-                createUserProfile();
+                trackUserProfile();
+                trackCreatedSuperProperty();
+                trackAppStartupProperties(true);
                 initSettings();
                 break;
             default:
@@ -199,30 +202,59 @@ public class InitAppActivity extends KamaradaActivity implements InitAppView, On
         }
     }
 
-    private void sendFirstTimeProperties(boolean state) {
-        JSONObject firstTimeSuperProperties = new JSONObject();
+    private void trackAppStartupProperties(boolean state) {
+        JSONObject appStartupSuperProperties = new JSONObject();
+        int appUseCount;
         try {
-            firstTimeSuperProperties.put(AnalyticsConstants.FIRST_TIME, state);
-            mixpanel.registerSuperProperties(firstTimeSuperProperties);
+            appUseCount = mixpanel.getSuperProperties().getInt(AnalyticsConstants.APP_USE_COUNT);
+        } catch (JSONException e) {
+            appUseCount = 0;
+        }
+        try {
+            appStartupSuperProperties.put(AnalyticsConstants.APP_USE_COUNT, ++appUseCount);
+            appStartupSuperProperties.put(AnalyticsConstants.FIRST_TIME, state);
+            appStartupSuperProperties.put(AnalyticsConstants.APP, "Kamarada");
+            mixpanel.registerSuperProperties(appStartupSuperProperties);
         } catch (JSONException e) {
             e.printStackTrace();
         }
     }
 
-    private void createUserProfile() {
+    private void trackUserProfile() {
         mixpanel.identify(androidId);
         mixpanel.getPeople().identify(androidId);
         JSONObject userProfileProperties = new JSONObject();
         try {
-            userProfileProperties.put(AnalyticsConstants.TYPE, AnalyticsConstants.TYPE_PAID);
             userProfileProperties.put(AnalyticsConstants.CREATED,
                     new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ssZ").format(new Date()));
-            userProfileProperties.put(AnalyticsConstants.LOCALE,
-                    Locale.getDefault().toString());
-            userProfileProperties.put(AnalyticsConstants.LANG, Locale.getDefault().getISO3Language());
             mixpanel.getPeople().setOnce(userProfileProperties);
         } catch (JSONException e) {
             e.printStackTrace();
+        }
+    }
+
+    private void trackUserProfileGeneralTraits() {
+        mixpanel.getPeople().increment(AnalyticsConstants.APP_USE_COUNT, 1);
+        JSONObject userProfileProperties = new JSONObject();
+        try {
+            userProfileProperties.put(AnalyticsConstants.TYPE, AnalyticsConstants.TYPE_PAID);
+            userProfileProperties.put(AnalyticsConstants.LOCALE,
+                    Locale.getDefault().toString());
+            userProfileProperties.put(AnalyticsConstants.LANG, Locale.getDefault().getISO3Language());
+            mixpanel.getPeople().set(userProfileProperties);
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+    }
+
+    private void trackCreatedSuperProperty() {
+        JSONObject createdSuperProperty = new JSONObject();
+        try {
+            createdSuperProperty.put(AnalyticsConstants.CREATED,
+                    new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ssZ").format(new Date()));
+            mixpanel.registerSuperPropertiesOnce(createdSuperProperty);
+        } catch (JSONException e) {
+            Log.e("ANALYTICS", "Error sending created super property");
         }
     }
 
