@@ -1,0 +1,261 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/recordLayout"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@mipmap/activity_record_background_wood"
+    android:orientation="vertical"
+    android:padding="64dp">
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:layout_marginBottom="16dp">
+
+        <RelativeLayout
+            android:id="@+id/videoThumbIndicator"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="16dp"
+            android:gravity="center"
+            android:layout_centerVertical="true"
+            android:layout_alignParentStart="true"
+            android:visibility="gone"
+            tools:visibility="visible">
+
+            <com.videonasocialmedia.kamarada.presentation.views.widget.CircleImageView
+                android:id="@+id/videoThumb"
+                android:layout_width="53dp"
+                android:layout_height="53dp"
+                android:background="@null"
+                android:scaleType="fitCenter"
+                android:layout_centerHorizontal="true"
+                android:layout_centerVertical="true"
+                android:layout_marginStart="16dp"
+                app:border_width="5dp"
+                app:border_color="@color/colorAccent"
+                tools:src="@mipmap/common_icon_settings_normal" />
+
+            <TextView
+                android:id="@+id/videoNumber"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerHorizontal="true"
+                android:layout_centerVertical="true"
+                android:scaleType="fitCenter"
+                android:textAppearance="?android:attr/textAppearanceMedium"
+                android:textColor="@color/colorAccent"
+                android:gravity="center"
+                android:textSize="27sp"
+                android:shadowColor="@color/textShadow"
+                android:shadowDx="2"
+                android:shadowDy="2"
+                android:shadowRadius="2"
+                tools:text="0" />
+
+        </RelativeLayout>
+
+        <ImageButton
+            android:id="@+id/settingsButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentEnd="true"
+            android:layout_centerVertical="true"
+            android:layout_marginEnd="32dp"
+            android:background="@null"
+            android:src="@mipmap/common_icon_settings_normal" />
+
+        <ImageButton
+            android:id="@+id/shareButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerHorizontal="true"
+            android:layout_centerVertical="true"
+            android:alpha="0.25"
+            android:background="@null"
+            android:src="@drawable/activity_record_share_icon_selector"
+            tools:alpha="1" />
+
+    </RelativeLayout>
+
+    <com.videonasocialmedia.avrecorder.view.AspectFrameLayout
+            android:id="@+id/aspectFrameLayout"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_marginBottom="4dp"
+            android:background="@color/colorAccent"
+            android:padding="6dp"
+            app:aspect="four_three">
+
+            <View
+                android:id="@+id/manualPreview"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:clickable="true" />
+
+            <com.videonasocialmedia.avrecorder.view.GLCameraEncoderView
+                android:id="@+id/cameraPreview"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content" />
+
+
+        <TextView
+            android:id="@+id/textFilterSelected"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical|center_horizontal"
+            android:background="@null"
+            android:textAppearance="?android:attr/textAppearanceMedium"
+            android:textColor="@color/textColorButton"
+            android:textSize="20dp"
+            tools:text="@string/app_name" />
+
+    </com.videonasocialmedia.avrecorder.view.AspectFrameLayout>
+
+    <RelativeLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:gravity="center">
+
+        <ProgressBar
+            android:id="@+id/progressBar"
+            style="?android:attr/progressBarStyleHorizontal"
+            android:layout_alignStart="@+id/progressBarImage"
+            android:layout_alignEnd="@+id/progressBarImage"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:progress="0"
+            tools:progress="70"
+            android:layout_marginStart="11dp"
+            android:layout_marginTop="16dp"
+            android:layout_marginEnd="15dp"
+            android:backgroundTint="@color/colorAccent"/>
+
+        <ImageView
+            android:id="@+id/progressBarImage"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            android:src="@mipmap/activity_record_progress_bar"/>
+
+    </RelativeLayout>
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_gravity="center"
+        android:layout_marginEnd="25dp"
+        android:layout_marginStart="25dp"
+        android:layout_weight="1"
+        android:orientation="horizontal">
+
+        <ImageButton
+            android:id="@+id/skinLeatherButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:layout_marginStart="16dp"
+            android:layout_marginEnd="4dp"
+            android:background="@null"
+            android:src="@drawable/activity_record_skin_leather_icon_selector"
+            android:visibility="gone" />
+
+        <ImageButton
+            android:id="@+id/skinWoodButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:layout_marginStart="16dp"
+            android:layout_marginEnd="4dp"
+            android:background="@null"
+            android:src="@drawable/activity_record_skin_wood_icon_selector"
+            android:visibility="visible" />
+
+        <RelativeLayout
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_centerHorizontal="true"
+            android:layout_centerVertical="true"
+            android:orientation="vertical">
+
+            <ImageButton
+                android:id="@+id/recordButton"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerInParent="true"
+                android:background="@null"
+                android:src="@drawable/activity_record_rec_icon_selector" />
+
+            <LinearLayout
+                android:id="@+id/settings"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentBottom="true"
+                android:layout_gravity="center_horizontal|bottom"
+                android:orientation="horizontal">
+
+                <ImageButton
+                    android:id="@+id/flashButton"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:background="@null"
+                    android:src="@drawable/activity_record_flash_icon_selector" />
+
+                <ImageButton
+                    android:id="@+id/toggleCameraButton"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:background="@null"
+                    android:src="@drawable/activity_record_change_camera_icon_selector" />
+            </LinearLayout>
+
+        </RelativeLayout>
+
+       <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentEnd="true"
+            android:layout_centerVertical="true"
+            android:layout_marginStart="4dp"
+           android:layout_marginEnd="16dp"
+            android:orientation="vertical">
+
+            <ImageButton
+                android:id="@+id/filterSepiaButton"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_marginBottom="16dp"
+                android:background="@null"
+                android:src="@drawable/activity_record_filter_sepia_icon_selector" />
+
+            <ImageButton
+                android:id="@+id/filterBlackAndWhiteButton"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_marginBottom="4dp"
+                android:background="@null"
+                android:src="@drawable/activity_record_filter_bw_icon_selector" />
+
+            <ImageButton
+                android:id="@+id/filterBlueButton"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_marginTop="16dp"
+                android:background="@null"
+                android:src="@drawable/activity_record_filter_blue_icon_selector" />
+
+        </LinearLayout>
+
+    </RelativeLayout>
+
+</LinearLayout>
