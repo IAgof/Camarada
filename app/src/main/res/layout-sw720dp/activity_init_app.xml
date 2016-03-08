@@ -9,7 +9,7 @@
         android:id="@+id/splash_screen"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:src="@mipmap/intro_app_splash_screen" />
+        android:src="@mipmap/intro_app_splash_screen_tablet" />
 
     <TextView
         android:id="@+id/videona_version"

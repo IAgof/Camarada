@@ -17,4 +17,5 @@ public class ConfigPreferences {
     public final static String QUALITY = "quality";
     public final static String TOTAL_VIDEOS_RECORDED = "total_videos_recorded";
     public final static String TOTAL_VIDEOS_SHARED = "total_videos_shared";
+    public static final String ACTIVITY_BACKGROUND = "ACTIVITY_BACKGROUND";
 }

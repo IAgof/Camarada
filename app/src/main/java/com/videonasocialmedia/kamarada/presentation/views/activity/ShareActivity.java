@@ -49,7 +49,6 @@ public class ShareActivity extends KamaradaActivity implements ShareView, Previe
         OnSocialNetworkClickedListener, SeekBar.OnSeekBarChangeListener {
 
     public static final String INTENT_EXTRA_VIDEO_PATH = "VIDEO_EDITED";
-    public static final String INTENT_EXTRA_BACKGROND = "ACTIVITY_BACKGROUND";
 
     @Bind(R.id.videoPreview)
     VideoView videoPreview;
@@ -87,13 +86,13 @@ public class ShareActivity extends KamaradaActivity implements ShareView, Previe
                         Context.MODE_PRIVATE);
         preferencesEditor = sharedPreferences.edit();
         presenter = new SharePresenter(this, this, sharedPreferences);
-        initBackgorund();
+        initBackground();
         initVideoPreview();
         initSocialNetworkContainer();
     }
 
-    private void initBackgorund() {
-        int backgroundId = getIntent().getIntExtra(INTENT_EXTRA_BACKGROND, -1);
+    private void initBackground() {
+        int backgroundId = sharedPreferences.getInt(ConfigPreferences.ACTIVITY_BACKGROUND, -1);
         if (backgroundId != -1)
             background.setBackgroundResource(backgroundId);
     }

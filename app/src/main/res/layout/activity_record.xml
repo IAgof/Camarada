@@ -5,7 +5,7 @@
     android:id="@+id/recordLayout"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@mipmap/activity_record_background_wood"
+    android:background="@mipmap/activity_record_background_leather"
     android:orientation="vertical"
     android:padding="16dp">
 

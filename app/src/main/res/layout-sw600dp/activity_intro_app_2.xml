@@ -14,6 +14,6 @@
         android:layout_marginLeft="10dp"
         android:layout_marginRight="10dp"
         android:layout_marginTop="15dp"
-        android:src="@mipmap/intro_app_slide_filters" />
+        android:src="@mipmap/intro_app_slide_filters_tablet" />
 
 </RelativeLayout>
