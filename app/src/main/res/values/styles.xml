@@ -24,6 +24,7 @@
         <item name="toolbarStyle">@style/KamaradaToolbar</item>
 
         <item name="android:preferenceCategoryStyle">@style/KamaradaCategoryPreference</item>
+        <item name="android:preferenceStyle">@style/KamaradaPreference</item>
 
     </style>
 
@@ -60,6 +61,10 @@
         <item name="android:layout">@layout/settings_category_preference</item>
         <item name="android:shouldDisableView">false</item>
         <item name="android:selectable">false</item>
+    </style>
+
+    <style name="KamaradaPreference">
+        <item name="android:layout">@layout/settings_preference</item>
     </style>
 
     <style name="KamaradaIntroTutorial" parent="Theme.AppCompat.Light">

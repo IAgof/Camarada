@@ -29,6 +29,7 @@
         <item name="android:alertDialogTheme">@style/KamaradaAlertDialog</item>
         <item name="android:toolbarStyle">@style/KamaradaToolbar</item>
         <item name="android:preferenceCategoryStyle">@style/KamaradaCategoryPreference</item>
+        <item name="android:preferenceStyle">@style/KamaradaPreference</item>
 
         <item name="android:editTextStyle">@style/KamaradaEditText</item>
         <item name="android:navigationBarColor">@color/colorPrimaryDark</item>
@@ -75,6 +76,10 @@
         <item name="android:shouldDisableView">false</item>
         <item name="android:selectable">false</item>
      </style>
+
+    <style name="KamaradaPreference">
+        <item name="android:layout">@layout/settings_preference</item>
+    </style>
 
     <style name="KamaradaEditText" parent="Widget.AppCompat.EditText">
 
