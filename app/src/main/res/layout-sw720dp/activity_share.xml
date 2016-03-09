@@ -5,22 +5,22 @@
     android:id="@+id/background"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@mipmap/activity_record_background_leather"
+    android:background="@mipmap/activity_record_background_leather_tablet"
     android:orientation="vertical"
-    android:padding="16dp">
+    android:padding="64dp">
 
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="53dp"
         android:layout_gravity="center"
-        android:layout_marginBottom="8dp">
+        android:layout_marginBottom="32dp">
 
         <ImageButton
             android:id="@+id/backButton"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_centerVertical="true"
-            android:layout_marginLeft="8dp"
+            android:layout_marginStart="64dp"
             android:background="@null"
             android:src="@drawable/common_icon_back_selector" />
 
@@ -30,7 +30,7 @@
             android:layout_height="wrap_content"
             android:layout_alignParentEnd="true"
             android:layout_centerVertical="true"
-            android:layout_marginRight="8dp"
+            android:layout_marginEnd="64dp"
             android:background="@null"
             android:src="@mipmap/common_icon_settings_normal" />
 
@@ -46,7 +46,10 @@
 
         <RelativeLayout
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content">
+            android:layout_height="wrap_content"
+            android:layout_marginStart="20dp"
+            android:layout_marginEnd="20dp"
+            android:layout_marginTop="20dp" >
 
             <VideoView
                 android:id="@+id/videoPreview"
@@ -81,8 +84,8 @@
             android:layout_height="wrap_content"
             android:layout_marginBottom="8dp"
             android:layout_marginEnd="16dp"
-            android:layout_marginStart="16dp"
-            android:layout_marginTop="8dp"
+            android:layout_marginStart="32dp"
+            android:layout_marginTop="32dp"
             tools:listitem="@layout/socialnetwork_viewholder" />
 
     </LinearLayout>
@@ -92,7 +95,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center_horizontal"
-        android:layout_marginTop="4dp"
+        android:layout_marginTop="32dp"
         android:background="@null"
         android:scaleType="fitCenter"
         android:src="@mipmap/activity_share_add_icon_normal" />

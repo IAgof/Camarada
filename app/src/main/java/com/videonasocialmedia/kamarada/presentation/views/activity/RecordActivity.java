@@ -90,9 +90,8 @@ public class RecordActivity extends KamaradaActivity implements RecordView, OnSw
     private boolean mUseImmersiveMode = true;
     private HorizontalGestureDetectorHelper gestureDetecorHelper;
     private int progressTime = 0;
-
-    //TODO sacar esta variable de aquí (hay que guardarlo en disco: shared prefs o algo así)
-    private int backgroundResourceId;
+    private SharedPreferences sharedPreferences;
+    private SharedPreferences.Editor sharedPreferencesEditor;
 
     private Handler timerHandler = new Handler();
     private Runnable timerRunnable = new Runnable() {
@@ -113,7 +112,10 @@ public class RecordActivity extends KamaradaActivity implements RecordView, OnSw
         setContentView(R.layout.activity_record);
         ButterKnife.bind(this);
 
-        changeSkin(R.mipmap.activity_record_background_leather);
+        sharedPreferences = getSharedPreferences(
+                ConfigPreferences.SETTINGS_SHARED_PREFERENCES_FILE_NAME,
+                Context.MODE_PRIVATE);
+        sharedPreferencesEditor = sharedPreferences.edit();
 
         cameraView.setKeepScreenOn(true);
         gestureDetecorHelper = new HorizontalGestureDetectorHelper(this, this);
@@ -124,15 +126,17 @@ public class RecordActivity extends KamaradaActivity implements RecordView, OnSw
                 return gestureDetecorHelper.getGestureDetector().onTouchEvent(event);
             }
         });
-
         shareButton.setClickable(false);
-
-        SharedPreferences sharedPreferences = getSharedPreferences(
-                ConfigPreferences.SETTINGS_SHARED_PREFERENCES_FILE_NAME,
-                Context.MODE_PRIVATE);
         recordPresenter = new RecordPresenter(this, this, this, cameraView, sharedPreferences);
+        initBackground();
         createProgressDialog();
         initProgressBar();
+    }
+
+    private void initBackground() {
+        int backgroundId = sharedPreferences.getInt(ConfigPreferences.ACTIVITY_BACKGROUND, -1);
+        if(backgroundId != -1)
+            recordPresenter.checkSkin(backgroundId);
     }
 
     private void createProgressDialog() {
@@ -243,11 +247,13 @@ public class RecordActivity extends KamaradaActivity implements RecordView, OnSw
 
     @OnClick(R.id.skinLeatherButton)
     public void changeToLeatherSkin() {
+        sendUserInteractedTracking(AnalyticsConstants.CHANGE_SKIN, AnalyticsConstants.SKIN_LEATHER);
         recordPresenter.changeToLeatherSkin();
     }
 
     @OnClick(R.id.skinWoodButton)
     public void changeToWoodSkin() {
+        sendUserInteractedTracking(AnalyticsConstants.CHANGE_SKIN, AnalyticsConstants.SKIN_WOOD);
         recordPresenter.changeToWoodSkin();
     }
 
@@ -451,8 +457,6 @@ public class RecordActivity extends KamaradaActivity implements RecordView, OnSw
     public void goToShare(String videoToSharePath) {
         Intent intent = new Intent(this, ShareActivity.class);
         intent.putExtra(ShareActivity.INTENT_EXTRA_VIDEO_PATH, videoToSharePath);
-        //TODO once the resource id is saved on shared preference the extra will be necessary
-        intent.putExtra(ShareActivity.INTENT_EXTRA_BACKGROND, backgroundResourceId);
         startActivity(intent);
     }
 
@@ -491,7 +495,8 @@ public class RecordActivity extends KamaradaActivity implements RecordView, OnSw
     @Override
     public void changeSkin(int backgroundId) {
         recordLayout.setBackgroundResource(backgroundId);
-        backgroundResourceId = backgroundId;
+        sharedPreferencesEditor.putInt(ConfigPreferences.ACTIVITY_BACKGROUND, backgroundId);
+        sharedPreferencesEditor.commit();
     }
 
     @Override

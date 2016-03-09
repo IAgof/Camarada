@@ -1,0 +1,25 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@android:color/black"
+    tools:context=".mainActivity">
+
+    <ImageView
+        android:id="@+id/splash_screen"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:src="@mipmap/intro_app_splash_screen_tablet" />
+
+    <TextView
+        android:id="@+id/videona_version"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignBottom="@+id/splash_screen"
+        android:layout_alignEnd="@+id/splash_screen"
+        android:layout_margin="10dp"
+        android:gravity="center"
+        android:textColor="@color/textColorVersionSplashScreen"
+        tools:text="v1.0.0" />
+
+</RelativeLayout>

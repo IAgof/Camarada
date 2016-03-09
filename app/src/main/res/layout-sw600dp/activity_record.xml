@@ -5,16 +5,15 @@
     android:id="@+id/recordLayout"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@mipmap/activity_record_background_leather"
+    android:background="@mipmap/activity_record_background_leather_tablet"
     android:orientation="vertical"
-    android:padding="16dp">
+    android:padding="64dp">
 
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_gravity="center"
-        android:layout_marginTop="12dp"
-        android:layout_marginBottom="8dp">
+        android:layout_marginBottom="16dp">
 
         <RelativeLayout
             android:id="@+id/videoThumbIndicator"
@@ -35,6 +34,7 @@
                 android:scaleType="fitCenter"
                 android:layout_centerHorizontal="true"
                 android:layout_centerVertical="true"
+                android:layout_marginStart="16dp"
                 app:border_width="5dp"
                 app:border_color="@color/colorAccent"
                 tools:src="@mipmap/common_icon_settings_normal" />
@@ -64,7 +64,7 @@
             android:layout_height="wrap_content"
             android:layout_alignParentEnd="true"
             android:layout_centerVertical="true"
-            android:layout_marginEnd="16dp"
+            android:layout_marginEnd="32dp"
             android:background="@null"
             android:src="@mipmap/common_icon_settings_normal" />
 
@@ -132,6 +132,7 @@
             android:progress="0"
             tools:progress="70"
             android:layout_marginStart="11dp"
+            android:layout_marginTop="16dp"
             android:layout_marginEnd="15dp"
             android:backgroundTint="@color/colorAccent"/>
 
@@ -139,6 +140,7 @@
             android:id="@+id/progressBarImage"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
             android:src="@mipmap/activity_record_progress_bar"/>
 
     </RelativeLayout>
@@ -157,6 +159,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_centerVertical="true"
+            android:layout_marginStart="16dp"
             android:layout_marginEnd="4dp"
             android:background="@null"
             android:src="@drawable/activity_record_skin_leather_icon_selector"
@@ -167,6 +170,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_centerVertical="true"
+            android:layout_marginStart="16dp"
             android:layout_marginEnd="4dp"
             android:background="@null"
             android:src="@drawable/activity_record_skin_wood_icon_selector"
@@ -220,6 +224,7 @@
             android:layout_alignParentEnd="true"
             android:layout_centerVertical="true"
             android:layout_marginStart="4dp"
+           android:layout_marginEnd="16dp"
             android:orientation="vertical">
 
             <ImageButton
@@ -227,7 +232,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
-                android:layout_marginBottom="4dp"
+                android:layout_marginBottom="16dp"
                 android:background="@null"
                 android:src="@drawable/activity_record_filter_sepia_icon_selector" />
 
@@ -245,6 +250,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
+                android:layout_marginTop="16dp"
                 android:background="@null"
                 android:src="@drawable/activity_record_filter_blue_icon_selector" />
 

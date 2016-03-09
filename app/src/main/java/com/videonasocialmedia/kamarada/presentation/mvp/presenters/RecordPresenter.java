@@ -2,6 +2,7 @@ package com.videonasocialmedia.kamarada.presentation.mvp.presenters;
 
 import android.content.Context;
 import android.content.SharedPreferences;
+import android.content.res.Configuration;
 import android.graphics.drawable.Drawable;
 import android.support.annotation.NonNull;
 import android.util.Log;
@@ -485,15 +486,43 @@ public class RecordPresenter implements OnExportFinishedListener {
         recordView.showFlashOn(on);
     }
 
+    public void checkSkin(int previousBackgroundId) {
+        switch (previousBackgroundId) {
+            case R.mipmap.activity_record_background_leather:
+                changeToLeatherSkin();
+                break;
+            case R.mipmap.activity_record_background_leather_tablet:
+                changeToLeatherSkin();
+                break;
+            case R.mipmap.activity_record_background_wood:
+                changeToWoodSkin();
+                break;
+            case R.mipmap.activity_record_background_wood_tablet:
+                changeToWoodSkin();
+                break;
+            default:
+                changeToLeatherSkin();
+                break;
+        }
+    }
+
     public void changeToWoodSkin() {
-        sendUserInteractedTracking(AnalyticsConstants.CHANGE_SKIN, AnalyticsConstants.SKIN_WOOD);
-        recordView.changeSkin(R.mipmap.activity_record_background_wood);
+        Configuration config = context.getResources().getConfiguration();
+        if (config.smallestScreenWidthDp >= 600) {
+            recordView.changeSkin(R.mipmap.activity_record_background_wood_tablet);
+        } else {
+            recordView.changeSkin(R.mipmap.activity_record_background_wood);
+        }
         recordView.showSkinLeatherButton();
     }
 
     public void changeToLeatherSkin() {
-        sendUserInteractedTracking(AnalyticsConstants.CHANGE_SKIN, AnalyticsConstants.SKIN_LEATHER);
-        recordView.changeSkin(R.mipmap.activity_record_background_leather);
+        Configuration config = context.getResources().getConfiguration();
+        if (config.smallestScreenWidthDp >= 600) {
+            recordView.changeSkin(R.mipmap.activity_record_background_leather_tablet);
+        } else {
+            recordView.changeSkin(R.mipmap.activity_record_background_leather);
+        }
         recordView.showSkinWoodButton();
     }
 
