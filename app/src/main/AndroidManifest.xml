@@ -9,7 +9,7 @@
         android:largeScreens="true"
         android:normalScreens="true"
         android:smallScreens="false"
-        android:xlargeScreens="false" />
+        android:xlargeScreens="true" />
 
     <permission
         android:name="com.videonasocialmedia.kamarada.permission.C2D_MESSAGE"
