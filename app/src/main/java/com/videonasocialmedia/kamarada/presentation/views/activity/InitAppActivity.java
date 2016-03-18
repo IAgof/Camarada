@@ -455,6 +455,7 @@ public class InitAppActivity extends KamaradaActivity implements InitAppView, On
                 if (notification != null) {
                     Log.d("INAPP", "in-app notification received");
                     mixpanel.getPeople().showGivenNotification(notification, parentActivity);
+                    mixpanel.getPeople().trackNotificationSeen(notification);
                 } else {
                     navigate(RecordActivity.class);
                 }
