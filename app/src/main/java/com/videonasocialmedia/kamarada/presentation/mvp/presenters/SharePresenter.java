@@ -35,14 +35,14 @@ public class SharePresenter {
         obtainSocialNetworksAvailableToShare();
     }
 
-    public void onPause() {
-
-    }
-
     public void obtainSocialNetworksAvailableToShare() {
         ObtainSocialNetworksToShareUseCase useCase = new ObtainSocialNetworksToShareUseCase();
         List<SocialNetwork> socialNetworks = useCase.getKnownSocialNetworks();
         shareView.showAppsToShareWith(socialNetworks);
+    }
+
+    public void onPause() {
+
     }
 
     public void shareVideo(String videoPath, SocialNetwork appToShareWith, Context ctx) {
@@ -55,8 +55,8 @@ public class SharePresenter {
         Intent intent = new Intent(Intent.ACTION_SEND);
         intent.setType("video/*");
         intent.putExtra(Intent.EXTRA_STREAM, uri);
-        intent.addCategory(Intent.CATEGORY_LAUNCHER);
-        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_RESET_TASK_IF_NEEDED);
+        intent.addCategory(Intent.CATEGORY_DEFAULT);
+        //intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_RESET_TASK_IF_NEEDED);
         intent.setComponent(name);
         ctx.startActivity(intent);
     }

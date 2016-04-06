@@ -36,8 +36,7 @@ public class SocialNetworkRepository {
             String activityName = app.activityInfo.name;
             Drawable icon = app.loadIcon(pm);
             SocialNetwork socialNetworkApp;
-            if (packageName.toLowerCase().contains("twitter")
-                    || activityName.toLowerCase().contains("twitter")) {
+            if (activityName.equalsIgnoreCase("com.twitter.android.composer.ComposerActivity")) {
                 socialNetworkApp = new SocialNetwork("Twitter", packageName,
                         activityName, icon, "#videona");
             } else if (packageName.toLowerCase().contains("facebook.katana")) {
