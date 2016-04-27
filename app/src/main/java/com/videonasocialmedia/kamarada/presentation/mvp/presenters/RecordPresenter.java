@@ -266,6 +266,7 @@ public class RecordPresenter implements OnExportFinishedListener {
         addVideoToProjectUseCase.addVideoToProfile(Constants.PATH_APP + File.separator + fileName);
         recordView.stopProgressBar();
         recordView.showRecordedVideoThumbIndicator(getLastClipPath(), ++numRecordedVideos);
+        recordView.showToastVideoRecorded();
         updateTotalVideosRecorded();
         trackTotalVideosRecordedSuperProperty();
         sendVideoRecordedTracking();
@@ -384,7 +385,6 @@ public class RecordPresenter implements OnExportFinishedListener {
     }
 
     private void removeTempVideos() {
-        removeFilesUsedFromTempProjectUseCase.removeFilesUsedInExport();
         removeFilesUsedFromTempProjectUseCase.clearVideosFromProject();
     }
 

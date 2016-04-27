@@ -8,6 +8,7 @@
 
     <!-- Record Activity -->
     <string name="toast_exit">Press back to exit</string>
+    <string name="showVideoRecorded">Video saved on your gallery</string>
 
     <!-- Export video -->
     <string name="add_videos_to_project">Please, add videos to project</string>
