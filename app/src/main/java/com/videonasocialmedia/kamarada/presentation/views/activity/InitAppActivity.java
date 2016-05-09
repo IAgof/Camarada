@@ -22,7 +22,7 @@ import android.widget.TextView;
 import com.mixpanel.android.mpmetrics.InAppNotification;
 import com.videonasocialmedia.kamarada.BuildConfig;
 import com.videonasocialmedia.kamarada.R;
-import com.videonasocialmedia.kamarada.domain.RemoveFilesInTempFolderUseCase;
+import com.videonasocialmedia.kamarada.model.entities.editor.Project;
 import com.videonasocialmedia.kamarada.presentation.listener.OnInitAppEventListener;
 import com.videonasocialmedia.kamarada.presentation.mvp.views.InitAppView;
 import com.videonasocialmedia.kamarada.utils.AnalyticsConstants;
@@ -72,7 +72,6 @@ public class InitAppActivity extends KamaradaActivity implements InitAppView, On
     private int numSupportedCameras;
     private long startTime;
     private String androidId = null;
-    private RemoveFilesInTempFolderUseCase removeFilesInTempFolderUseCase;
     private String initState;
 
     @Override
@@ -86,7 +85,6 @@ public class InitAppActivity extends KamaradaActivity implements InitAppView, On
 
         setContentView(R.layout.activity_init_app);
         ButterKnife.bind(this);
-        removeFilesInTempFolderUseCase = new RemoveFilesInTempFolderUseCase();
         setVersionCode();
         if (BuildConfig.DEBUG) {
             MINIMUN_WAIT_TIME = 2000;
@@ -340,7 +338,7 @@ public class InitAppActivity extends KamaradaActivity implements InitAppView, On
      */
     private void setupPathsApp(OnInitAppEventListener listener) {
         try {
-            cleanTempPath();
+
             initPaths();
             listener.onCheckPathsAppSuccess();
         } catch (IOException e) {
@@ -364,9 +362,6 @@ public class InitAppActivity extends KamaradaActivity implements InitAppView, On
         preferencesEditor.putString(ConfigPreferences.PRIVATE_PATH, privatePath).commit();
     }
 
-    private void cleanTempPath() {
-        removeFilesInTempFolderUseCase.removeFilesInTempFolder();
-    }
 
     private void copyMusicFromResources() {
         try {
@@ -394,7 +389,13 @@ public class InitAppActivity extends KamaradaActivity implements InitAppView, On
 
     @Override
     public void onCheckPathsAppSuccess() {
+        startLoadingProject(this);
+    }
 
+    private void startLoadingProject(OnInitAppEventListener listener) {
+        //TODO Define project title (by date, by project count, ...)
+        //TODO Define path project. By default, path app. Path .temp, private data
+        Project.getInstance(Constants.PROJECT_TITLE, sharedPreferences.getString(ConfigPreferences.PRIVATE_PATH, ""));
     }
 
     @Override

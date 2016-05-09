@@ -45,6 +45,8 @@ public interface RecordView {
 
     void showRecordedVideoThumbIndicator(String pathLastRecordedVideo, int numberOfRecordedVideos);
 
+    void showToastVideoRecorded();
+
     void hideRecordedVideoThumbIndicator();
 
 }
