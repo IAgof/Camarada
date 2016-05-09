@@ -8,8 +8,8 @@ android {
         applicationId "com.videonasocialmedia.kamarada"
         minSdkVersion 18
         targetSdkVersion 23
-        versionCode 9 //6-04-2016
-        versionName "1.2.2"
+        versionCode 10 //8-05-2016
+        versionName "1.2.3"
     }
 
     buildTypes {
