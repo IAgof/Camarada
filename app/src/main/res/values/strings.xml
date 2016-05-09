@@ -8,6 +8,7 @@
 
     <!-- Record Activity -->
     <string name="toast_exit">Press back to exit</string>
+    <string name="showVideoRecorded">Video saved on your gallery</string>
 
     <!-- Export video -->
     <string name="add_videos_to_project">Please, add videos to project</string>
@@ -81,7 +82,7 @@
         What are you waiting to use it?\n\n
         Lights, camera, ... action!\n\n
     </string>
-    
+
 
     <string name="videona_web">http://www.videona.com</string>
     <string name="contactUsTitle"><u>Contact us</u></string>

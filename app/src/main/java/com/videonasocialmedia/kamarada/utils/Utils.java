@@ -218,4 +218,17 @@ public class Utils {
         return hour + (double)(minutes)/60;
     }
 
+    public static void removeVideo(String path) {
+        File file = new File(path);
+        if (file != null) {
+           file.delete();
+        }
+    }
+
+    public static void moveVideo(String origPath, String destPath) {
+        File file = new File(origPath);
+        file.renameTo(new File(destPath));
+
+    }
+
 }

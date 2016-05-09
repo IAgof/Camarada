@@ -9,6 +9,7 @@ import android.graphics.PorterDuff;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
+import android.view.Gravity;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.WindowManager;
@@ -35,6 +36,9 @@ import com.videonasocialmedia.kamarada.utils.Utils;
 
 import org.json.JSONException;
 import org.json.JSONObject;
+
+import java.util.Timer;
+import java.util.TimerTask;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
@@ -105,6 +109,8 @@ public class RecordActivity extends KamaradaActivity implements RecordView, OnSw
             timerHandler.postDelayed(this, delay);
         }
     };
+    private int secondsProgressDialog;
+    private int MINIMUM_TIME_WAITING_PROGRESS_DIALOG = 3;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -415,6 +421,14 @@ public class RecordActivity extends KamaradaActivity implements RecordView, OnSw
     }
 
     @Override
+    public void showToastVideoRecorded(){
+        // Toast video recorded
+        Toast videoRecorded = Toast.makeText(this, this.getText(R.string.showVideoRecorded), Toast.LENGTH_SHORT);
+        videoRecorded.setGravity(Gravity.TOP, 0, 300);
+        videoRecorded.show();
+    }
+
+    @Override
     public void hideRecordedVideoThumbIndicator() {
         videoThumbIndicator.setVisibility(View.GONE);
     }
@@ -463,12 +477,36 @@ public class RecordActivity extends KamaradaActivity implements RecordView, OnSw
     @Override
     public void showProgressDialog() {
         progressDialog.show();
+
+        // Start timer, minimum time showing progress dialog
+        Timer timer = new Timer();
+        timer.schedule(new TimerTask() {
+
+            @Override
+            public void run() {
+
+                secondsProgressDialog++;
+                if(secondsProgressDialog>MINIMUM_TIME_WAITING_PROGRESS_DIALOG) {
+                    cancel();
+                }
+            }
+
+        },0,1000);//Update text every second
     }
 
     @Override
     public void hideProgressDialog() {
-        if (progressDialog != null && progressDialog.isShowing())
+        if (progressDialog != null && progressDialog.isShowing()) {
+            while(secondsProgressDialog<MINIMUM_TIME_WAITING_PROGRESS_DIALOG){
+              // wait
+                try {
+                    Thread.sleep(1000);
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+            }
             progressDialog.dismiss();
+        }
     }
 
     @Override

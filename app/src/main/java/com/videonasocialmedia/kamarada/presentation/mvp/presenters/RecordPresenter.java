@@ -16,10 +16,11 @@ import com.videonasocialmedia.avrecorder.event.MuxerFinishedEvent;
 import com.videonasocialmedia.avrecorder.view.GLCameraEncoderView;
 import com.videonasocialmedia.kamarada.BuildConfig;
 import com.videonasocialmedia.kamarada.R;
+import com.videonasocialmedia.kamarada.domain.AddVideoToProjectUseCase;
 import com.videonasocialmedia.kamarada.domain.ExportUseCase;
-import com.videonasocialmedia.kamarada.domain.GetVideosFromTempFolderUseCase;
+import com.videonasocialmedia.kamarada.domain.GetVideosFromTempProjectUseCase;
 import com.videonasocialmedia.kamarada.domain.OnExportFinishedListener;
-import com.videonasocialmedia.kamarada.domain.RemoveFilesInTempFolderUseCase;
+import com.videonasocialmedia.kamarada.domain.RemoveFilesUsedFromTempProjectUseCase;
 import com.videonasocialmedia.kamarada.domain.effects.GetEffectListUseCase;
 import com.videonasocialmedia.kamarada.model.entities.ShaderEffect;
 import com.videonasocialmedia.kamarada.presentation.mvp.views.EffectSelectorView;
@@ -68,8 +69,9 @@ public class RecordPresenter implements OnExportFinishedListener {
     /**
      * Get media list use case
      */
-    private GetVideosFromTempFolderUseCase getVideosFromTempFolderUseCase;
-    private RemoveFilesInTempFolderUseCase removeFilesInTempFolderUseCase;
+    private GetVideosFromTempProjectUseCase getVideosFromTempProjectUseCase;
+    private RemoveFilesUsedFromTempProjectUseCase removeFilesUsedFromTempProjectUseCase;
+    private AddVideoToProjectUseCase addVideoToProjectUseCase;
     private List<ShaderEffect> effects;
     private int selectedFilterIndex = 0;
     private String resolution;
@@ -87,8 +89,9 @@ public class RecordPresenter implements OnExportFinishedListener {
         preferencesEditor = sharedPreferences.edit();
         exportUseCase = new ExportUseCase(this);
         effects = getShaderEffectList();
-        getVideosFromTempFolderUseCase = new GetVideosFromTempFolderUseCase();
-        removeFilesInTempFolderUseCase = new RemoveFilesInTempFolderUseCase();
+        getVideosFromTempProjectUseCase = new GetVideosFromTempProjectUseCase();
+        removeFilesUsedFromTempProjectUseCase = new RemoveFilesUsedFromTempProjectUseCase();
+        addVideoToProjectUseCase = new AddVideoToProjectUseCase();
         mixpanel = MixpanelAPI.getInstance(context, BuildConfig.MIXPANEL_TOKEN);
         initRecorder(cameraPreview, sharedPreferences);
     }
@@ -260,8 +263,10 @@ public class RecordPresenter implements OnExportFinishedListener {
 
     public void onEventMainThread(MuxerFinishedEvent e) {
         fileName = renameOutputVideo(config.getOutputPath());
+        addVideoToProjectUseCase.addVideoToProfile(Constants.PATH_APP + File.separator + fileName);
         recordView.stopProgressBar();
         recordView.showRecordedVideoThumbIndicator(getLastClipPath(), ++numRecordedVideos);
+        recordView.showToastVideoRecorded();
         updateTotalVideosRecorded();
         trackTotalVideosRecordedSuperProperty();
         sendVideoRecordedTracking();
@@ -271,13 +276,13 @@ public class RecordPresenter implements OnExportFinishedListener {
         File originalFile = new File(originalPath);
         String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss").format(new Date());
         String outputPath = "VID_" + timeStamp + ".mp4";
-        File destinationFile = new File(Constants.PATH_APP_TEMP, outputPath);
+        File destinationFile = new File(Constants.PATH_APP, outputPath);
         originalFile.renameTo(destinationFile);
         return outputPath;
     }
 
     private String getLastClipPath() {
-        return Constants.PATH_APP_TEMP + File.separator + fileName;
+        return Constants.PATH_APP + File.separator + fileName;
     }
 
     private void updateTotalVideosRecorded() {
@@ -356,7 +361,7 @@ public class RecordPresenter implements OnExportFinishedListener {
     }
 
     private void doStartExport() {
-        List<String> videoList = getVideosFromTempFolderUseCase.getVideosFromTempFolder();
+        List<String> videoList = getVideosFromTempProjectUseCase.getVideosFromTempProject();
         if (videoList.size() > 0) {
             exportUseCase.export(videoList);
         } else {
@@ -380,7 +385,7 @@ public class RecordPresenter implements OnExportFinishedListener {
     }
 
     private void removeTempVideos() {
-        removeFilesInTempFolderUseCase.removeFilesInTempFolder();
+        removeFilesUsedFromTempProjectUseCase.clearVideosFromProject();
     }
 
     private void sendExportedVideoMetadataTracking() {
@@ -401,7 +406,7 @@ public class RecordPresenter implements OnExportFinishedListener {
     }
 
     private double getVideoLength() {
-        List<String> videoList = getVideosFromTempFolderUseCase.getVideosFromTempFolder();
+        List<String> videoList = getVideosFromTempProjectUseCase.getVideosFromTempProject();
         double duration = 0.0;
         if (videoList.size() > 0)
             duration = Utils.getFileDuration(videoList);
@@ -411,7 +416,7 @@ public class RecordPresenter implements OnExportFinishedListener {
     }
 
     private int getNumberOfRecordedClips() {
-        int numberOfClipsRecorded = getVideosFromTempFolderUseCase.getVideosFromTempFolder().size();
+        int numberOfClipsRecorded = getVideosFromTempProjectUseCase.getVideosFromTempProject().size();
         preferencesEditor.putInt(ConfigPreferences.NUMBER_OF_CLIPS, numberOfClipsRecorded);
         preferencesEditor.commit();
         return numberOfClipsRecorded;
@@ -549,7 +554,7 @@ public class RecordPresenter implements OnExportFinishedListener {
     public void checkAvailableVideos() {
         int actualNumberOfRecordedClips = getNumberOfRecordedClips();
         if(actualNumberOfRecordedClips > 0) {
-            List<String> videoList = getVideosFromTempFolderUseCase.getVideosFromTempFolder();
+            List<String> videoList = getVideosFromTempProjectUseCase.getVideosFromTempProject();
             String latestClipPath = videoList.get(videoList.size()-1);
             numRecordedVideos = actualNumberOfRecordedClips;
             recordView.showRecordedVideoThumbIndicator(latestClipPath, numRecordedVideos);
