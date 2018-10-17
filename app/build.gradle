@@ -7,9 +7,9 @@ android {
     defaultConfig {
         applicationId "com.videonasocialmedia.kamarada"
         minSdkVersion 18
-        targetSdkVersion 23
-        versionCode 10 //8-05-2016
-        versionName "1.2.3"
+        targetSdkVersion 27
+        versionCode 11 //17-12-2018
+        versionName "1.2.4"
     }
 
     buildTypes {
